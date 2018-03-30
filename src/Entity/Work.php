@@ -31,6 +31,11 @@ class Work
      */
     private $endDate;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Task", inversedBy="works")
+     */
+    private $task;
+
     public function getId()
     {
         return $this->id;
@@ -68,6 +73,18 @@ class Work
     public function setEndDate(\DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    public function getTask(): ?Task
+    {
+        return $this->task;
+    }
+
+    public function setTask(?Task $task): self
+    {
+        $this->task = $task;
 
         return $this;
     }
