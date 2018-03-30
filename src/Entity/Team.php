@@ -19,21 +19,55 @@ class Team
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $teamName;
+    private $name;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="teams")
+     */
+    private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="leaderTeams")
+     */
+    private $leader;
 
     public function getId()
     {
         return $this->id;
     }
 
-    public function getTeamName(): ?string
+    public function getName(): ?string
     {
-        return $this->teamName;
+        return $this->name;
     }
 
-    public function setTeamName(string $teamName): self
+    public function setName(string $name): self
     {
-        $this->teamName = $teamName;
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getLeader(): ?User
+    {
+        return $this->leader;
+    }
+
+    public function setLeader(?User $leader): self
+    {
+        $this->leader = $leader;
 
         return $this;
     }
