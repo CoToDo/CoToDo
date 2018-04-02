@@ -44,9 +44,15 @@ class Project
      */
     private $managers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="project")
+     */
+    private $subProject;
+
     public function __construct()
     {
         $this->managers = new ArrayCollection();
+        $this->subProject = new ArrayCollection();
     }
 
     public function getId()
@@ -123,6 +129,37 @@ class Project
     {
         if ($this->managers->contains($manager)) {
             $this->managers->removeElement($manager);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getSubProject(): Collection
+    {
+        return $this->subProject;
+    }
+
+    public function addSubProject(Project $subProject): self
+    {
+        if (!$this->subProject->contains($subProject)) {
+            $this->subProject[] = $subProject;
+            $subProject->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubProject(Project $subProject): self
+    {
+        if ($this->subProject->contains($subProject)) {
+            $this->subProject->removeElement($subProject);
+            // set the owning side to null (unless already changed)
+            if ($subProject->getProject() === $this) {
+                $subProject->setProject(null);
+            }
         }
 
         return $this;
