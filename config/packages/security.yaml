@@ -1,14 +1,28 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+
+    encoders:
+            App\Entity\User:
+                algorithm: bcrypt
+
     providers:
-        in_memory: { memory: ~ }
+        our_db_provider:
+                entity:
+                    class: App\Entity\User
+                    property: mail
+                    # if you're using multiple entity managers
+                    # manager_name: customer
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: true
-
+            anonymous: ~
+            form_login:
+                            login_path: login
+                            check_path: login
+            provider: our_db_provider
             # activate different ways to authenticate
 
             # http_basic: true
