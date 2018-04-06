@@ -17,6 +17,7 @@ class ProjectType extends AbstractType
             ->add('createDate')
             ->add('leader')
             ->add('managers')
+            ->add('subProject')
         ;
     }
 

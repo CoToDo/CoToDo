@@ -18,6 +18,8 @@ class TaskType extends AbstractType
             ->add('completionDate')
             ->add('deadline')
             ->add('tags')
+            ->add('works')
+            ->add('comments')
         ;
     }
 
