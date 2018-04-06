@@ -313,4 +313,53 @@ class User
 
         return $this;
     }
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function getPassword()
+    {
+        return $this->hash;
+    }
+
+    public function  getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    public function  eraseCredentials()
+    {
+    }
+
+    public function getUser()
+    {
+        return $this->mail;
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->mail,
+            $this->hash,
+            // see section on salt below
+            // $this->salt,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->mail,
+            $this->hash,
+            // see section on salt below
+            // $this->salt
+            ) = unserialize($serialized);
+    }
+
+
 }
