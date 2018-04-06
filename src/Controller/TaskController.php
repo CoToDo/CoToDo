@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/task")
+ * @Route("/tasks")
  */
 class TaskController extends Controller
 {
@@ -24,9 +24,9 @@ class TaskController extends Controller
     }
 
     /**
-     * @Route("/new", name="task_new", methods="GET|POST")
+     * @Route("/create", name="task_new", methods="GET|POST")
      */
-    public function new(Request $request): Response
+    public function create(Request $request): Response
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);

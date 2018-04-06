@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/team")
+ * @Route("/teams")
  */
 class TeamController extends Controller
 {
@@ -24,9 +24,9 @@ class TeamController extends Controller
     }
 
     /**
-     * @Route("/new", name="team_new", methods="GET|POST")
+     * @Route("/create", name="team_new", methods="GET|POST")
      */
-    public function new(Request $request): Response
+    public function create(Request $request): Response
     {
         $team = new Team();
         $form = $this->createForm(TeamType::class, $team);

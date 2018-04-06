@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/project")
+ * @Route("/projects")
  */
 class ProjectController extends Controller
 {
@@ -24,9 +24,9 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/new", name="project_new", methods="GET|POST")
+     * @Route("/create", name="project_new", methods="GET|POST")
      */
-    public function new(Request $request): Response
+    public function create(Request $request): Response
     {
         $project = new Project();
         $form = $this->createForm(ProjectType::class, $project);

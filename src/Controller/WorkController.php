@@ -24,9 +24,9 @@ class WorkController extends Controller
     }
 
     /**
-     * @Route("/new", name="work_new", methods="GET|POST")
+     * @Route("/create", name="work_new", methods="GET|POST")
      */
-    public function new(Request $request): Response
+    public function create(Request $request): Response
     {
         $work = new Work();
         $form = $this->createForm(WorkType::class, $work);
