@@ -361,5 +361,10 @@ class User
             ) = unserialize($serialized);
     }
 
+    public function __toString()
+    {
+        return $this->getMail();
+    }
+
 
 }

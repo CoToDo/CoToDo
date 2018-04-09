@@ -45,14 +45,15 @@ class Project
     private $managers;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="project")
+     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="parentProject")
      */
-    private $subProject;
+    private $subProjects;
+
 
     public function __construct()
     {
         $this->managers = new ArrayCollection();
-        $this->subProject = new ArrayCollection();
+        $this->subProjects = new ArrayCollection();
     }
 
     public function getId()
@@ -133,20 +134,25 @@ class Project
 
         return $this;
     }
+    
+    public function __toString()
+    {
+        return "" . $this->getName();
+    }
 
     /**
      * @return Collection|Project[]
      */
-    public function getSubProject(): Collection
+    public function getSubProjects(): Collection
     {
-        return $this->subProject;
+        return $this->subProjects;
     }
 
     public function addSubProject(Project $subProject): self
     {
-        if (!$this->subProject->contains($subProject)) {
-            $this->subProject[] = $subProject;
-            $subProject->setProject($this);
+        if (!$this->subProjects->contains($subProject)) {
+            $this->subProjects[] = $subProject;
+            $subProject->setParentProject($this);
         }
 
         return $this;
@@ -154,19 +160,14 @@ class Project
 
     public function removeSubProject(Project $subProject): self
     {
-        if ($this->subProject->contains($subProject)) {
-            $this->subProject->removeElement($subProject);
+        if ($this->subProjects->contains($subProject)) {
+            $this->subProjects->removeElement($subProject);
             // set the owning side to null (unless already changed)
-            if ($subProject->getProject() === $this) {
-                $subProject->setProject(null);
+            if ($subProject->getParentProject() === $this) {
+                $subProject->setParentProject(null);
             }
         }
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        return "" . $this->getName();
     }
 }

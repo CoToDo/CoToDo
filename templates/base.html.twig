@@ -2,11 +2,34 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <nav class="navbar navbar-light bg-light justify-content-between">
+            <a class="navbar-brand" href="#">
+                <img src="https://avatars1.githubusercontent.com/u/36856513?s=200&v=4" width="60" height="50" class="d-inline-block align-top" alt="">
+            </a>
+
+            <form class="form-inline">
+                <button onclick="location.href='/projects/create';" class="btn btn-outline-success" type="button">Create project</button>
+            </form>
+
+
+            <form class="form-inline">
+                <button class="btn btn-outline-success" type="button">logout</button>
+            </form>
+
+            <form class="form-inline">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+
+        </nav>
+
+    {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
+
     </body>
 </html>
