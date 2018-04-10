@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,14 +24,20 @@ class Team
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="teams")
+     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="team")
      */
-    private $user;
+    private $projects;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="leaderTeams")
+     * @ORM\OneToMany(targetEntity="App\Entity\Role", mappedBy="team")
      */
-    private $leader;
+    private $roles;
+
+    public function __construct()
+    {
+        $this->projects = new ArrayCollection();
+        $this->roles = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -48,32 +56,65 @@ class Team
         return $this;
     }
 
-    public function getUser(): ?User
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProjects(): Collection
     {
-        return $this->user;
+        return $this->projects;
     }
 
-    public function setUser(?User $user): self
+    public function addProject(Project $project): self
     {
-        $this->user = $user;
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->setTeam($this);
+        }
 
         return $this;
     }
 
-    public function getLeader(): ?User
+    public function removeProject(Project $project): self
     {
-        return $this->leader;
-    }
-
-    public function setLeader(?User $leader): self
-    {
-        $this->leader = $leader;
+        if ($this->projects->contains($project)) {
+            $this->projects->removeElement($project);
+            // set the owning side to null (unless already changed)
+            if ($project->getTeam() === $this) {
+                $project->setTeam(null);
+            }
+        }
 
         return $this;
     }
 
-    public function __toString()
+    /**
+     * @return Collection|Role[]
+     */
+    public function getRoles(): Collection
     {
-        return "" .$this->getName();
+        return $this->roles;
+    }
+
+    public function addRole(Role $role): self
+    {
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
+            $role->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRole(Role $role): self
+    {
+        if ($this->roles->contains($role)) {
+            $this->roles->removeElement($role);
+            // set the owning side to null (unless already changed)
+            if ($role->getTeam() === $this) {
+                $role->setTeam(null);
+            }
+        }
+
+        return $this;
     }
 }

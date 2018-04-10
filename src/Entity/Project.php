@@ -34,17 +34,6 @@ class Project
     private $createDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="leaderProjects")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $leader;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="manageProjects")
-     */
-    private $managers;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="subProjects")
      */
     private $parentProject;
@@ -54,6 +43,10 @@ class Project
      */
     private $subProjects;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Team", inversedBy="projects")
+     */
+    private $team;
 
     public function __construct()
     {
@@ -114,32 +107,6 @@ class Project
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getManagers(): Collection
-    {
-        return $this->managers;
-    }
-
-    public function addManager(User $manager): self
-    {
-        if (!$this->managers->contains($manager)) {
-            $this->managers[] = $manager;
-        }
-
-        return $this;
-    }
-
-    public function removeManager(User $manager): self
-    {
-        if ($this->managers->contains($manager)) {
-            $this->managers->removeElement($manager);
-        }
-
-        return $this;
-    }
-
     public function __toString()
     {
         return "" . $this->getName();
@@ -190,6 +157,18 @@ class Project
     public function setParentProject($parentProject): void
     {
         $this->parentProject = $parentProject;
+    }
+
+    public function getTeam(): ?Team
+    {
+        return $this->team;
+    }
+
+    public function setTeam(?Team $team): self
+    {
+        $this->team = $team;
+
+        return $this;
     }
 
 }

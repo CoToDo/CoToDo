@@ -39,16 +39,6 @@ class User
     private $hash;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Team", mappedBy="user")
-     */
-    private $teams;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Team", mappedBy="leader")
-     */
-    private $leaderTeams;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user")
      */
     private $comments;
@@ -59,23 +49,15 @@ class User
     private $works;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="leader")
+     * @ORM\OneToMany(targetEntity="App\Entity\Role", mappedBy="user")
      */
-    private $leaderProjects;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Project", mappedBy="managers")
-     */
-    private $manageProjects;
+    private $roles;
 
     public function __construct()
     {
-        $this->teams = new ArrayCollection();
-        $this->leaderTeams = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->works = new ArrayCollection();
-        $this->leaderProjects = new ArrayCollection();
-        $this->manageProjects = new ArrayCollection();
+        $this->roles = new ArrayCollection();
     }
 
     public function getId()
@@ -127,68 +109,6 @@ class User
     public function setHash(string $hash): self
     {
         $this->hash = $hash;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Team[]
-     */
-    public function getTeams(): Collection
-    {
-        return $this->teams;
-    }
-
-    public function addTeam(Team $team): self
-    {
-        if (!$this->teams->contains($team)) {
-            $this->teams[] = $team;
-            $team->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTeam(Team $team): self
-    {
-        if ($this->teams->contains($team)) {
-            $this->teams->removeElement($team);
-            // set the owning side to null (unless already changed)
-            if ($team->getUser() === $this) {
-                $team->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Team[]
-     */
-    public function getLeaderTeams(): Collection
-    {
-        return $this->leaderTeams;
-    }
-
-    public function addLeaderTeam(Team $leaderTeam): self
-    {
-        if (!$this->leaderTeams->contains($leaderTeam)) {
-            $this->leaderTeams[] = $leaderTeam;
-            $leaderTeam->setLeader($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLeaderTeam(Team $leaderTeam): self
-    {
-        if ($this->leaderTeams->contains($leaderTeam)) {
-            $this->leaderTeams->removeElement($leaderTeam);
-            // set the owning side to null (unless already changed)
-            if ($leaderTeam->getLeader() === $this) {
-                $leaderTeam->setLeader(null);
-            }
-        }
 
         return $this;
     }
@@ -255,64 +175,6 @@ class User
         return $this;
     }
 
-    /**
-     * @return Collection|Project[]
-     */
-    public function getLeaderProjects(): Collection
-    {
-        return $this->leaderProjects;
-    }
-
-    public function addLeaderProject(Project $leaderProject): self
-    {
-        if (!$this->leaderProjects->contains($leaderProject)) {
-            $this->leaderProjects[] = $leaderProject;
-            $leaderProject->setLeader($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLeaderProject(Project $leaderProject): self
-    {
-        if ($this->leaderProjects->contains($leaderProject)) {
-            $this->leaderProjects->removeElement($leaderProject);
-            // set the owning side to null (unless already changed)
-            if ($leaderProject->getLeader() === $this) {
-                $leaderProject->setLeader(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Project[]
-     */
-    public function getManageProjects(): Collection
-    {
-        return $this->manageProjects;
-    }
-
-    public function addManageProject(Project $manageProject): self
-    {
-        if (!$this->manageProjects->contains($manageProject)) {
-            $this->manageProjects[] = $manageProject;
-            $manageProject->addManager($this);
-        }
-
-        return $this;
-    }
-
-    public function removeManageProject(Project $manageProject): self
-    {
-        if ($this->manageProjects->contains($manageProject)) {
-            $this->manageProjects->removeElement($manageProject);
-            $manageProject->removeManager($this);
-        }
-
-        return $this;
-    }
     public function getSalt()
     {
         return null;
@@ -364,6 +226,29 @@ class User
     public function __toString()
     {
         return $this->getMail();
+    }
+
+    public function addRole(Role $role): self
+    {
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
+            $role->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRole(Role $role): self
+    {
+        if ($this->roles->contains($role)) {
+            $this->roles->removeElement($role);
+            // set the owning side to null (unless already changed)
+            if ($role->getUser() === $this) {
+                $role->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
 
