@@ -45,6 +45,11 @@ class Project
     private $managers;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="subProjects")
+     */
+    private $parentProject;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="parentProject")
      */
     private $subProjects;
@@ -134,7 +139,7 @@ class Project
 
         return $this;
     }
-    
+
     public function __toString()
     {
         return "" . $this->getName();
@@ -170,4 +175,21 @@ class Project
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getParentProject()
+    {
+        return $this->parentProject;
+    }
+
+    /**
+     * @param mixed $parentProject
+     */
+    public function setParentProject($parentProject): void
+    {
+        $this->parentProject = $parentProject;
+    }
+
 }

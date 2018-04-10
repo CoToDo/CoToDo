@@ -8,18 +8,12 @@
     </head>
     <body>
         <nav class="navbar navbar-light bg-light justify-content-between">
-            <a class="navbar-brand" href="#">
-                <img src="https://avatars1.githubusercontent.com/u/36856513?s=200&v=4" width="60" height="50" class="d-inline-block align-top" alt="">
+            <a class="navbar-brand" href="{{ path('dashboard') }}">
+                <img src="{{ asset('LogoFinal.svg') }}" width="60" height="50" class="d-inline-block align-top" alt="">
             </a>
 
-            <form class="form-inline">
-                <button onclick="location.href='/projects/create';" class="btn btn-outline-success" type="button">Create project</button>
-            </form>
-
-
-            <form class="form-inline">
-                <button class="btn btn-outline-success" type="button">logout</button>
-            </form>
+            <a class="btn btn-outline-success" href="{{ path('project_new') }}">Create project</a>
+            <a class="btn btn-outline-success" href="#">Logout</a>
 
             <form class="form-inline">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
