@@ -26,7 +26,7 @@ class ProjectController extends Controller
     /**
      * @Route("/create", name="project_new", methods="GET|POST")
      */
-    public function create(Request $request): Response
+    public function new(Request $request): Response
     {
         $project = new Project();
         $form = $this->createForm(ProjectType::class, $project);
