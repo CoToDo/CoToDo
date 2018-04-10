@@ -7,13 +7,24 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        <nav class="navbar navbar-light bg-light justify-content-between">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="{{ path('dashboard') }}">
                 <img src="{{ asset('LogoFinal.svg') }}" width="60" height="50" class="d-inline-block align-top" alt="">
             </a>
 
-            <a class="btn btn-outline-success" href="{{ path('project_new') }}">Create project</a>
-            <a class="btn btn-outline-success" href="#">Logout</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="{{ path('project_new') }}">Create project <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="{{ path('team_new') }}">Create team</a>
+                    <a class="nav-item nav-link" href="{{ path('role_new') }}">Role</a>
+                    <a class="nav-item nav-link" href="#">Disabled</a>
+                </div>
+
+            </div>
 
             <form class="form-inline">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Constants;
 use App\Entity\Team;
+use App\Entity\Role;
+use App\Entity\User;
 use App\Form\TeamType;
 use App\Repository\TeamRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -28,6 +31,7 @@ class TeamController extends Controller
      */
     public function new(Request $request): Response
     {
+
         $team = new Team();
         $form = $this->createForm(TeamType::class, $team);
         $form->handleRequest($request);
@@ -37,8 +41,21 @@ class TeamController extends Controller
             $em->persist($team);
             $em->flush();
 
+            //id 1 should be id of actual user, not set yet
+            $user=$this->getDoctrine()->getRepository(User::class)->find(1);
+
+            $role = new Role();
+            $role->setUser($user);
+            $role->setTeam($team);
+            $role->setType(Constants::LEADER);
+            $em->persist($role);
+            $em->flush();
+
             return $this->redirectToRoute('team_index');
         }
+
+
+
 
         return $this->render('team/new.html.twig', [
             'team' => $team,
