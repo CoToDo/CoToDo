@@ -23,8 +23,8 @@
                 <td>{{ work.startDate ? work.startDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ work.endDate ? work.endDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('work_show', {'id': work.id}) }}">show</a>
-                    <a href="{{ path('work_edit', {'id': work.id}) }}">edit</a>
+                    <a class="btn btn-outline-primary" href="{{ path('work_show', {'id': work.id}) }}">Show</a>
+                    <a class="btn btn-outline-secondary" href="{{ path('work_edit', {'id': work.id}) }}">Edit</a>
                 </td>
             </tr>
         {% else %}
@@ -35,5 +35,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('work_new') }}">Create new</a>
+    <a class="btn btn-outline-success" href="{{ path('work_new') }}">Create new</a>
 {% endblock %}
