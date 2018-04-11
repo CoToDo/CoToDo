@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Entity\User;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends Controller
 {
@@ -13,8 +13,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $user=$this->getDoctrine()->getRepository(User::class)->find(1);
-
+        $user = $this->getDoctrine()->getRepository(User::class)->find(1);
         if(!$user){
             throw $this->createNotFoundException("No user found for id 1");
         }
