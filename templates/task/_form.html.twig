@@ -1,4 +1,57 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="col">
+        {{ form_label(form.name) }}
+        {{ form_errors(form.name) }}
+        {{ form_widget(form.name) }}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col">
+            {{ form_label(form.createDate) }}
+            {{ form_errors(form.createDate) }}
+            {{ form_widget(form.createDate) }}
+        </div>
+        <div class="col">
+            {{ form_label(form.completionDate) }}
+            {{ form_errors(form.completionDate) }}
+            {{ form_widget(form.completionDate) }}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col">
+            {{ form_label(form.priority, null, {'label_attr': {'class': 'col-form-label'}} )}}
+            {{ form_errors(form.priority) }}
+            {{ form_widget(form.priority) }}
+        </div>
+        <div class="col">
+            {{ form_label(form.deadline) }}
+            {{ form_errors(form.deadline) }}
+            {{ form_widget(form.deadline) }}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col">
+            {{ form_label(form.tags) }}
+            {{ form_errors(form.tags) }}
+            {{ form_widget(form.tags) }}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col">
+            {{ form_label(form.works) }}
+            {{ form_errors(form.works) }}
+            {{ form_widget(form.works) }}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col">
+            {{ form_label(form.comments) }}
+            {{ form_errors(form.comments) }}
+            {{ form_widget(form.comments) }}
+        </div>
+    </div>
+    <button class="btn btn-outline-primary">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
