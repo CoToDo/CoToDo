@@ -3,24 +3,27 @@
 {% block title %}Role{% endblock %}
 
 {% block body %}
-    <h1>Role</h1>
+    <div class="main-div-crud">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ role.id }}</td>
-            </tr>
-            <tr>
-                <th>Type</th>
-                <td>{{ role.type }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <h1>Role</h1>
 
-    <a class="btn btn-outline-primary" href="{{ path('role_index') }}">back to list</a>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ role.id }}</td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td>{{ role.type }}</td>
+                </tr>
+            </tbody>
+        </table>
 
-    <a class="btn btn-outline-primary" href="{{ path('role_edit', {'id': role.id}) }}">edit</a>
+        <a class="btn btn-outline-primary" href="{{ path('role_index') }}">back to list</a>
 
-    {{ include('role/_delete_form.html.twig') }}
+        <a class="btn btn-outline-primary" href="{{ path('role_edit', {'id': role.id}) }}">edit</a>
+
+        {{ include('role/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

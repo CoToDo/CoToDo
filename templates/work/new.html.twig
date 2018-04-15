@@ -3,9 +3,12 @@
 {% block title %}New Work{% endblock %}
 
 {% block body %}
-    <h1>Create new Work</h1>
+    <div class="main-div-crud">
 
-    {{ include('work/_form.html.twig') }}
+        <h1>Create new Work</h1>
 
-    <a class="btn btn-outline-primary" href="{{ path('work_index') }}">back to list</a>
+        {{ include('work/_form.html.twig') }}
+
+        <a class="btn btn-outline-primary" href="{{ path('work_index') }}">back to list</a>
+    </div>
 {% endblock %}

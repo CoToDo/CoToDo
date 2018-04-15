@@ -3,32 +3,34 @@
 {% block title %}Work{% endblock %}
 
 {% block body %}
-    <h1>Work</h1>
+    <div class="main-div-crud">
+        <h1>Work</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ work.id }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ work.description }}</td>
-            </tr>
-            <tr>
-                <th>StartDate</th>
-                <td>{{ work.startDate ? work.startDate|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>EndDate</th>
-                <td>{{ work.endDate ? work.endDate|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ work.id }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ work.description }}</td>
+                </tr>
+                <tr>
+                    <th>StartDate</th>
+                    <td>{{ work.startDate ? work.startDate|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>EndDate</th>
+                    <td>{{ work.endDate ? work.endDate|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
 
-    <a class="btn btn-outline-primary" href="{{ path('work_index') }}">back to list</a>
+        <a class="btn btn-outline-primary" href="{{ path('work_index') }}">back to list</a>
 
-    <a class="btn btn-outline-primary" href="{{ path('work_edit', {'id': work.id}) }}">edit</a>
+        <a class="btn btn-outline-primary" href="{{ path('work_edit', {'id': work.id}) }}">edit</a>
 
-    {{ include('work/_delete_form.html.twig') }}
+        {{ include('work/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

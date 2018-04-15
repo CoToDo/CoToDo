@@ -3,37 +3,40 @@
 {% block title %}Project index{% endblock %}
 
 {% block body %}
-    <h1>Project index</h1>
+    <div class="main-div-crud">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>CreateDate</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for project in projects %}
-            <tr>
-                <td>{{ project.id }}</td>
-                <td>{{ project.name }}</td>
-                <td>{{ project.description }}</td>
-                <td>{{ project.createDate ? project.createDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a class="btn btn-outline-primary" href="{{ path('project_show', {'id': project.id}) }}">show</a>
-                    <a class="btn btn-outline-secondary" href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <h1>Project index</h1>
 
-    <a class="btn btn-outline-success" href="{{ path('project_new') }}">Create new</a>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>CreateDate</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for project in projects %}
+                <tr>
+                    <td>{{ project.id }}</td>
+                    <td>{{ project.name }}</td>
+                    <td>{{ project.description }}</td>
+                    <td>{{ project.createDate ? project.createDate|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>
+                        <a class="btn btn-outline-primary" href="{{ path('project_show', {'id': project.id}) }}">show</a>
+                        <a class="btn btn-outline-secondary" href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a class="btn btn-outline-success" href="{{ path('project_new') }}">Create new</a>
+    </div>
 {% endblock %}
