@@ -3,7 +3,7 @@
 {% block title %}Task index{% endblock %}
 
 {% block body %}
-    <div class="main-div-crud">
+    <div class="main-div-crud-list">
 
         <h1>Task index</h1>
 
@@ -16,7 +16,7 @@
                     <th>CreateDate</th>
                     <th>CompletionDate</th>
                     <th>Deadline</th>
-                    <th>actions</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,13 +29,13 @@
                     <td>{{ task.completionDate ? task.completionDate|date('Y-m-d H:i:s') : '' }}</td>
                     <td>{{ task.deadline ? task.deadline|date('Y-m-d H:i:s') : '' }}</td>
                     <td>
-                        <a class="btn btn-outline-primary" href="{{ path('task_show', {'id': task.id}) }}">Show</a>
-                        <a class="btn btn-outline-secondary" href="{{ path('task_edit', {'id': task.id}) }}">Edit</a>
+                        <a class="btn btn-outline-secondary" href="{{ path('task_show', {'id': task.id}) }}">Show</a>
+                        <a class="btn btn-outline-primary" href="{{ path('task_edit', {'id': task.id}) }}">Edit</a>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="7">no records found</td>
+                    <td colspan="7">No records found</td>
                 </tr>
             {% endfor %}
             </tbody>

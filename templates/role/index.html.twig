@@ -3,7 +3,7 @@
 {% block title %}Role index{% endblock %}
 
 {% block body %}
-    <div class="main-div-crud">
+    <div class="main-div-crud-list">
 
         <h1>Role index</h1>
 
@@ -12,7 +12,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Type</th>
-                    <th>actions</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,13 +21,13 @@
                     <td>{{ role.id }}</td>
                     <td>{{ role.type }}</td>
                     <td>
-                        <a class="btn btn-outline-primary" href="{{ path('role_show', {'id': role.id}) }}">show</a>
-                        <a class="btn btn-outline-secondary" href="{{ path('role_edit', {'id': role.id}) }}">edit</a>
+                        <a class="btn btn-outline-secondary" href="{{ path('role_show', {'id': role.id}) }}">Show</a>
+                        <a class="btn btn-outline-primary" href="{{ path('role_edit', {'id': role.id}) }}">Edit</a>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="3">no records found</td>
+                    <td colspan="3">No records found</td>
                 </tr>
             {% endfor %}
             </tbody>

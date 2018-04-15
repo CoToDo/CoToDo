@@ -3,7 +3,7 @@
 {% block title %}Project index{% endblock %}
 
 {% block body %}
-    <div class="main-div-crud">
+    <div class="main-div-crud-list">
 
         <h1>Project index</h1>
 
@@ -14,7 +14,7 @@
                     <th>Name</th>
                     <th>Description</th>
                     <th>CreateDate</th>
-                    <th>actions</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,13 +25,13 @@
                     <td>{{ project.description }}</td>
                     <td>{{ project.createDate ? project.createDate|date('Y-m-d H:i:s') : '' }}</td>
                     <td>
-                        <a class="btn btn-outline-primary" href="{{ path('project_show', {'id': project.id}) }}">show</a>
-                        <a class="btn btn-outline-secondary" href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
+                        <a class="btn btn-outline-secondary" href="{{ path('project_show', {'id': project.id}) }}">Show</a>
+                        <a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5">no records found</td>
+                    <td colspan="5">No records found</td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -3,7 +3,7 @@
 {% block title %}Work index{% endblock %}
 
 {% block body %}
-    <div class="main-div-crud">
+    <div class="main-div-crud-list">
 
         <h1>Work index</h1>
 
@@ -14,7 +14,7 @@
                     <th>Description</th>
                     <th>StartDate</th>
                     <th>EndDate</th>
-                    <th>actions</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,13 +25,13 @@
                     <td>{{ work.startDate ? work.startDate|date('Y-m-d H:i:s') : '' }}</td>
                     <td>{{ work.endDate ? work.endDate|date('Y-m-d H:i:s') : '' }}</td>
                     <td>
-                        <a class="btn btn-outline-primary" href="{{ path('work_show', {'id': work.id}) }}">Show</a>
-                        <a class="btn btn-outline-secondary" href="{{ path('work_edit', {'id': work.id}) }}">Edit</a>
+                        <a class="btn btn-outline-secondary" href="{{ path('work_show', {'id': work.id}) }}">Show</a>
+                        <a class="btn btn-outline-primary" href="{{ path('work_edit', {'id': work.id}) }}">Edit</a>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5">no records found</td>
+                    <td colspan="5">No records found</td>
                 </tr>
             {% endfor %}
             </tbody>

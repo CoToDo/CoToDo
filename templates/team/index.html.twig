@@ -3,7 +3,7 @@
 {% block title %}Team index{% endblock %}
 
 {% block body %}
-    <div class="main-div-crud">
+    <div class="main-div-crud-list">
 
         <h1>Team index</h1>
 
@@ -12,7 +12,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Name</th>
-                    <th>actions</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,13 +21,13 @@
                     <td>{{ team.id }}</td>
                     <td>{{ team.name }}</td>
                     <td>
-                        <a class="btn btn-outline-primary" href="{{ path('team_show', {'id': team.id}) }}">show</a>
-                        <a class="btn btn-outline-secondary" href="{{ path('team_edit', {'id': team.id}) }}">edit</a>
+                        <a class="btn btn-outline-secondary" href="{{ path('team_show', {'id': team.id}) }}">Show</a>
+                        <a class="btn btn-outline-primary" href="{{ path('team_edit', {'id': team.id}) }}">Edit</a>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="3">no records found</td>
+                    <td colspan="3">No records found</td>
                 </tr>
             {% endfor %}
             </tbody>

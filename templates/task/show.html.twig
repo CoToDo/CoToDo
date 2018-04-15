@@ -36,9 +36,9 @@
             </tbody>
         </table>
 
-        <a class="btn btn-outline-primary" href="{{ path('task_index') }}">back to list</a>
+        <a class="btn btn-outline-secondary" href="{{ path('task_index') }}">Back to list</a>
 
-        <a class="btn btn-outline-primary" href="{{ path('task_edit', {'id': task.id}) }}">edit</a>
+        <a class="btn btn-outline-primary" href="{{ path('task_edit', {'id': task.id}) }}">Edit</a>
 
         {{ include('task/_delete_form.html.twig') }}
     </div>
