@@ -32,6 +32,13 @@ class ProjectController extends Controller
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
+        //Automatically set createDate
+        $dateTime = new \DateTime('now');;
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        if (null === $project->getCreateDate()) {
+            $project->setCreateDate($dateTime);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($project);

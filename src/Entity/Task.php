@@ -34,7 +34,7 @@ class Task
     private $createDate;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $completionDate;
 

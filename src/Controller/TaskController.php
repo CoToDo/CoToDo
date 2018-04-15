@@ -32,6 +32,13 @@ class TaskController extends Controller
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 
+        //Automatically set createDate
+        $dateTime = new \DateTime('now');;
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        if (null === $task->getCreateDate()) {
+            $task->setCreateDate($dateTime);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($task);
