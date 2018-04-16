@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Work;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,8 +14,12 @@ class WorkType extends AbstractType
     {
         $builder
             ->add('description')
-            ->add('startDate')
-            ->add('endDate')
+            ->add('startDate', DateTimeType::class, [
+                'widget' => 'single_text',
+            ])
+            ->add('endDate', DateTimeType::class, [
+                'widget' => 'single_text',
+            ])
             ->add('task')
             ->add('user')
         ;

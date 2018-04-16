@@ -15,7 +15,7 @@
             {{ form_widget(form.priority) }}
         </div>
         <div class="col">
-            {{ form_label(form.deadline) }}
+            {{ form_label(form.deadline, null, {'label_attr': {'class': 'col-form-label'}} ) }}
             {{ form_errors(form.deadline) }}
             {{ form_widget(form.deadline) }}
         </div>
