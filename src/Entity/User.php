@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -31,14 +32,22 @@ class User implements UserInterface, \Serializable
     private $lastName;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Email()
      */
     private $mail;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Length(max=4096)
+     */
+    private $plainPassword;
+
+    /**
      * @ORM\Column(type="string", length=255, unique=true)
      */
-    private $hash;
+    private $password;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user")
@@ -103,14 +112,9 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getHash(): ?string
+    public function setPassword(string $password): self
     {
-        return $this->hash;
-    }
-
-    public function setHash(string $hash): self
-    {
-        $this->hash = $hash;
+        $this->password = $password;
 
         return $this;
     }
@@ -184,7 +188,7 @@ class User implements UserInterface, \Serializable
 
     public function getPassword()
     {
-        return $this->hash;
+        return $this->password;
     }
 
     public function  getRoles()
@@ -201,13 +205,30 @@ class User implements UserInterface, \Serializable
         return $this->mail;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param mixed $plainPassword
+     */
+    public function setPlainPassword($plainPassword): void
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+
     /** @see \Serializable::serialize() */
     public function serialize()
     {
         return serialize(array(
             $this->id,
             $this->mail,
-            $this->hash,
+            $this->password,
             // see section on salt below
             // $this->salt,
         ));
@@ -219,7 +240,7 @@ class User implements UserInterface, \Serializable
         list (
             $this->id,
             $this->mail,
-            $this->hash,
+            $this->password,
             // see section on salt below
             // $this->salt
             ) = unserialize($serialized);
