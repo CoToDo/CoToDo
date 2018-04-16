@@ -20,7 +20,14 @@ class ProjectController extends Controller
      */
     public function index(ProjectRepository $projectRepository): Response
     {
-        return $this->render('project/index.html.twig', ['projects' => $projectRepository->findAll()]);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+        if($user) {
+            return $this->render('project/index.html.twig', ['projects' => $projectRepository->findAll()]);
+        }
+
     }
 
     /**
@@ -28,29 +35,36 @@ class ProjectController extends Controller
      */
     public function new(Request $request): Response
     {
-        $project = new Project();
-        $form = $this->createForm(ProjectType::class, $project);
-        $form->handleRequest($request);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        //Automatically set createDate
-        $dateTime = new \DateTime('now');;
-        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        if (null === $project->getCreateDate()) {
-            $project->setCreateDate($dateTime);
+        $user = $this->getUser();
+
+        if($user) {
+            $project = new Project();
+            $form = $this->createForm(ProjectType::class, $project);
+            $form->handleRequest($request);
+
+            //Automatically set createDate
+            $dateTime = new \DateTime('now');;
+            $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+            if (null === $project->getCreateDate()) {
+                $project->setCreateDate($dateTime);
+            }
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($project);
+                $em->flush();
+
+                return $this->redirectToRoute('project_index');
+            }
+
+            return $this->render('project/new.html.twig', [
+                'project' => $project,
+                'form' => $form->createView(),
+            ]);
         }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($project);
-            $em->flush();
-
-            return $this->redirectToRoute('project_index');
-        }
-
-        return $this->render('project/new.html.twig', [
-            'project' => $project,
-            'form' => $form->createView(),
-        ]);
     }
 
     /**
@@ -58,7 +72,14 @@ class ProjectController extends Controller
      */
     public function show(Project $project): Response
     {
-        return $this->render('project/show.html.twig', ['project' => $project]);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+        if($user) {
+            return $this->render('project/show.html.twig', ['project' => $project]);
+        }
+
     }
 
     /**
