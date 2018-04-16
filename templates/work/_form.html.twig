@@ -1,14 +1,14 @@
 {{ form_start(form) }}
     {{ form_errors(form) }}
     {#{{ form_widget(form) }}#}
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
             {{ form_label(form.description) }}
             {{ form_errors(form.description) }}
             {{ form_widget(form.description) }}
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
             {{ form_label(form.startDate) }}
             {{ form_errors(form.startDate) }}
@@ -20,19 +20,21 @@
             {{ form_widget(form.endDate) }}
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
             {{ form_label(form.task) }}
             {{ form_errors(form.task) }}
             {{ form_widget(form.task) }}
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
             {{ form_label(form.user) }}
             {{ form_errors(form.user) }}
             {{ form_widget(form.user) }}
         </div>
     </div>
-    <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+    <div class="form-group">
+        <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+    </div>
 {{ form_end(form) }}

@@ -8,7 +8,7 @@
         {{ form_widget(form.name) }}
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
             {{ form_label(form.priority, null, {'label_attr': {'class': 'col-form-label'}} )}}
             {{ form_errors(form.priority) }}
@@ -20,26 +20,28 @@
             {{ form_widget(form.deadline) }}
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
             {{ form_label(form.tags) }}
             {{ form_errors(form.tags) }}
             {{ form_widget(form.tags) }}
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
             {{ form_label(form.works) }}
             {{ form_errors(form.works) }}
             {{ form_widget(form.works) }}
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
             {{ form_label(form.comments) }}
             {{ form_errors(form.comments) }}
             {{ form_widget(form.comments) }}
         </div>
     </div>
-    <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+    <div class="form-group">
+        <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+    </div>
 {{ form_end(form) }}

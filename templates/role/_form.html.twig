@@ -1,27 +1,28 @@
 {{ form_start(form) }}
     {{ form_errors(form) }}
 
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
             {{ form_label(form.type) }}
             {{ form_errors(form.type) }}
             {{ form_widget(form.type) }}
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
             {{ form_label(form.team) }}
             {{ form_errors(form.team) }}
             {{ form_widget(form.team) }}
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
             {{ form_label(form.user) }}
             {{ form_errors(form.user) }}
             {{ form_widget(form.user) }}
         </div>
     </div>
-
-    <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+    <div class="form-group">
+        <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+    </div>
 {{ form_end(form) }}

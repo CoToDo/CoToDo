@@ -1,33 +1,35 @@
-{{ form_start(form) }}
+{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
     {{ form_errors(form) }}
 
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
-            {{ form_label(form.name) }}
+            {{ form_label(form.name, null, {'attr': {'class': 'col-form-dlabel'}}) }}
             {{ form_errors(form.name) }}
             {{ form_widget(form.name) }}
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
             {{ form_label(form.description) }}
             {{ form_errors(form.description) }}
             {{ form_widget(form.description) }}
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
             {{ form_label(form.parentProject) }}
             {{ form_errors(form.parentProject) }}
             {{ form_widget(form.parentProject) }}
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row form-group">
         <div class="col">
             {{ form_label(form.team) }}
             {{ form_errors(form.team) }}
             {{ form_widget(form.team) }}
         </div>
     </div>
-    <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+    <div class="form-group">
+        <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+    </div>
 {{ form_end(form) }}
