@@ -6,6 +6,7 @@ use App\Constants;
 use App\Entity\Team;
 use App\Entity\Role;
 use App\Entity\User;
+use App\Form\RoleType;
 use App\Form\TeamType;
 use App\Repository\TeamRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -41,9 +42,7 @@ class TeamController extends Controller
             $em->persist($team);
             $em->flush();
 
-            //id 1 should be id of actual user, not set yet
             $user = $this->getUser();
-
             $role = new Role();
             $role->setUser($user);
             $role->setTeam($team);
@@ -65,7 +64,7 @@ class TeamController extends Controller
      */
     public function show(Team $team): Response
     {
-        return $this->render('team/show.html.twig', ['team' => $team]);
+        return $this->render('team/show.html.twig', ['team' => $team, 'roles'=> $team->getRoles()]);
     }
 
     /**
@@ -101,4 +100,44 @@ class TeamController extends Controller
 
         return $this->redirectToRoute('team_index');
     }
+
+    /**
+     * @Route("/{id}/add", name="team_add_user", methods="GET|POST")
+     */
+    public function addUser(Request $request, Team $team): Response
+    {
+        $role = new Role();
+        $role->setTeam($team);
+        $form = $this->createForm(RoleType::class, $role);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($role);
+            $em->flush();
+
+            return $this->redirectToRoute('role_index');
+        }
+
+        return $this->render('role/new.html.twig', [
+            'role' => $role,
+            'form' => $form->createView(),
+        ]);
+    }
+//    public function addUser(Request $request, Team $team): Response
+//    {
+//        $form = $this->createForm(TeamType::class, $team);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $this->getDoctrine()->getManager()->flush();
+//
+//            return $this->redirectToRoute('team_add_user', ['id' => $team->getId()]);
+//        }
+//
+//        return $this->render('role/new.html.twig', [
+//            'team' => $team,
+//            'form' => $form->createView(),
+//        ]);
+//    }
 }

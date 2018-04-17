@@ -5,20 +5,38 @@
 {% block body %}
     <div class="main-div-crud">
 
-        <h1>Team</h1>
+        <h1>{{ team.name }}</h1>
 
         <table class="table">
+            <thead>
+            <tr>
+                <th>User</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
             <tbody>
+            {% for role in roles %}
                 <tr>
-                    <th>Name</th>
-                    <td>{{ team.name }}</td>
+                    <td>{{ role.user }}</td>
+                    <td>{{ role.type }}</td>
+                    <td>
+                        <a class="btn btn-outline-primary" href="{{ path('role_edit', {'id': role.id}) }}">Edit</a>
+                    </td>
                 </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">No records found</td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
 
         <a class="btn btn-outline-secondary" href="{{ path('team_index') }}">Back to list</a>
 
         <a class="btn btn-outline-primary" href="{{ path('team_edit', {'id': team.id}) }}">Edit</a>
+
+        <a class="btn btn-outline-primary" href="{{ path('team_add_user', {'id': team.id}) }}">Add user</a>
 
         {{ include('team/_delete_form.html.twig') }}
     </div>

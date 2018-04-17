@@ -21,7 +21,6 @@ class RoleType extends AbstractType
                 array('choices' => array(Constants::LEADER =>Constants::LEADER,
                                          Constants::ADMIN => Constants::ADMIN,
                                          Constants::USER => Constants::USER)))
-            ->add('team')
             ->add('user')
         ;
     }
