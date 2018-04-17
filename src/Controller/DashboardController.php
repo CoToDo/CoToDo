@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     /**
      * @Route("/dashboard", name="dashboard")7
-     * @Security("has_role('IS_AUTHENTICATED_FULLY')")
+     * @Security("has_role('ROLE_USER')")
      */
     public function index()
     {

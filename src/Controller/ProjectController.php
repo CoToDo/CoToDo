@@ -18,7 +18,7 @@ class ProjectController extends Controller
 {
     /**
      * @Route("/", name="project_index", methods="GET")
-     * @Security("has_role('IS_AUTHENTICATED_FULLY')")
+     * @Security("has_role('ROLE_USER')")
      */
     public function index(ProjectRepository $projectRepository): Response
     {
@@ -29,58 +29,54 @@ class ProjectController extends Controller
 
     /**
      * @Route("/create", name="project_new", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
      */
     public function new(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user = $this->getUser();
 
-        if($user) {
-            $project = new Project();
-            $form = $this->createForm(ProjectType::class, $project);
-            $form->handleRequest($request);
+        $project = new Project();
+        $form = $this->createForm(ProjectType::class, $project);
+        $form->handleRequest($request);
 
-            //Automatically set createDate
-            $dateTime = new \DateTime('now');;
-            $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-            if (null === $project->getCreateDate()) {
-                $project->setCreateDate($dateTime);
-            }
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($project);
-                $em->flush();
-
-                return $this->redirectToRoute('project_index');
-            }
-
-            return $this->render('project/new.html.twig', [
-                'project' => $project,
-                'form' => $form->createView(),
-            ]);
+        //Automatically set createDate
+        $dateTime = new \DateTime('now');;
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        if (null === $project->getCreateDate()) {
+            $project->setCreateDate($dateTime);
         }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($project);
+            $em->flush();
+
+            return $this->redirectToRoute('project_index');
+        }
+
+        return $this->render('project/new.html.twig', [
+            'project' => $project,
+            'form' => $form->createView(),
+        ]);
+
 
     }
 
     /**
      * @Route("/{id}", name="project_show", methods="GET")
+     * @Security("has_role('ROLE_USER')")
      */
     public function show(Project $project): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $user = $this->getUser();
-
-        if($user) {
-            return $this->render('project/show.html.twig', ['project' => $project]);
-        }
+        return $this->render('project/show.html.twig', ['project' => $project]);
 
     }
 
     /**
      * @Route("/{id}/edit", name="project_edit", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
      */
     public function edit(Request $request, Project $project): Response
     {
@@ -101,6 +97,7 @@ class ProjectController extends Controller
 
     /**
      * @Route("/{id}", name="project_delete", methods="DELETE")
+     * @Security("has_role('ROLE_USER')")
      */
     public function delete(Request $request, Project $project): Response
     {
