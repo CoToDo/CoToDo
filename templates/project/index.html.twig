@@ -10,7 +10,6 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Id</th>
                     <th>Name</th>
                     <th>Description</th>
                     <th>CreateDate</th>
@@ -20,7 +19,6 @@
             <tbody>
             {% for project in projects %}
                 <tr>
-                    <td>{{ project.id }}</td>
                     <td>{{ project.name }}</td>
                     <td>{{ project.description }}</td>
                     <td>{{ project.createDate ? project.createDate|date('Y-m-d H:i:s') : '' }}</td>
@@ -31,7 +29,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5">No records found</td>
+                    <td colspan="4">No records found</td>
                 </tr>
             {% endfor %}
             </tbody>

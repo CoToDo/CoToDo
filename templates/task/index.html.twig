@@ -10,7 +10,6 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Id</th>
                     <th>Name</th>
                     <th>Priority</th>
                     <th>CreateDate</th>
@@ -22,7 +21,6 @@
             <tbody>
             {% for task in tasks %}
                 <tr>
-                    <td>{{ task.id }}</td>
                     <td>{{ task.name }}</td>
                     <td>{{ task.priority }}</td>
                     <td>{{ task.createDate ? task.createDate|date('Y-m-d H:i:s') : '' }}</td>
@@ -35,7 +33,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="7">No records found</td>
+                    <td colspan="6">No records found</td>
                 </tr>
             {% endfor %}
             </tbody>

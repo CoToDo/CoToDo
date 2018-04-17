@@ -10,7 +10,6 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Id</th>
                     <th>Type</th>
                     <th>Actions</th>
                 </tr>
@@ -18,7 +17,6 @@
             <tbody>
             {% for role in roles %}
                 <tr>
-                    <td>{{ role.id }}</td>
                     <td>{{ role.type }}</td>
                     <td>
                         <a class="btn btn-outline-secondary" href="{{ path('role_show', {'id': role.id}) }}">Show</a>
@@ -27,7 +25,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="3">No records found</td>
+                    <td colspan="2">No records found</td>
                 </tr>
             {% endfor %}
             </tbody>
