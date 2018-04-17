@@ -54,9 +54,6 @@ class TeamController extends Controller
             return $this->redirectToRoute('team_index');
         }
 
-
-
-
         return $this->render('team/new.html.twig', [
             'team' => $team,
             'form' => $form->createView(),
