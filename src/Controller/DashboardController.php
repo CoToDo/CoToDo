@@ -16,6 +16,7 @@ class DashboardController extends Controller
      */
     public function index(TaskRepository $taskRepository): Response
     {
+
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
             'tasks' => $taskRepository->findAllSortedByPriority()
