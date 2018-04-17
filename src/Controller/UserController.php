@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/user")
+ * @Route("/users")
  */
 class UserController extends Controller
 {
@@ -21,29 +21,6 @@ class UserController extends Controller
     public function index(UserRepository $userRepository): Response
     {
         return $this->render('user/index.html.twig', ['users' => $userRepository->findAll()]);
-    }
-
-    /**
-     * @Route("/new", name="user_new", methods="GET|POST")
-     */
-    public function new(Request $request): Response
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
-            return $this->redirectToRoute('user_index');
-        }
-
-        return $this->render('user/new.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
     }
 
     /**
