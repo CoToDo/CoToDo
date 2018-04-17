@@ -2,30 +2,25 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class DashboardController extends Controller
 {
     /**
-     * @Route("/dashboard", name="dashboard")
+     * @Route("/dashboard", name="dashboard")7
+     * @Security("has_role('IS_AUTHENTICATED_FULLY')")
      */
     public function index()
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         $user = $this->getUser();
 
-        if($user){
-
-            return $this->render('dashboard/index.html.twig', [
-                'controller_name' => 'DashboardController',
-                'userName' => $user->getName(),
-                'lastName' => $user->getLastName()
-            ]);
-        }
+        return $this->render('dashboard/index.html.twig', [
+            'controller_name' => 'DashboardController',
+            'userName' => $user->getName(),
+            'lastName' => $user->getLastName()
+        ]);
 
 
     }

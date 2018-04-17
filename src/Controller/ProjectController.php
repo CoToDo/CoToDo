@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * @Route("/projects")
@@ -17,16 +18,12 @@ class ProjectController extends Controller
 {
     /**
      * @Route("/", name="project_index", methods="GET")
+     * @Security("has_role('IS_AUTHENTICATED_FULLY')")
      */
     public function index(ProjectRepository $projectRepository): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $user = $this->getUser();
-
-        if($user) {
-            return $this->render('project/index.html.twig', ['projects' => $projectRepository->findAll()]);
-        }
+        return $this->render('project/index.html.twig', ['projects' => $projectRepository->findAll()]);
 
     }
 
