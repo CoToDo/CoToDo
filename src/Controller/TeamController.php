@@ -23,7 +23,7 @@ class TeamController extends Controller
      */
     public function index(TeamRepository $teamRepository): Response
     {
-        return $this->render('team/index.html.twig', ['teams' => $teamRepository->findAll()]);
+        return $this->render('team/index.html.twig', ['teams' => $teamRepository->findMyTeams($this->getUser()->getId())]);
     }
 
     /**
@@ -42,7 +42,7 @@ class TeamController extends Controller
             $em->flush();
 
             //id 1 should be id of actual user, not set yet
-            $user=$this->getDoctrine()->getRepository(User::class)->find(1);
+            $user = $this->getUser();
 
             $role = new Role();
             $role->setUser($user);

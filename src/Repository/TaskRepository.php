@@ -22,9 +22,12 @@ class TaskRepository extends ServiceEntityRepository
     /**
      * @return Task[] Returns an array of Task objects
      */
-    public function findAllSortedByPriority()
+    public function findMyTasksSortedByPriority($id)
     {
         return $this->createQueryBuilder('t')
+            ->join('t.works',"w")
+            ->where('w.user = :val')
+            ->setParameter('val', $id)
             ->orderBy('t.priority, t.deadline', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
