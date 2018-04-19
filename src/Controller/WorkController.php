@@ -54,6 +54,7 @@ class WorkController extends Controller
 
     /**
      * @Route("/{id}/edit", name="work_edit", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
      */
     public function edit(Request $request, Work $work): Response
     {
