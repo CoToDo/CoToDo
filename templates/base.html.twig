@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
         <title>{% block title %}Home{% endblock %} | CoToDo</title>
@@ -18,7 +18,7 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse container" id="navbarNavAltMarkup">
+            <div class="collapse navbar-collapse container my-2 my-lg-0" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="{{ path('project_new') }}">Create Project <span class="sr-only">(current)</span></a>
                     <a class="nav-item nav-link" href="{{ path('team_new') }}">Create Team</a>
@@ -30,18 +30,19 @@
 
 
             <div class="collapse navbar-collapse container">
-                <form class="form-inline">
+                <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
             </div>
 
-            <div class="collapse navbar-collapse container">
-                <ul class="nav-item dropdown">
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="nav-item dropdown my-2 my-lg-0">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{app.user}}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item">{{app.user.name}} {{app.user.lastname}}</a>
                         <a class="dropdown-item" href="{{ path('user_show', {'id': app.user.id}) }}">Settings</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ path('logout') }}">Logout</a>
