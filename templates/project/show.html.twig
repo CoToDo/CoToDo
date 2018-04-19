@@ -60,15 +60,10 @@
                         <td colspan="6">No records found</td>
                     </tr>
                 {% endfor %}
-                    <tr>
-                        <td>
-                            <a class="btn btn-outline-success" href="{{ path('project_task_new', {'idp': project.id, 'id': project.id}) }}">Add task</a>
-                            <a class="btn btn-outline-secondary" href="{{ path('project_task_index', {'id': project.id}) }}">Show tasks</a><div class="m-5">
-                        </td>
-                    </tr>
                 </tbody>
             </table>
-
+            <a class="btn btn-outline-success" href="{{ path('project_task_new', {'idp': project.id, 'id': project.id}) }}">Add task</a>
+            <a class="btn btn-outline-secondary " href="{{ path('project_task_index', {'id': project.id}) }}">Show tasks</a>
         </div>
 
 
