@@ -5,24 +5,23 @@
 {% block body %}
     <div class="main-div-crud-list">
 
-        <h1>Team index</h1>
+        <h1>My Teams</h1>
 
         <table class="table">
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
             {% for team in teams %}
                 <tr>
-                    <td>{{ team.name }}</td>
-                    <td>
-                        <a class="btn btn-outline-secondary" href="{{ path('team_show', {'id': team.id}) }}">Show</a>
-                        <a class="btn btn-outline-primary" href="{{ path('team_edit', {'id': team.id}) }}">Edit</a>
+                    <td><a class="btn btn-outline-secondary" href="{{ path('team_show', {'id': team.id}) }}">{{ team.name }}</a></td>
+                    {#<td>#}
+                        {#<a class="btn btn-outline-secondary" href="{{ path('team_show', {'id': team.id}) }}">Show</a>#}
+                        {#<a class="btn btn-outline-primary" href="{{ path('team_edit', {'id': team.id}) }}">Edit</a>#}
                         {#<a class="btn btn-outline-primary" href="{{ path('team_add', {'id': team.id}) }}">Add </a>#}
-                    </td>
+                    {#</td>#}
                 </tr>
             {% else %}
                 <tr>

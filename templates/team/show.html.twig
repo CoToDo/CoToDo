@@ -8,6 +8,9 @@
         <h1>{{ team.name }}</h1>
 
         <table class="table">
+
+            <h2>Roles<h2>
+
             <thead>
             <tr>
                 <th>User</th>
@@ -22,6 +25,7 @@
                     <td>{{ role.type }}</td>
                     <td>
                         <a class="btn btn-outline-primary" href="{{ path('role_edit', {'id': role.id}) }}">Edit</a>
+                        {{ include('role/_delete_form.html.twig') }}
                     </td>
                 </tr>
             {% else %}
@@ -32,11 +36,43 @@
             </tbody>
         </table>
 
+        <a class="btn btn-outline-success" href="{{ path('team_add_user', {'id': team.id}) }}">Add user</a>
+
+        <table class="table">
+
+            <h2>Projects<h2>
+
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>CreateDate</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for project in projects %}
+                <tr>
+                    <td>{{ project.name }}</td>
+                    <td>{{ project.description }}</td>
+                    <td>{{ project.createDate ? project.createDate|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>
+                        <a class="btn btn-outline-secondary" href="{{ path('project_show', {'id': project.id}) }}">Show</a>
+                        <a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
         <a class="btn btn-outline-secondary" href="{{ path('team_index') }}">Back to list</a>
 
         <a class="btn btn-outline-primary" href="{{ path('team_edit', {'id': team.id}) }}">Edit</a>
 
-        <a class="btn btn-outline-primary" href="{{ path('team_add_user', {'id': team.id}) }}">Add user</a>
 
         {{ include('team/_delete_form.html.twig') }}
     </div>
