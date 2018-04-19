@@ -27,7 +27,7 @@
         </div>
         <div class="m-5">
 
-            <h1>Tasks</h1>
+            <h2>Tasks</h2>
 
             <table class="table">
                 <thead>
@@ -63,6 +63,48 @@
                     <tr>
                         <td>
                             <a class="btn btn-outline-success" href="{{ path('project_task_new', {'idp': project.id, 'id': project.id}) }}">Add task</a>
+                            <a class="btn btn-outline-secondary" href="{{ path('project_task_index', {'id': project.id}) }}">Show tasks</a><div class="m-5">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
+
+
+        <div class="m-5">
+            <h2>Subprojects</h2>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Create date</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for subproject in subprojects %}
+                    <tr>
+                        <td>{{ subproject.name }}</td>
+                        <td>{{ subproject.description }}</td>
+                        <td>{{ subproject.createDate ? subproject.createDate|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>
+                            <a class="btn btn-outline-secondary" href="{{ path('project_show', {'id': subproject.id}) }}">Show</a>
+                            <a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': subproject.id}) }}">Edit</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">No records found</td>
+                    </tr>
+                {% endfor %}
+                    <tr>
+                        <td>
+                            <a class="btn btn-outline-success" href="{{ path('subproject_new', {'id': project.id}) }}">Add subproject</a>
                         </td>
                     </tr>
                 </tbody>
@@ -70,10 +112,8 @@
 
             <a class="btn btn-outline-secondary" href="{{ path('project_index') }}">Back to list</a>
 
-
-            {{ include('project/_delete_form.html.twig') }}
-
         </div>
+
 
     </div>
 {% endblock %}

@@ -69,13 +69,51 @@ class ProjectController extends Controller
     }
 
     /**
+     * @Route("/{id}/create", name="subproject_new", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function newSubproject(Request $request, Project $parentProject): Response
+    {
+
+        $project = new Project();
+        $project->setParentProject($parentProject);
+        $form = $this->createForm(ProjectType::class, $project, [
+            'userId' => $this->getUser()->getId(),
+            'teamRepository' => $this->getDoctrine()->getRepository(Team::class)
+        ]);
+        $form->handleRequest($request);
+
+        //Automatically set createDate
+        $dateTime = new \DateTime('now');;
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        if (null === $project->getCreateDate()) {
+            $project->setCreateDate($dateTime);
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($project);
+            $em->flush();
+
+            return $this->redirectToRoute('project_index');
+        }
+
+        return $this->render('project/new.html.twig', [
+            'project' => $project,
+            'form' => $form->createView(),
+        ]);
+
+
+    }
+
+    /**
      * @Route("/{id}", name="project_show", methods="GET")
      * @Security("has_role('ROLE_USER')")
      */
     public function show(Project $project): Response
     {
 
-        return $this->render('project/show.html.twig', ['project' => $project]);
+        return $this->render('project/show.html.twig', ['project' => $project, 'subprojects' => $project->getSubProjects()]);
 
     }
 
@@ -121,6 +159,7 @@ class ProjectController extends Controller
 
     /**
      * @Route("/{id}/tasks", name="project_task_index", methods="GET")
+     * @Security("has_role('ROLE_USER')")
      */
     public function indexTasks(Project $project): Response
     {
@@ -129,6 +168,7 @@ class ProjectController extends Controller
 
     /**
      * @Route("/{id}/tasks/create", name="project_task_new", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
      */
     public function createTask(Request $request, Project $project): Response
     {
@@ -163,6 +203,7 @@ class ProjectController extends Controller
     /**
      * @Route("/{idp}/tasks/{id}", name="project_task_show", methods="GET")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
+     * @Security("has_role('ROLE_USER')")
      */
     public function showTask(Project $project, Task $task): Response
     {
@@ -172,6 +213,7 @@ class ProjectController extends Controller
     /**
      * @Route("/{idp}/tasks/{id}/edit", name="project_task_edit", methods="GET|POST")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
+     * @Security("has_role('ROLE_USER')")
      */
     public function editTask(Request $request, Project $project, Task $task): Response
     {
@@ -194,6 +236,7 @@ class ProjectController extends Controller
     /**
      * @Route("/{idp}/tasks/{id}", name="project_task_delete", methods="DELETE")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
+     * @Security("has_role('ROLE_USER')")
      */
     public function deleteTask(Request $request, Project $project, Task $task): Response
     {
