@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * @Route("/teams")
@@ -21,6 +22,7 @@ class TeamController extends Controller
 {
     /**
      * @Route("/", name="team_index", methods="GET")
+     * @Security("has_role('ROLE_USER')")
      */
     public function index(TeamRepository $teamRepository): Response
     {
@@ -29,10 +31,10 @@ class TeamController extends Controller
 
     /**
      * @Route("/create", name="team_new", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
      */
     public function new(Request $request): Response
     {
-
         $team = new Team();
         $form = $this->createForm(TeamType::class, $team);
         $form->handleRequest($request);
@@ -61,32 +63,18 @@ class TeamController extends Controller
 
     /**
      * @Route("/{id}", name="team_show", methods="GET")
+     * @Security("has_role('ROLE_USER')")
+     * @Security("team.isMember(user)")
      */
     public function show(Team $team): Response
     {
-
-        $user = $this->getUser();
-
-        // check if user is in that team
-        $found = false;
-        foreach ($team->getRoles() as $role) {
-            if($user->getId() == $role->getUser()->getId()) {
-                $found = true;
-                break;
-            }
-        }
-
-        if($found) {
-            return $this->render('team/show.html.twig', ['team' => $team, 'roles' => $team->getRoles(), 'projects' => $team->getProjects()]);
-        }
-        else {
-            return $this->redirectToRoute('team_index');
-        }
-
+        return $this->render('team/show.html.twig', ['team' => $team, 'roles' => $team->getRoles(), 'projects' => $team->getProjects()]);
     }
 
     /**
      * @Route("/{id}/edit", name="team_edit", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
+     * @Security("team.isMember(user)")
      */
     public function edit(Request $request, Team $team): Response
     {
@@ -107,10 +95,12 @@ class TeamController extends Controller
 
     /**
      * @Route("/{id}", name="team_delete", methods="DELETE")
+     * @Security("has_role('ROLE_USER')")
+     * @Security("team.isMember(user)")
      */
     public function delete(Request $request, Team $team): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$team->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $team->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($team);
             $em->flush();
@@ -121,6 +111,8 @@ class TeamController extends Controller
 
     /**
      * @Route("/{id}/add", name="team_add_user", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
+     * @Security("team.isMember(user)")
      */
     public function addUser(Request $request, Team $team): Response
     {

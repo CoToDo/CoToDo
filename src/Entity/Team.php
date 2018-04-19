@@ -124,4 +124,14 @@ class Team
     }
 
 
+    public function isMember($user) {
+        foreach ($this->getRoles() as $role) {
+            if($user->getId() == $role->getUser()->getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }
