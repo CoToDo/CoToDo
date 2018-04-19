@@ -9,6 +9,6 @@
 
         {{ include('task/_form.html.twig') }}
 
-        <a class="btn btn-outline-primary" href="{{ path('project_task_index') }}">Back to list</a>
+        <a class="btn btn-outline-primary" href="{{ path('project_task_index', {'id': project.id}) }}">Back to list</a>
     </div>
 {% endblock %}
