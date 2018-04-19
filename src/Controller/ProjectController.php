@@ -68,6 +68,44 @@ class ProjectController extends Controller
     }
 
     /**
+     * @Route("/{id}/create", name="subproject_new", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function newSubproject(Request $request, Project $parentProject): Response
+    {
+
+        $project = new Project();
+        $project->setParentProject($parentProject);
+        $form = $this->createForm(ProjectType::class, $project, [
+            'userId' => $this->getUser()->getId(),
+            'teamRepository' => $this->getDoctrine()->getRepository(Team::class)
+        ]);
+        $form->handleRequest($request);
+
+        //Automatically set createDate
+        $dateTime = new \DateTime('now');;
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        if (null === $project->getCreateDate()) {
+            $project->setCreateDate($dateTime);
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($project);
+            $em->flush();
+
+            return $this->redirectToRoute('project_index');
+        }
+
+        return $this->render('project/new.html.twig', [
+            'project' => $project,
+            'form' => $form->createView(),
+        ]);
+
+
+    }
+
+    /**
      * @Route("/{id}", name="project_show", methods="GET")
      * @Security("has_role('ROLE_USER')")
      */
