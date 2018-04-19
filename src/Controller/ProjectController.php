@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\Tag;
 use App\Entity\Task;
 use App\Entity\Team;
 use App\Form\ProjectType;

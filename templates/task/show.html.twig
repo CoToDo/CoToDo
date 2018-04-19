@@ -29,6 +29,14 @@
                     <th>Deadline</th>
                     <td>{{ task.deadline ? task.deadline|date('Y-m-d H:i:s') : '' }}</td>
                 </tr>
+                <tr>
+                    <th>Tags</th>
+                    <td>
+                        {% for tag in task.tags %}
+                            {{ tag.name }}
+                        {% endfor %}
+                    </td>
+                </tr>
             </tbody>
         </table>
 
