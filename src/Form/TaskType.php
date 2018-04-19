@@ -19,7 +19,6 @@ class TaskType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('tags')
-            ->add('works')
             ->add('comments')
         ;
     }
