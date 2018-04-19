@@ -17,45 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class RoleController extends Controller
 {
     /**
-     * @Route("/", name="role_index", methods="GET")
-     */
-    public function index(RoleRepository $roleRepository): Response
-    {
-        return $this->render('role/index.html.twig', ['roles' => $roleRepository->findAll()]);
-    }
-
-    /**
-     * @Route("/create", name="role_new", methods="GET|POST")
-     */
-    public function new(Request $request): Response
-    {
-        $role = new Role();
-        $form = $this->createForm(RoleType::class, $role);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($role);
-            $em->flush();
-
-            return $this->redirectToRoute('role_index');
-        }
-
-        return $this->render('role/new.html.twig', [
-            'role' => $role,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="role_show", methods="GET")
-     */
-    public function show(Role $role): Response
-    {
-        return $this->render('role/show.html.twig', ['role' => $role]);
-    }
-
-    /**
      * @Route("/{id}/edit", name="role_edit", methods="GET|POST")
      */
     public function edit(Request $request, Role $role): Response
@@ -86,7 +47,7 @@ class RoleController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('role_index');
+        return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
     }
 
 
