@@ -2,24 +2,24 @@
 
 namespace App\Controller;
 
+use App\Entity\Project;
 use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
-use phpDocumentor\Reflection\Project;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/tasks")
+ * @Route("tasks")
  */
 class TaskController extends Controller
 {
     /**
      * @Route("/", name="task_index", methods="GET")
      */
-    public function index(TaskRepository $taskRepository): Response
+    public function index(TaskRepository $taskRepository, Project $project): Response
     {
         return $this->render('task/index.html.twig', ['tasks' => $taskRepository->findAll()]);
     }
@@ -57,7 +57,7 @@ class TaskController extends Controller
     /**
      * @Route("/{id}", name="task_show", methods="GET")
      */
-    public function show(Task $task): Response
+    public function show(Project $project, Task $task): Response
     {
         return $this->render('task/show.html.twig', ['task' => $task]);
     }

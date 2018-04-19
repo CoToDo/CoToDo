@@ -27,8 +27,8 @@
                     <td>{{ task.completionDate ? task.completionDate|date('Y-m-d H:i:s') : '' }}</td>
                     <td>{{ task.deadline ? task.deadline|date('Y-m-d H:i:s') : '' }}</td>
                     <td>
-                        <a class="btn btn-outline-secondary" href="{{ path('project_task_show', {'id': task.id}) }}">Show</a>
-                        <a class="btn btn-outline-primary" href="{{ path('project task_edit', {'id': task.id}) }}">Edit</a>
+                        <a class="btn btn-outline-secondary" href="{{ path('project_task_show', {'idp': project.id , 'id': task.id}) }}">Show</a>
+                        <a class="btn btn-outline-primary" href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
                     </td>
                 </tr>
             {% else %}
@@ -39,6 +39,6 @@
             </tbody>
         </table>
 
-        <a class="btn btn-outline-success" href="{{ path('project_task_new') }}">Create new</a>
+        <a class="btn btn-outline-success" href="{{ path('project_task_new', {'id':project.id}) }}">Create new</a>
     </div>
 {% endblock %}

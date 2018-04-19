@@ -7,6 +7,8 @@ use App\Entity\Task;
 use App\Form\ProjectType;
 use App\Form\TaskType;
 use App\Repository\ProjectRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use App\Repository\TaskRepository;
 use App\Repository\TeamRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -113,16 +115,25 @@ class ProjectController extends Controller
         return $this->redirectToRoute('project_index');
     }
 
+
     /**
-     * @Route("/{id}/add", name="project_add_task", methods="GET|POST")
+     * @Route("/{id}/tasks", name="project_task_index", methods="GET")
      */
-    public function addUser(Request $request, Project $project): Response
+    public function indexTasks(Project $project): Response
+    {
+        return $this->render('task/index.html.twig', ['tasks' => $project->getTasks(), 'project' => $project]);
+    }
+
+    /**
+     * @Route("/{id}/tasks/create", name="project_task_new", methods="GET|POST")
+     */
+    public function createTask(Request $request, Project $project): Response
     {
         $task = new Task();
         $task->setProject($project);
 
         //Automatically set createDate
-        $dateTime = new \DateTime('now');;
+        $dateTime = new \DateTime('now');
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         if (null === $task->getCreateDate()) {
             $task->setCreateDate($dateTime);
@@ -136,12 +147,59 @@ class ProjectController extends Controller
             $em->persist($task);
             $em->flush();
 
-            return $this->redirectToRoute('project_index');
+            return $this->redirectToRoute('project_task_index');
         }
 
         return $this->render('task/new.html.twig', [
             'task' => $task,
+            'project' => $project,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/{idp}/tasks/{id}", name="project_task_show", methods="GET")
+     * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
+     */
+    public function showTask(Project $project, Task $task): Response
+    {
+        return $this->render('task/show.html.twig', ['task' => $task, 'project' => $project]);
+    }
+
+    /**
+     * @Route("/{idp}/tasks/{id}/edit", name="project_task_edit", methods="GET|POST")
+     * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
+     */
+    public function editTask(Request $request, Project $project, Task $task): Response
+    {
+        $form = $this->createForm(TaskType::class, $task);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('project_task_edit', ['id' => $task->getId(), 'idp' => $project->getId()]);
+        }
+
+        return $this->render('task/edit.html.twig', [
+            'task' => $task,
+            'project' => $project,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{idp}/tasks/{id}", name="project_task_delete", methods="DELETE")
+     * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
+     */
+    public function deleteTask(Request $request, Project $project, Task $task): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($task);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('project_task_index', ['id' => $project->getId()]);
     }
 }
