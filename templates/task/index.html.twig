@@ -5,7 +5,7 @@
 {% block body %}
     <div class="main-div-crud-list">
 
-        <h1>Tasks</h1>
+        <h1>{{ project.name }} tasks</h1>
 
         <table class="table">
             <thead>
@@ -29,6 +29,7 @@
                     <td>
                         <a class="btn btn-outline-secondary" href="{{ path('project_task_show', {'idp': project.id , 'id': task.id}) }}">Show</a>
                         <a class="btn btn-outline-primary" href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
+                        <a class="btn btn-outline-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
                     </td>
                 </tr>
             {% else %}

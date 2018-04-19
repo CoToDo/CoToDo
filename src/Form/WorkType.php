@@ -14,13 +14,13 @@ class WorkType extends AbstractType
     {
         $builder
             ->add('description')
-            ->add('startDate', DateTimeType::class, [
-                'widget' => 'single_text',
-            ])
-            ->add('endDate', DateTimeType::class, [
-                'widget' => 'single_text',
-            ])
-            ->add('task')
+//            ->add('startDate', DateTimeType::class, [
+//                'widget' => 'single_text',
+//            ])
+//            ->add('endDate', DateTimeType::class, [
+//                'widget' => 'single_text',
+//            ])
+//            ->add('task')
             ->add('user')
         ;
     }
