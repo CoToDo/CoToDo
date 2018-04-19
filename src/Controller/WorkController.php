@@ -39,7 +39,7 @@ class WorkController extends Controller
             $em->persist($work);
             $em->flush();
 
-            return $this->redirectToRoute('work_index');
+            return $this->redirectToRoute('project_tasks_index', ['id' => $task->getId()]);
         }
 
         return $this->render('work/new.html.twig', [
