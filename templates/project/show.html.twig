@@ -24,11 +24,44 @@
             </tbody>
         </table>
 
-        <a class="btn btn-outline-secondary" href="{{ path('project_index') }}">Back to list</a>
-
         <a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>
 
-        <a class="btn btn-outline-primary" href="{{ path('project_task_new', {'idp': project.id, 'id': project.id}) }}">Add task</a>
+        <a class="btn btn-outline-success" href="{{ path('project_task_new', {'idp': project.id, 'id': project.id}) }}">Add task</a>
+
+        <a class="btn btn-outline-secondary" href="{{ path('project_task_index', {'id': project.id}) }}">Show tasks</a>
+
+        <h2>Subprojects</h2>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Create date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for subproject in subprojects %}
+                <tr>
+                    <td>{{ subproject.name }}</td>
+                    <td>{{ subproject.description }}</td>
+                    <td>{{ subproject.createDate ? subproject.createDate|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>
+                        <a class="btn btn-outline-secondary" href="{{ path('project_show', {'id': subproject.id}) }}">Show</a>
+                        <a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': subproject.id}) }}">Edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a class="btn btn-outline-secondary" href="{{ path('project_index') }}">Back to list</a>
+        <a class="btn btn-outline-success" href="{{ path('project_new') }}">Add subproject</a>
 
         {{ include('project/_delete_form.html.twig') }}
     </div>

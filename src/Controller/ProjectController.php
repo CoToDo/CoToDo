@@ -75,7 +75,7 @@ class ProjectController extends Controller
     public function show(Project $project): Response
     {
 
-        return $this->render('project/show.html.twig', ['project' => $project]);
+        return $this->render('project/show.html.twig', ['project' => $project, 'subprojects' => $project->getSubProjects()]);
 
     }
 
@@ -118,6 +118,7 @@ class ProjectController extends Controller
 
     /**
      * @Route("/{id}/tasks", name="project_task_index", methods="GET")
+     * @Security("has_role('ROLE_USER')")
      */
     public function indexTasks(Project $project): Response
     {
@@ -126,6 +127,7 @@ class ProjectController extends Controller
 
     /**
      * @Route("/{id}/tasks/create", name="project_task_new", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
      */
     public function createTask(Request $request, Project $project): Response
     {
@@ -160,6 +162,7 @@ class ProjectController extends Controller
     /**
      * @Route("/{idp}/tasks/{id}", name="project_task_show", methods="GET")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
+     * @Security("has_role('ROLE_USER')")
      */
     public function showTask(Project $project, Task $task): Response
     {
@@ -169,6 +172,7 @@ class ProjectController extends Controller
     /**
      * @Route("/{idp}/tasks/{id}/edit", name="project_task_edit", methods="GET|POST")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
+     * @Security("has_role('ROLE_USER')")
      */
     public function editTask(Request $request, Project $project, Task $task): Response
     {
@@ -191,6 +195,7 @@ class ProjectController extends Controller
     /**
      * @Route("/{idp}/tasks/{id}", name="project_task_delete", methods="DELETE")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
+     * @Security("has_role('ROLE_USER')")
      */
     public function deleteTask(Request $request, Project $project, Task $task): Response
     {
