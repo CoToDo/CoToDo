@@ -9,6 +9,6 @@
 
         {{ include('role/_form.html.twig') }}
 
-        <a class="btn btn-outline-primary" href="{{ path('role_index') }}">Back to list</a>
+        <a class="btn btn-outline-secondary" href="{{ path('team_show', {'id': role.team.id }) }}">Back to team</a>
     </div>
 {% endblock %}

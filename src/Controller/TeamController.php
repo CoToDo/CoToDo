@@ -116,7 +116,7 @@ class TeamController extends Controller
             $em->persist($role);
             $em->flush();
 
-            return $this->redirectToRoute('team_index');
+            return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
         }
 
         return $this->render('role/new.html.twig', [
