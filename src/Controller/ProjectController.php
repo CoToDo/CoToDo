@@ -4,12 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Project;
 use App\Entity\Task;
+use App\Entity\Team;
 use App\Form\ProjectType;
 use App\Form\TaskType;
 use App\Repository\ProjectRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use App\Repository\TaskRepository;
-use App\Repository\TeamRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,13 +34,13 @@ class ProjectController extends Controller
      * @Route("/create", name="project_new", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      */
-    public function new(TeamRepository $teamRepository, Request $request): Response
+    public function new(Request $request): Response
     {
 
         $project = new Project();
         $form = $this->createForm(ProjectType::class, $project, [
             'userId' => $this->getUser()->getId(),
-            'teamRepository' => $teamRepository,
+            'teamRepository' => $this->getDoctrine()->getRepository(Team::class)
         ]);
         $form->handleRequest($request);
 
@@ -85,7 +84,10 @@ class ProjectController extends Controller
      */
     public function edit(Request $request, Project $project): Response
     {
-        $form = $this->createForm(ProjectType::class, $project);
+        $form = $this->createForm(ProjectType::class, $project,[
+            'userId' => $this->getUser()->getId(),
+            'teamRepository' => $this->getDoctrine()->getRepository(Team::class)
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
