@@ -18,7 +18,7 @@ class UserController extends Controller
 {
     /**
      * @Route("/", name="user_index", methods="GET")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function index(UserRepository $userRepository): Response
     {

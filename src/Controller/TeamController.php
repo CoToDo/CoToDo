@@ -74,7 +74,7 @@ class TeamController extends Controller
     /**
      * @Route("/{id}/edit", name="team_edit", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
-     * @Security("team.isAdmin(user)")
+     * @Security("team.isLeader(user)")
      */
     public function edit(Request $request, Team $team): Response
     {
