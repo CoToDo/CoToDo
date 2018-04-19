@@ -9,8 +9,8 @@
         <table class="table">
             <tbody>
                 <tr>
-                    <th>Id</th>
-                    <td>{{ work.id }}</td>
+                    <th>Worker</th>
+                    <td>{{ work.user.fullName }}</td>
                 </tr>
                 <tr>
                     <th>Description</th>
@@ -27,7 +27,7 @@
             </tbody>
         </table>
 
-        <a class="btn btn-outline-secondary" href="{{ path('work_index') }}">Back to list</a>
+        <a class="btn btn-outline-secondary" href="{{ path('project_task_show', {'idp' : work.task.project.id, 'id': work.task.id}) }}">Back to task</a>
 
         <a class="btn btn-outline-primary" href="{{ path('work_edit', {'id': work.id}) }}">Edit</a>
 

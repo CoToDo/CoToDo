@@ -16,13 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class WorkController extends Controller
 {
-    /**
-     * @Route("/", name="work_index", methods="GET")
-     */
-    public function index(WorkRepository $workRepository): Response
-    {
-        return $this->render('work/index.html.twig', ['works' => $workRepository->findAll()]);
-    }
 
     /**
      * @Route("/{id}/create", name="work_new", methods="GET|POST")
@@ -39,7 +32,7 @@ class WorkController extends Controller
             $em->persist($work);
             $em->flush();
 
-            return $this->redirectToRoute('project_task_index', ['id' => $task->getProject()->getId()]);
+            return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
         }
 
         return $this->render('work/new.html.twig', [
