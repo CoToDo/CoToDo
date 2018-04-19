@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Task;
 use App\Entity\Work;
 use App\Form\WorkType;
 use App\Repository\WorkRepository;
@@ -24,11 +25,12 @@ class WorkController extends Controller
     }
 
     /**
-     * @Route("/create", name="work_new", methods="GET|POST")
+     * @Route("/{id}/create", name="work_new", methods="GET|POST")
      */
-    public function create(Request $request): Response
+    public function create(Request $request, Task $task): Response
     {
         $work = new Work();
+        $work->setTask($task);
         $form = $this->createForm(WorkType::class, $work);
         $form->handleRequest($request);
 
@@ -42,6 +44,7 @@ class WorkController extends Controller
 
         return $this->render('work/new.html.twig', [
             'work' => $work,
+            'task' => $task,
             'form' => $form->createView(),
         ]);
     }
