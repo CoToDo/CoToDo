@@ -25,7 +25,7 @@
                     <td>{{ task.priority }}</td>
                     <td>{{ task.createDate ? task.createDate|date('Y-m-d H:i:s') : '' }}</td>
                     <td>{{ task.completionDate ? task.completionDate|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>{{ task.deadline ? task.deadline|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ task.deadline ? task.deadline|date('Y-m-d') : '' }}</td>
                     <td>
                         <a class="btn btn-outline-secondary" href="{{ path('project_task_show', {'idp': project.id , 'id': task.id}) }}">Show</a>
                         <a class="btn btn-outline-primary" href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
