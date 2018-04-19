@@ -64,7 +64,25 @@ class TeamController extends Controller
      */
     public function show(Team $team): Response
     {
-        return $this->render('team/show.html.twig', ['team' => $team, 'roles'=> $team->getRoles(), 'projects'=> $team->getProjects()]);
+
+        $user = $this->getUser();
+
+        // check if user is in that team
+        $found = false;
+        foreach ($team->getRoles() as $role) {
+            if($user->getId() == $role->getUser()->getId()) {
+                $found = true;
+                break;
+            }
+        }
+
+        if($found) {
+            return $this->render('team/show.html.twig', ['team' => $team, 'roles' => $team->getRoles(), 'projects' => $team->getProjects()]);
+        }
+        else {
+            return $this->redirectToRoute('team_index');
+        }
+
     }
 
     /**
