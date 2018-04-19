@@ -7,12 +7,9 @@ use App\Entity\Task;
 use App\Form\ProjectType;
 use App\Form\TaskType;
 use App\Repository\ProjectRepository;
-<<<<<<< HEAD
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use App\Repository\TaskRepository;
-=======
 use App\Repository\TeamRepository;
->>>>>>> 59bee7991c3b4c2756f016de3cfa57cbd400918a
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
