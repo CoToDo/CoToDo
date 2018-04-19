@@ -5,14 +5,14 @@
 {% block body %}
     <div class="main-div-crud-list">
 
-        <h1>My Teams</h1>
+        <h1 align="center">My Teams</h1>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                </tr>
-            </thead>
+        <table class="tablecenter table-borderless">
+            {#<thead>#}
+                {#<tr>#}
+                    {#<th>Name</th>#}
+                {#</tr>#}
+            {#</thead>#}
             <tbody>
             {% for team in teams %}
                 <tr>
