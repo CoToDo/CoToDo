@@ -36,13 +36,18 @@
                 </form>
             </div>
 
-            <div class="collapse navbar-collapse justify-content-end">
-                <ul class="nav-item dropdown my-2 my-lg-0">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{app.user}}
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item">{{app.user.name}} {{app.user.lastname}}</a>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{app.user}}
+                </button>
+            {#<div class="collapse navbar-collapse justify-content-end dropdown">#}
+                {#<ul class="nav-item dropdown my-2 my-lg-0">#}
+                    {#<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+                        {#{{app.user}}#}
+                    {#</a>#}
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item">Signed in as <b>{{app.user.name}} {{app.user.lastname}}</b></a>
+                        <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ path('user_show', {'id': app.user.id}) }}">Settings</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ path('logout') }}">Logout</a>
