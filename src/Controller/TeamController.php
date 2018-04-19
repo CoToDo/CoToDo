@@ -64,7 +64,7 @@ class TeamController extends Controller
      */
     public function show(Team $team): Response
     {
-        return $this->render('team/show.html.twig', ['team' => $team, 'roles'=> $team->getRoles()]);
+        return $this->render('team/show.html.twig', ['team' => $team, 'roles'=> $team->getRoles(), 'projects'=> $team->getProjects()]);
     }
 
     /**
