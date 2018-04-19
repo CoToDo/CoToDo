@@ -5,10 +5,10 @@
 {% block body %}
     <div class="main-div-crud">
 
-        <h1>Create new Task</h1>
+        <h1>Create new task</h1>
 
         {{ include('task/_form.html.twig') }}
 
-        <a class="btn btn-outline-primary" href="{{ path('task_index') }}">Back to list</a>
+        <a class="btn btn-outline-primary" href="{{ path('project_task_index') }}">Back to list</a>
     </div>
 {% endblock %}

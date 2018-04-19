@@ -1,19 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Task index{% endblock %}
+{% block title %}Tasks{% endblock %}
 
 {% block body %}
     <div class="main-div-crud-list">
 
-        <h1>Task index</h1>
+        <h1>Tasks</h1>
 
         <table class="table">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Priority</th>
-                    <th>CreateDate</th>
-                    <th>CompletionDate</th>
+                    <th>Create date</th>
+                    <th>Completion date</th>
                     <th>Deadline</th>
                     <th>Actions</th>
                 </tr>
@@ -27,8 +27,8 @@
                     <td>{{ task.completionDate ? task.completionDate|date('Y-m-d H:i:s') : '' }}</td>
                     <td>{{ task.deadline ? task.deadline|date('Y-m-d H:i:s') : '' }}</td>
                     <td>
-                        <a class="btn btn-outline-secondary" href="{{ path('task_show', {'id': task.id}) }}">Show</a>
-                        <a class="btn btn-outline-primary" href="{{ path('task_edit', {'id': task.id}) }}">Edit</a>
+                        <a class="btn btn-outline-secondary" href="{{ path('project_task_show', {'id': task.id}) }}">Show</a>
+                        <a class="btn btn-outline-primary" href="{{ path('project task_edit', {'id': task.id}) }}">Edit</a>
                     </td>
                 </tr>
             {% else %}
@@ -39,6 +39,6 @@
             </tbody>
         </table>
 
-        <a class="btn btn-outline-success" href="{{ path('task_new') }}">Create new</a>
+        <a class="btn btn-outline-success" href="{{ path('project_task_new') }}">Create new</a>
     </div>
 {% endblock %}

@@ -18,11 +18,11 @@
                     <td>{{ task.priority }}</td>
                 </tr>
                 <tr>
-                    <th>CreateDate</th>
+                    <th>Create date</th>
                     <td>{{ task.createDate ? task.createDate|date('Y-m-d H:i:s') : '' }}</td>
                 </tr>
                 <tr>
-                    <th>CompletionDate</th>
+                    <th>Completion date</th>
                     <td>{{ task.completionDate ? task.completionDate|date('Y-m-d H:i:s') : '' }}</td>
                 </tr>
                 <tr>
@@ -32,9 +32,9 @@
             </tbody>
         </table>
 
-        <a class="btn btn-outline-secondary" href="{{ path('task_index') }}">Back to list</a>
+        <a class="btn btn-outline-secondary" href="{{ path('project_task_index') }}">Back to list</a>
 
-        <a class="btn btn-outline-primary" href="{{ path('task_edit', {'id': task.id}) }}">Edit</a>
+        <a class="btn btn-outline-primary" href="{{ path('project_task_edit', {'id': task.id}) }}">Edit</a>
 
         {{ include('task/_delete_form.html.twig') }}
     </div>
