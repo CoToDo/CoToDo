@@ -19,6 +19,7 @@ class WorkController extends Controller
 
     /**
      * @Route("/{id}/create", name="work_new", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
      */
     public function create(Request $request, Task $task): Response
     {
@@ -44,6 +45,7 @@ class WorkController extends Controller
 
     /**
      * @Route("/{id}", name="work_show", methods="GET")
+     * @Security("has_role('ROLE_USER')")
      */
     public function show(Work $work): Response
     {
@@ -72,6 +74,7 @@ class WorkController extends Controller
 
     /**
      * @Route("/{id}", name="work_delete", methods="DELETE")
+     * @Security("has_role('ROLE_USER')")
      */
     public function delete(Request $request, Work $work): Response
     {

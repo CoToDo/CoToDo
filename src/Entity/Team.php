@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Constants;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -127,6 +128,26 @@ class Team
     public function isMember($user) {
         foreach ($this->getRoles() as $role) {
             if($user->getId() == $role->getUser()->getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public function isLeader($user) {
+        foreach ($this->getRoles() as $role) {
+            if($user->getId() == $role->getUser()->getId() && $role->getType() == Constants::LEADER) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function isAdmin($user) {
+        foreach ($this->getRoles() as $role) {
+            if($user->getId() == $role->getUser()->getId() && ($role->getType() == Constants::ADMIN || $role->getType() == Constants::LEADER)) {
+                echo $user . " " . $role->getType();
                 return true;
             }
         }

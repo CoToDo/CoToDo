@@ -74,7 +74,7 @@ class TeamController extends Controller
     /**
      * @Route("/{id}/edit", name="team_edit", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
-     * @Security("team.isMember(user)")
+     * @Security("team.isAdmin(user)")
      */
     public function edit(Request $request, Team $team): Response
     {
@@ -96,7 +96,7 @@ class TeamController extends Controller
     /**
      * @Route("/{id}", name="team_delete", methods="DELETE")
      * @Security("has_role('ROLE_USER')")
-     * @Security("team.isMember(user)")
+     * @Security("team.isLeader(user)")
      */
     public function delete(Request $request, Team $team): Response
     {
@@ -112,7 +112,7 @@ class TeamController extends Controller
     /**
      * @Route("/{id}/add", name="team_add_user", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
-     * @Security("team.isMember(user)")
+     * @Security("team.isAdmin(user)")
      */
     public function addUser(Request $request, Team $team): Response
     {
