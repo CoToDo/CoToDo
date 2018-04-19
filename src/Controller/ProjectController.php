@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\Task;
 use App\Form\ProjectType;
+use App\Form\TaskType;
 use App\Repository\ProjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -107,5 +109,37 @@ class ProjectController extends Controller
         }
 
         return $this->redirectToRoute('project_index');
+    }
+
+    /**
+     * @Route("/{id}/add", name="project_add_task", methods="GET|POST")
+     */
+    public function addUser(Request $request, Project $project): Response
+    {
+        $task = new Task();
+        $task->setProject($project);
+
+        //Automatically set createDate
+        $dateTime = new \DateTime('now');;
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        if (null === $task->getCreateDate()) {
+            $task->setCreateDate($dateTime);
+        }
+
+        $form = $this->createForm(TaskType::class, $task);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($task);
+            $em->flush();
+
+            return $this->redirectToRoute('project_index');
+        }
+
+        return $this->render('task/new.html.twig', [
+            'task' => $task,
+            'form' => $form->createView(),
+        ]);
     }
 }

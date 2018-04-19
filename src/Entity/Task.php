@@ -58,6 +58,11 @@ class Task
      */
     private $comments;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="tasks")
+     */
+    private $project;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -223,5 +228,17 @@ class Task
     public function __toString()
     {
         return "" . $this->getName();
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
+
+        return $this;
     }
 }

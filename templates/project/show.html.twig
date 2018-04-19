@@ -28,6 +28,8 @@
 
         <a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>
 
+        <a class="btn btn-outline-primary" href="{{ path('project_add_task', {'id': project.id}) }}">Add Task</a>
+
         {{ include('project/_delete_form.html.twig') }}
     </div>
 {% endblock %}
