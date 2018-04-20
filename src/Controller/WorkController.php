@@ -79,7 +79,7 @@ class WorkController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('project_task_index', ['id' => $work->getTask()->getProject()->getTeam()->getId()]);
+            return $this->redirectToRoute('project_task_index', ['id' => $work->getTask()->getProject()->getId()]);
         }
 
         return $this->render('work/edit.html.twig', [
