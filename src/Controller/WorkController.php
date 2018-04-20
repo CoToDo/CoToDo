@@ -57,7 +57,10 @@ class WorkController extends Controller
      */
     public function show(Work $work): Response
     {
-        return $this->render('work/show.html.twig', ['work' => $work]);
+        return $this->render('work/show.html.twig', [
+            'work' => $work,
+            'team' => $work->getTask()->getProject()->getTeam(),
+            'userRole' => $this->getUser()]);
     }
 
     /**

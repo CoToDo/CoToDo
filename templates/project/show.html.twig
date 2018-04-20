@@ -23,7 +23,9 @@
                     </tr>
                 </tbody>
             </table>
-            <a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>
+            {% if team.admin(userRole) %}
+                <a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>
+            {% endif %}
         </div>
         <div class="m-5">
 
@@ -51,8 +53,10 @@
                         <td>{{ task.deadline ? task.deadline|date('Y-m-d H:i:s') : '' }}</td>
                         <td>
                             <a class="btn btn-outline-secondary" href="{{ path('project_task_show', {'idp': project.id , 'id': task.id}) }}">Show</a>
-                            <a class="btn btn-outline-primary" href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
-                            <a class="btn btn-outline-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
+                            {% if team.admin(userRole) %}
+                                <a class="btn btn-outline-primary" href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
+                                <a class="btn btn-outline-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
+                            {% endif %}
                         </td>
                     </tr>
 
@@ -63,7 +67,10 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <a class="btn btn-outline-success" href="{{ path('project_task_new', {'idp': project.id, 'id': project.id}) }}">Add task</a>
+            {% if team.admin(userRole) %}
+                <a class="btn btn-outline-success" href="{{ path('project_task_new', {'idp': project.id, 'id': project.id}) }}">Add task</a>
+            {% endif %}
+
             <a class="btn btn-outline-secondary " href="{{ path('project_task_index', {'id': project.id}) }}">Show tasks</a>
         </div>
 
@@ -90,7 +97,9 @@
                         <td>{{ subproject.createDate ? subproject.createDate|date('Y-m-d H:i:s') : '' }}</td>
                         <td>
                             <a class="btn btn-outline-secondary" href="{{ path('project_show', {'id': subproject.id}) }}">Show</a>
-                            <a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': subproject.id}) }}">Edit</a>
+                            {% if team.admin(userRole) %}
+                                <a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': subproject.id}) }}">Edit</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% else %}
@@ -100,7 +109,9 @@
                 {% endfor %}
                     <tr>
                         <td>
-                            <a class="btn btn-outline-success" href="{{ path('subproject_new', {'id': project.id}) }}">Add subproject</a>
+                            {% if team.admin(userRole) %}
+                                <a class="btn btn-outline-success" href="{{ path('subproject_new', {'id': project.id}) }}">Add subproject</a>
+                            {% endif %}
                         </td>
                     </tr>
                 </tbody>

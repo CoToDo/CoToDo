@@ -18,7 +18,7 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse container my-2 my-lg-0" id="navbarNavAltMarkup">
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="{{ path('project_new') }}">Create Project <span class="sr-only">(current)</span></a>
                     <a class="nav-item nav-link" href="{{ path('team_new') }}">Create Team</a>
@@ -29,7 +29,7 @@
             </div>
 
 
-            <div class="collapse navbar-collapse container">
+            <div class="w-50 p-3">
                 <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -47,12 +47,11 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ path('logout') }}">Logout</a>
                     </div>
-                </ul>
+                </div>
             </div>
 
 
         </nav>
-
 
     {% block body %}{% endblock %}
         {% block javascripts %}
