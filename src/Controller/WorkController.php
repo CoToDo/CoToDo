@@ -70,13 +70,16 @@ class WorkController extends Controller
      */
     public function edit(Request $request, Work $work): Response
     {
-        $form = $this->createForm(WorkType::class, $work);
+        $form = $this->createForm(WorkType::class, $work, [
+            'teamId' => $work->getTask()->getProject()->getTeam()->getId(),
+            'userRepository' => $this->getDoctrine()->getRepository(User::class),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('work_edit', ['id' => $work->getId()]);
+            return $this->redirectToRoute('project_task_index', ['id' => $work->getTask()->getProject()->getTeam()->getId()]);
         }
 
         return $this->render('work/edit.html.twig', [
