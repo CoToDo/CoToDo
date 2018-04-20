@@ -30,7 +30,7 @@ class ProjectRepository extends ServiceEntityRepository
             ->andWhere('r.user = :id')
             ->setParameter('id', $id)
             ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+//            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;

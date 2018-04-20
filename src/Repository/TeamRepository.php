@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Team;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -29,12 +30,27 @@ class TeamRepository extends ServiceEntityRepository
             ->andWhere('r.user = :id')
             ->setParameter('id', $id)
             ->orderBy('t.name', 'ASC')
-            ->setMaxResults(10)
+//            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
 
+    /**
+     * @return User[] Returns an array of Team objects
+     */
+    public function findProjectTeamMembers($id)
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.roles', 'r')
+            ->andWhere('r.user = :id')
+            ->setParameter('id', $id)
+            ->orderBy('t.name', 'ASC')
+//            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
     /*
     public function findOneBySomeField($value): ?Team
     {

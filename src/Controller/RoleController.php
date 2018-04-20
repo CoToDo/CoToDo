@@ -20,6 +20,7 @@ class RoleController extends Controller
     /**
      * @Route("/{id}/edit", name="role_edit", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
+     * @Security("role.getTeam().isLeader(user)")
      */
     public function edit(Request $request, Role $role): Response
     {
@@ -41,6 +42,7 @@ class RoleController extends Controller
     /**
      * @Route("/{id}", name="role_delete", methods="DELETE")
      * @Security("has_role('ROLE_USER')")
+     * @Security("role.getTeam().isLeader(user)")
      */
     public function delete(Request $request, Role $role): Response
     {

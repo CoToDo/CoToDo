@@ -28,7 +28,6 @@ class ProjectController extends Controller
     public function index(ProjectRepository $projectRepository): Response
     {
         return $this->render('project/index.html.twig', ['projects' => $projectRepository->findMyProjects($this->getUser()->getId())]);
-
     }
 
     /**
