@@ -30,7 +30,7 @@ class RoleController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('role_edit', ['id' => $role->getId()]);
+            return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
         }
 
         return $this->render('role/edit.html.twig', [
