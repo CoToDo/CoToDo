@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\User;
 use App\Entity\Work;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,7 +23,10 @@ class WorkType extends AbstractType
 //                'widget' => 'single_text',
 //            ])
 //            ->add('task')
-            ->add('user')
+            ->add('user', EntityType::class, [
+                'class' => User::class,
+                'choices' => $options['userRepository']->findProjectTeamMembers($options['teamId'])
+            ])
         ;
     }
 
@@ -29,6 +34,8 @@ class WorkType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Work::class,
+            'teamId' => null,
+            'userRepository' => null,
         ]);
     }
 }

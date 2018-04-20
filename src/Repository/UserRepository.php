@@ -19,6 +19,21 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    /**
+     * @return User[] Returns an array of Team objects
+     */
+    public function findProjectTeamMembers($team)
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.roles', 'r')
+            ->join('r.team', 't')
+            ->andWhere('t.id = :id')
+            ->setParameter('id', $team)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

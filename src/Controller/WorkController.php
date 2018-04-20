@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Entity\Team;
+use App\Entity\User;
 use App\Entity\Work;
 use App\Form\WorkType;
 use App\Repository\WorkRepository;
@@ -28,7 +29,8 @@ class WorkController extends Controller
         $work = new Work();
         $work->setTask($task);
         $form = $this->createForm(WorkType::class, $work, [
-            'team' => $task->getProject()->getTeam()
+            'teamId' => $task->getProject()->getTeam()->getId(),
+            'userRepository' => $this->getDoctrine()->getRepository(User::class)
         ]);
         $form->handleRequest($request);
 
