@@ -147,7 +147,6 @@ class Team
     public function isAdmin($user) {
         foreach ($this->getRoles() as $role) {
             if($user->getId() == $role->getUser()->getId() && ($role->getType() == Constants::ADMIN || $role->getType() == Constants::LEADER)) {
-                echo $user . " " . $role->getType();
                 return true;
             }
         }
