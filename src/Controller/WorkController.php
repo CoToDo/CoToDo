@@ -23,6 +23,7 @@ class WorkController extends Controller
     /**
      * @Route("/{id}/create", name="work_new", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
+     * @Security("task.getProject().getTeam().isAdmin(user)")
      */
     public function create(Request $request, Task $task): Response
     {
@@ -52,6 +53,7 @@ class WorkController extends Controller
     /**
      * @Route("/{id}", name="work_show", methods="GET")
      * @Security("has_role('ROLE_USER')")
+     * @Security("work.getTask().getProject().getTeam().isMember(user)")
      */
     public function show(Work $work): Response
     {
@@ -61,6 +63,7 @@ class WorkController extends Controller
     /**
      * @Route("/{id}/edit", name="work_edit", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
+     * @Security("work.getTask().getProject().getTeam().isAdmin(user)")
      */
     public function edit(Request $request, Work $work): Response
     {
@@ -82,6 +85,7 @@ class WorkController extends Controller
     /**
      * @Route("/{id}", name="work_delete", methods="DELETE")
      * @Security("has_role('ROLE_USER')")
+     * @Security("work.getTask().getProject().getTeam().isAdmin(user)")
      */
     public function delete(Request $request, Work $work): Response
     {

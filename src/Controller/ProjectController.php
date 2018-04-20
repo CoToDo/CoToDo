@@ -70,6 +70,7 @@ class ProjectController extends Controller
     /**
      * @Route("/{id}/create", name="subproject_new", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
+     * @Security("parentProject.getTeam().isAdmin(user)")
      */
     public function newSubproject(Request $request, Project $parentProject): Response
     {
@@ -100,7 +101,8 @@ class ProjectController extends Controller
         return $this->render('project/new.html.twig', [
             'project' => $project,
             'form' => $form->createView(),
-        ]);
+            'team' => $project->getTeam(),
+            'userRole' => $this->getUser()]);
 
 
     }
@@ -108,17 +110,23 @@ class ProjectController extends Controller
     /**
      * @Route("/{id}", name="project_show", methods="GET")
      * @Security("has_role('ROLE_USER')")
+     * @Security("project.getTeam().isMember(user)")
      */
     public function show(Project $project): Response
     {
 
-        return $this->render('project/show.html.twig', ['project' => $project, 'subprojects' => $project->getSubProjects()]);
+        return $this->render('project/show.html.twig', [
+            'project' => $project,
+            'subprojects' => $project->getSubProjects(),
+            'team' => $project->getTeam(),
+            'userRole' => $this->getUser()]);
 
     }
 
     /**
      * @Route("/{id}/edit", name="project_edit", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
+     * @Security("project.getTeam().isAdmin(user)")
      */
     public function edit(Request $request, Project $project): Response
     {
@@ -143,6 +151,7 @@ class ProjectController extends Controller
     /**
      * @Route("/{id}", name="project_delete", methods="DELETE")
      * @Security("has_role('ROLE_USER')")
+     * @Security("project.getTeam().isLeader(user)")
      */
     public function delete(Request $request, Project $project): Response
     {
@@ -159,6 +168,7 @@ class ProjectController extends Controller
     /**
      * @Route("/{id}/tasks", name="project_task_index", methods="GET")
      * @Security("has_role('ROLE_USER')")
+     * @Security("project.getTeam().isMember(user)")
      */
     public function indexTasks(Project $project): Response
     {
@@ -168,6 +178,7 @@ class ProjectController extends Controller
     /**
      * @Route("/{id}/tasks/create", name="project_task_new", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
+     * @Security("project.getTeam().isAdmin(user)")
      */
     public function createTask(Request $request, Project $project): Response
     {
@@ -203,16 +214,22 @@ class ProjectController extends Controller
      * @Route("/{idp}/tasks/{id}", name="project_task_show", methods="GET")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")
+     * @Security("project.getTeam().isMember(user)")
      */
     public function showTask(Project $project, Task $task): Response
     {
-        return $this->render('task/show.html.twig', ['task' => $task, 'project' => $project]);
+        return $this->render('task/show.html.twig', [
+            'task' => $task,
+            'project' => $project,
+            'team' => $project->getTeam(),
+            'userRole' => $this->getUser()]);
     }
 
     /**
      * @Route("/{idp}/tasks/{id}/edit", name="project_task_edit", methods="GET|POST")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")
+     * @Security("project.getTeam().isAdmin(user)")
      */
     public function editTask(Request $request, Project $project, Task $task): Response
     {
@@ -236,6 +253,7 @@ class ProjectController extends Controller
      * @Route("/{idp}/tasks/{id}", name="project_task_delete", methods="DELETE")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")
+     * @Security("project.getTeam().isAdmin(user)")
      */
     public function deleteTask(Request $request, Project $project, Task $task): Response
     {
