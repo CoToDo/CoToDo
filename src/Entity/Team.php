@@ -153,5 +153,13 @@ class Team
         return false;
     }
 
+    public function isOnlyAdmin($user) {
+        foreach ($this->getRoles() as $role) {
+            if($user->getId() == $role->getUser()->getId() && $role->getType() == Constants::ADMIN) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

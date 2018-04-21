@@ -24,6 +24,12 @@ class RoleController extends Controller
      */
     public function edit(Request $request, Role $role): Response
     {
+        $user = $this->getUser();
+        $team = $role->getTeam();
+        if($team->isAdmin($user) && $role->getType() == Constants::LEADER) {
+            return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+        }
+
         $form = $this->createForm(RoleType::class, $role);
         $form->handleRequest($request);
 

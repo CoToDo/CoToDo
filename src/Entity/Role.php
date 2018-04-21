@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Constants;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -77,5 +78,16 @@ class Role
        return $this->getTeam().$this->getType().$this->getUser();
     }
 
+    public function isRoleAdmin() {
+        return Constants::ADMIN == $this->getType();
+    }
+
+    public function isRoleLeader() {
+        return Constants::LEADER == $this->getType();
+    }
+
+    public function isRoleUser() {
+        return Constants::USER == $this->getType();
+    }
 
 }

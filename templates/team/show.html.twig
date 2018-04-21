@@ -26,11 +26,18 @@
                         <td>{{ role.user }}</td>
                         <td>{{ role.type }}</td>
 
-                        {% if team.admin(userRole) %}
+                        {% if team.leader(userRole) %}
                             <td>
                                 <a class="btn btn-outline-primary" href="{{ path('role_edit', {'id': role.id}) }}">Edit</a>
                                 {{ include('role/_delete_form.html.twig') }}
                             </td>
+                        {% elseif team.onlyAdmin(userRole) and (role.roleUser() or role.roleAdmin()) %}
+                            <td>
+                                <a class="btn btn-outline-primary" href="{{ path('role_edit', {'id': role.id}) }}">Edit</a>
+                                {{ include('role/_delete_form.html.twig') }}
+                            </td>
+                        {% else %}
+                            <td></td>
                         {% endif %}
 
                     </tr>
@@ -69,7 +76,8 @@
                         <td>
                             <a class="btn btn-outline-secondary" href="{{ path('project_show', {'id': project.id}) }}">Show</a>
                             {% if team.leader(userRole) %}
-                                <a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>
+                                <a class="btn btn-outline-primary"
+                                   href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>
                             {% endif %}
                         </td>
                     </tr>
