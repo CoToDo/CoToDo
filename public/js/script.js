@@ -48,3 +48,9 @@ function addTagForm($collectionHolder, $newLinkLi) {
     // Display the form in the page in an li, before the "Add a tag" link li
     $newLinkLi.before(newForm);
 }
+
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});

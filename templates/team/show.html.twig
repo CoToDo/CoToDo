@@ -75,7 +75,7 @@
                         <td>{{ project.createDate ? project.createDate|date('Y-m-d H:i:s') : '' }}</td>
                         <td>
                             <a class="btn btn-outline-secondary" href="{{ path('project_show', {'id': project.id}) }}">Show</a>
-                            {% if team.leader(userRole) %}
+                            {% if team.admin(userRole) %}
                                 <a class="btn btn-outline-primary"
                                    href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>
                             {% endif %}

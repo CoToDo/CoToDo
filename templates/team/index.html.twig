@@ -7,30 +7,30 @@
 
         <h1 align="center">My Teams</h1>
 
-        <table class="tablecenter table-borderless">
-            {#<thead>#}
-                {#<tr>#}
-                    {#<th>Name</th>#}
-                {#</tr>#}
-            {#</thead>#}
-            <tbody>
-            {% for team in teams %}
-                <tr>
-                    <td><a class="btn btn-outline-secondary" href="{{ path('team_show', {'id': team.id}) }}">{{ team.name }}</a></td>
-                    {#<td>#}
-                        {#<a class="btn btn-outline-secondary" href="{{ path('team_show', {'id': team.id}) }}">Show</a>#}
-                        {#<a class="btn btn-outline-primary" href="{{ path('team_edit', {'id': team.id}) }}">Edit</a>#}
-                        {#<a class="btn btn-outline-primary" href="{{ path('team_add', {'id': team.id}) }}">Add </a>#}
-                    {#</td>#}
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="2">No records found</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="m-5">
+            <table class="tablecenter table-borderless table-hover w-50">
+                <tbody>
+                {% for team in teams %}
+                    <tr class='clickable-row' data-href="{{ path('team_show', {'id': team.id}) }}">
+                        <td><h4 class="text-secondary">{{ team.name }}</h4></td>
+                        <td>
+                            {% if team.leader(userRole) %}
+                                <a class="btn btn-outline-primary" href="{{ path('team_edit', {'id': team.id}) }}">Edit</a>
+                                {{ include('team/_delete_form.html.twig') }}
+                            {% endif %}
 
-        <a class="btn btn-outline-success" href="{{ path('team_new') }}">Create new</a>
+                            {% if team.admin(userRole) %}
+                                <a class="btn btn-outline-success" href="{{ path('team_add_user', {'id': team.id}) }}">Add user</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">No records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}
