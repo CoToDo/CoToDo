@@ -29,12 +29,28 @@ class TaskRepository extends ServiceEntityRepository
             ->where('w.user = :val')
             ->setParameter('val', $id)
             ->orderBy('t.priority, t.deadline', 'ASC')
-            ->setMaxResults(10)
+//            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
 
+    /**
+     * @return Task[] Returns an array of Task objects
+     */
+    public function findMyTasksSortedByPriorityMatch($id, $param)
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.works',"w")
+            ->where('w.user = :val')
+            ->setParameter('val', $id)
+            ->andWhere('t.name LIKE :param')
+            ->setParameter('param', '%' . $param . '%' )
+            ->orderBy('t.priority, t.deadline', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
     /*
     public function findOneBySomeField($value): ?Task
     {
