@@ -24,12 +24,7 @@ class RoleController extends Controller
      */
     public function edit(Request $request, Role $role): Response
     {
-        $user = $this->getUser();
-        $team = $role->getTeam();
-        if($team->isAdmin($user) && $role->getType() == Constants::LEADER) {
-            return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
-        }
-
+        $this->canDoIt($role);
         $form = $this->createForm(RoleType::class, $role);
         $form->handleRequest($request);
 
@@ -48,10 +43,11 @@ class RoleController extends Controller
     /**
      * @Route("/{id}", name="role_delete", methods="DELETE")
      * @Security("has_role('ROLE_USER')")
-     * @Security("role.getTeam().isLeader(user)")
+     * @Security("role.getTeam().isAdmin(user)")
      */
     public function delete(Request $request, Role $role): Response
     {
+        $this->canDoIt($role);
         if ($this->isCsrfTokenValid('delete'.$role->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($role);
@@ -59,6 +55,14 @@ class RoleController extends Controller
         }
 
         return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+    }
+
+    private function canDoIt(Role $role) {
+        $user = $this->getUser();
+        $team = $role->getTeam();
+        if($team->isOnlyAdmin($user) && $role->getType() == Constants::LEADER) {
+            return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+        }
     }
 
 
