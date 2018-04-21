@@ -127,50 +127,54 @@ class Team
     }
 
 
-    public function isMember($user) {
+    public function isMember($user)
+    {
         foreach ($user->getUserRoles() as $role) {
-            if($user->getId() == $role->getUser()->getId()) {
+            if ($this->getId() == $role->getTeam()->getId()) {
                 return true;
             }
         }
         return false;
     }
 
-
-    public function isLeader($user) {
-        foreach ($this->getRoles() as $role) {
-            if($user->getId() == $role->getUser()->getId() && $role->getType() == Constants::LEADER) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function isAdmin($user) {
-        foreach ($this->getRoles() as $role) {
-            if($user->getId() == $role->getUser()->getId() && ($role->getType() == Constants::ADMIN || $role->getType() == Constants::LEADER)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function isOnlyAdmin($user) {
-        foreach ($this->getRoles() as $role) {
-            if($user->getId() == $role->getUser()->getId() && $role->getType() == Constants::ADMIN) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function getMemberRole($user) {
+    public function getMemberRole($user)
+    {
         foreach ($user->getUserRoles() as $role) {
-            if($user->getId() == $role->getUser()->getId()) {
+            if ($this->getId() == $role->getTeam()->getId()) {
                 return $role->getType();
             }
         }
         return null;
+    }
+
+    public function isLeader($user)
+    {
+        foreach ($this->getRoles() as $role) {
+            if ($user->getId() == $role->getUser()->getId() && $role->getType() == Constants::LEADER) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function isAdmin($user)
+    {
+        foreach ($this->getRoles() as $role) {
+            if ($user->getId() == $role->getUser()->getId() && ($role->getType() == Constants::ADMIN || $role->getType() == Constants::LEADER)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function isOnlyAdmin($user)
+    {
+        foreach ($this->getRoles() as $role) {
+            if ($user->getId() == $role->getUser()->getId() && $role->getType() == Constants::ADMIN) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

@@ -124,10 +124,25 @@ class TeamController extends Controller
     {
         $role = new Role();
         $role->setTeam($team);
+
+        $user = $this->getUser();
+        if(!$role->getTeam()->isMember($user)) {
+            return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+        }
+
+        $userRole = $role->getTeam()->getMemberRole($this->getUser());
+        if ($userRole == Constants::USER) {
+            return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+        }
+
         $form = $this->createForm(RoleType::class, $role);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if($userRole == Constants::ADMIN && $role->getType() == Constants::LEADER) {
+                return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
+            }
+
             if($team->isMember($role->getUser())) {
                 //user has already in team
                 return $this->redirectToRoute('team_show', ['id' => $team->getId()]);

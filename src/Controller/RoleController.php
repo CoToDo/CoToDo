@@ -25,15 +25,7 @@ class RoleController extends Controller
     public function edit(Request $request, Role $role): Response
     {
         $user = $this->getUser();
-        if(!$role->getTeam()->isMember($user)) {
-            return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
-        }
-
         $userRole = $role->getTeam()->getMemberRole($this->getUser());
-        if ($userRole == Constants::USER) {
-            return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
-        }
-
         $lastUserId = $role->getUser()->getId();
         $form = $this->createForm(RoleType::class, $role);
         $form->handleRequest($request);
@@ -41,11 +33,12 @@ class RoleController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             if($userRole == Constants::ADMIN && $role->getType() == Constants::LEADER) {
-                return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+                return $this->returnWrong($role, $form);
             }
+
             if($role->getTeam()->isMember($role->getUser()) && $lastUserId != $role->getUser()->getId()) {
                 //user has already in team
-                return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+                return $this->returnWrong($role, $form);
             }
 
             $this->getDoctrine()->getManager()->flush();
@@ -53,6 +46,10 @@ class RoleController extends Controller
             return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
         }
 
+        return $this->returnWrong($role, $form);
+    }
+
+    public function returnWrong($role, $form) {
         return $this->render('role/edit.html.twig', [
             'role' => $role,
             'form' => $form->createView(),
