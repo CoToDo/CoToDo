@@ -281,8 +281,7 @@ class User implements UserInterface, \Serializable
     }
 
     public function getFullName(){
-        return "" . $this->getName() . " " . $this->getLastName();
+        return $this->getName() . " " . $this->getLastName();
     }
-
 
 }

@@ -164,4 +164,13 @@ class Team
         return false;
     }
 
+    public function getMemberRole($user) {
+        foreach ($user->getUserRoles() as $role) {
+            if($user->getId() == $role->getUser()->getId()) {
+                return $role->getType();
+            }
+        }
+        return null;
+    }
+
 }

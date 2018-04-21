@@ -24,13 +24,26 @@ class RoleController extends Controller
      */
     public function edit(Request $request, Role $role): Response
     {
-        $this->canDoIt($role);
+        $user = $this->getUser();
+        if(!$role->getTeam()->isMember($user)) {
+            return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+        }
+
+        $userRole = $role->getTeam()->getMemberRole($this->getUser());
+        if ($userRole == Constants::USER) {
+            return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+        }
+
+        $lastUserId = $role->getUser()->getId();
         $form = $this->createForm(RoleType::class, $role);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-//            echo $role->getUser() . $role->getTeam()->isMember($role->getUser()) . $role->getTeam();
-            if($role->getTeam()->isMember($role->getUser())) {
+
+            if($userRole == Constants::ADMIN && $role->getType() == Constants::LEADER) {
+                return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+            }
+            if($role->getTeam()->isMember($role->getUser()) && $lastUserId != $role->getUser()->getId()) {
                 //user has already in team
                 return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
             }
@@ -53,22 +66,22 @@ class RoleController extends Controller
      */
     public function delete(Request $request, Role $role): Response
     {
-        $this->canDoIt($role);
-        if ($this->isCsrfTokenValid('delete'.$role->getId(), $request->request->get('_token'))) {
+        $this->canDoIt($role, $role->getType());
+        if ($this->isCsrfTokenValid('delete' . $role->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($role);
+            $em->remove($role, $role->getType());
             $em->flush();
         }
 
         return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
     }
 
-    private function canDoIt(Role $role) {
-        $user = $this->getUser();
-        $team = $role->getTeam();
-        if($team->isOnlyAdmin($user) && $role->getType() == Constants::LEADER) {
-            return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+    private function canDoIt(Role $role, $lastRoleType)
+    {
+        if ($lastRoleType == Constants::ADMIN && $role->getType() == Constants::LEADER) {
+            return false;
         }
+        return true;
     }
 
 
