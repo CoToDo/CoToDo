@@ -39,7 +39,8 @@ class Project
     private $parentProject;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="parentProject")
+     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="parentProject", cascade={"remove"})
+     * @ORM\JoinColumn(name="subProject_id", referencedColumnName="subProject_id", onDelete="CASCADE")
      */
     private $subProjects;
 
@@ -49,7 +50,8 @@ class Project
     private $team;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Task", mappedBy="project")
+     * @ORM\OneToMany(targetEntity="App\Entity\Task", mappedBy="project", cascade={"remove"})
+     * @ORM\JoinColumn(name="task_id", referencedColumnName="task_id", onDelete="CASCADE")
      */
     private $tasks;
 

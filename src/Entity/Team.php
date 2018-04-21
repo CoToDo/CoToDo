@@ -25,12 +25,14 @@ class Team
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="team")
+     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="team", cascade={"remove"})
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="project_id", onDelete="CASCADE")
      */
     private $projects;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Role", mappedBy="team")
+     * @ORM\OneToMany(targetEntity="App\Entity\Role", mappedBy="team", cascade={"remove"})
+     * @ORM\JoinColumn(name="role_id", referencedColumnName="role_id", onDelete="CASCADE")
      */
     private $roles;
 
