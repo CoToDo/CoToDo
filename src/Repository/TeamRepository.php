@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Constants;
 use App\Entity\Team;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -34,6 +35,23 @@ class TeamRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * @return Team[] Returns an array of Team objects
+     */
+    public function findLeaderTeams($id)
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.roles', 'r')
+            ->andWhere('r.user = :id and r.type = :leader')
+            ->setParameter('id', $id)
+            ->setParameter('leader', Constants::LEADER)
+            ->orderBy('t.name', 'ASC')
+//            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
     /*
