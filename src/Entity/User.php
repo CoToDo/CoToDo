@@ -276,6 +276,10 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    public function getUserRoles() {
+        return $this->roles;
+    }
+
     public function getFullName(){
         return "" . $this->getName() . " " . $this->getLastName();
     }

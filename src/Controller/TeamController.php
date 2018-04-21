@@ -126,6 +126,11 @@ class TeamController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if($team->isMember($role->getUser())) {
+                //user has already in team
+                return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
+            }
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($role);
             $em->flush();

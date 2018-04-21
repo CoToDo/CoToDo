@@ -29,6 +29,12 @@ class RoleController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+//            echo $role->getUser() . $role->getTeam()->isMember($role->getUser()) . $role->getTeam();
+            if($role->getTeam()->isMember($role->getUser())) {
+                //user has already in team
+                return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+            }
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
