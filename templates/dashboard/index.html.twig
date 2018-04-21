@@ -28,6 +28,7 @@
                     <td>{{ task.deadline ? task.deadline|date('Y-m-d H:i:s') : '' }}</td>
                     <td>
                         <a class="btn btn-outline-secondary" href="{{ path('project_task_show', {'idp' : task.project.id, 'id': task.id}) }}">Show</a>
+                        <a class="btn btn-success" href="{{ path('project_task_show', {'idp' : task.project.id, 'id': task.id}) }}">Comment</a>
                     </td>
                 </tr>
             {% else %}

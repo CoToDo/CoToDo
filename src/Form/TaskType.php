@@ -26,7 +26,6 @@ class TaskType extends AbstractType
                 'by_reference' => false,
 
             ))
-            ->add('comments')
         ;
     }
 
