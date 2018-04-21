@@ -26,7 +26,9 @@ class TeamController extends Controller
      */
     public function index(TeamRepository $teamRepository): Response
     {
-        return $this->render('team/index.html.twig', ['teams' => $teamRepository->findMyTeams($this->getUser()->getId())]);
+        return $this->render('team/index.html.twig', [
+            'teams' => $teamRepository->findMyTeams($this->getUser()->getId()),
+            'userRole' => $this->getUser()]);
     }
 
     /**
