@@ -49,12 +49,14 @@ class Task
     private $tags;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Work", mappedBy="task")
+     * @ORM\OneToMany(targetEntity="App\Entity\Work", mappedBy="task", cascade={"remove"})
+     * @ORM\JoinColumn(name="work_id", referencedColumnName="work_id", onDelete="CASCADE")
      */
     private $works;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="task")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="task", cascade={"remove"})
+     * @ORM\JoinColumn(name="comment_id", referencedColumnName="comment_id", onDelete="CASCADE")
      */
     private $comments;
 
