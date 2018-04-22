@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Project;
 use App\Entity\Tag;
 use App\Entity\Task;
 use App\Entity\Team;
+use App\Form\CommentType;
 use App\Form\ProjectType;
 use App\Form\TaskType;
 use App\Repository\ProjectRepository;
@@ -69,7 +71,6 @@ class ProjectController extends Controller
 
     }
 
-
     /**
      * @Route("/{id}/create", name="subproject_new", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
@@ -117,7 +118,6 @@ class ProjectController extends Controller
      */
     public function show(Project $project): Response
     {
-
         return $this->render('project/show.html.twig', [
             'project' => $project,
             'subprojects' => $project->getSubProjects(),
@@ -217,19 +217,39 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{idp}/tasks/{id}", name="project_task_show", methods="GET")
+     * @Route("/{idp}/tasks/{id}", name="project_task_show", methods="GET|POST")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isMember(user)")
      */
-    public function showTask(Project $project, Task $task): Response
+    public function showTask(Request $request, Project $project, Task $task): Response
     {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setTask($task);
+            $comment->setUser($this->getUser());
+            $dateTime = new \DateTime('now');;
+            $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+            $comment->setDate($dateTime);
+
+            echo $comment;
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+
+//            return $this->redirectToRoute('project_task_show', ['id' => $task->getId(), 'idp' => $project->getId()]);
+        }
+
         return $this->render('task/show.html.twig', [
             'task' => $task,
             'project' => $project,
             'team' => $project->getTeam(),
             'userRole' => $this->getUser(),
-            'comments' => $task->getComments()]);
+            'comments' => $task->getComments(),
+            'form' => $form->createView()
+            ]);
     }
 
     /**
@@ -272,6 +292,10 @@ class ProjectController extends Controller
 
         return $this->redirectToRoute('project_task_index', ['id' => $project->getId()]);
     }
+
+
+
+
 
 
 }

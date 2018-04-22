@@ -102,8 +102,8 @@
                 {% for comment in task.comments %}
                     <tr >
                         <td>{{ comment.text }}</td>
-                        <td>{{ comment.date}}</td>
-                        <td>{{ comment.user}}</td>
+                        <td>{{ comment.date ? comment.date|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>{{ comment.user }}</td>
                     </tr>
                 {% else %}
                     <tr>
@@ -113,6 +113,11 @@
                 </tbody>
             </table>
         </div>
+
+        <div>
+            {{ include('task/_form_comment.html.twig') }}
+        </div>
+
 
     </div>
 {% endblock %}
