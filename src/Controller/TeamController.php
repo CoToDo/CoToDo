@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Constants;
 use App\Entity\Team;
 use App\Entity\Role;
+use App\Entity\Project;
+use App\Form\ProjectType;
 use App\Entity\User;
 use App\Form\RoleType;
 use App\Form\TeamType;
@@ -61,6 +63,44 @@ class TeamController extends Controller
             'team' => $team,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/{id}/create", name="team_create_project", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
+     * @Security("team.isLeader(user)")
+     */
+    public function newProject(Request $request, Team $team): Response
+    {
+        $project = new Project();
+        $form = $this->createForm(ProjectType::class, $project, [
+            'userId' => $this->getUser()->getId()
+        ]);
+        $form->handleRequest($request);
+
+        //Automatically set createDate
+        $dateTime = new \DateTime('now');;
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        if (null === $project->getCreateDate()) {
+            $project->setCreateDate($dateTime);
+        }
+
+        $project->setTeam($team);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($project);
+            $em->flush();
+
+            return $this->redirectToRoute('project_index');
+        }
+
+        return $this->render('project/new.html.twig', [
+            'project' => $project,
+            'form' => $form->createView(),
+        ]);
+
+
     }
 
     /**
