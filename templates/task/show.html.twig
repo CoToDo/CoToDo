@@ -65,7 +65,8 @@
                         <td>{{ work.endDate ? work.endDate|date('Y-m-d H:i:s') : '' }}</td>
                         <td>
                             {% if team.admin(userRole) %}
-                                <a class="btn btn-outline-primary" href="{{ path('work_edit', {'id': work.id}) }}">Edit</a>
+                                <a class="btn btn-outline-primary"
+                                   href="{{ path('work_edit', {'id': work.id}) }}">Edit</a>
                             {% endif %}
                         </td>
                     </tr>
@@ -78,9 +79,11 @@
             </table>
 
 
-            <a class="btn btn-outline-secondary" href="{{ path('project_task_index', {'id': project.id}) }}">Back to list</a>
+            <a class="btn btn-outline-secondary" href="{{ path('project_task_index', {'id': project.id}) }}">Back to
+                list</a>
             {% if team.admin(userRole) %}
-                <a class="btn btn-outline-primary" href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
+                <a class="btn btn-outline-primary"
+                   href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
                 <a class="btn btn-outline-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
 
                 {{ include('task/_delete_form.html.twig') }}
@@ -90,31 +93,15 @@
         <div class="m-5">
             <h3>Comments</h3>
 
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>Text</th>
-                    <th>Date</th>
-                    <th>User</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for comment in task.comments %}
-                    <tr >
-                        <td>{{ comment.text }}</td>
-                        <td>{{ comment.date ? comment.date|date('Y-m-d H:i:s') : '' }}</td>
-                        <td>{{ comment.user }}</td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="5">No records found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            {% for comment in task.comments %}
+                <div class="m-5">
+                    <p class="pright"> {{ comment.user }} {{ comment.date ? comment.date|date('Y-m-d H:i:s') : '' }} </p>
+                    <textarea class="form-control" rows="4">{{ comment.text }}</textarea>
+                </div>
+            {% endfor %}
         </div>
 
-        <div>
+        <div class="m-5">
             {{ include('task/_form_comment.html.twig') }}
         </div>
 

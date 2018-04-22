@@ -58,6 +58,10 @@
         align-self: center;
 }
 
+.pright {
+        text-align: right;
+}
+
 .navicon:hover,
 .navicon:active,
 .navicon:focus {

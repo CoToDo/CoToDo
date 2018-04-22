@@ -239,7 +239,7 @@ class ProjectController extends Controller
             $em->persist($comment);
             $em->flush();
 
-//            return $this->redirectToRoute('project_task_show', ['id' => $task->getId(), 'idp' => $project->getId()]);
+            return $this->redirectToRoute('project_task_show', ['id' => $task->getId(), 'idp' => $project->getId()]);
         }
 
         return $this->render('task/show.html.twig', [
