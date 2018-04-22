@@ -3,11 +3,13 @@
 namespace App\Form;
 
 use App\Entity\Task;
+use App\Priorities;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class TaskType extends AbstractType
 {
@@ -15,7 +17,13 @@ class TaskType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('priority')
+            ->add('priority', ChoiceType::class,
+                array('choices' => array(Priorities::A => Priorities::A,
+                                         Priorities::B => Priorities::B,
+                                         Priorities::C => Priorities::C,
+                                         Priorities::D => Priorities::D,
+                                         Priorities::E => Priorities::E,
+                                         Priorities::F => Priorities::F)))
             ->add('deadline', DateType::class, [
                 'widget' => 'single_text',
             ])

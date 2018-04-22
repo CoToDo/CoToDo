@@ -224,7 +224,8 @@ class ProjectController extends Controller
             'task' => $task,
             'project' => $project,
             'team' => $project->getTeam(),
-            'userRole' => $this->getUser()]);
+            'userRole' => $this->getUser(),
+            'comments' => $task->getComments()]);
     }
 
     /**
@@ -267,4 +268,6 @@ class ProjectController extends Controller
 
         return $this->redirectToRoute('project_task_index', ['id' => $project->getId()]);
     }
+
+
 }
