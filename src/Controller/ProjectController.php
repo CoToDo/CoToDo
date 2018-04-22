@@ -49,7 +49,7 @@ class ProjectController extends Controller
         $form->handleRequest($request);
 
         //Automatically set createDate
-        $dateTime = new \DateTime('now');;
+        $dateTime = new \DateTime('now');
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         if (null === $project->getCreateDate()) {
             $project->setCreateDate($dateTime);
@@ -133,7 +133,7 @@ class ProjectController extends Controller
      */
     public function edit(Request $request, Project $project): Response
     {
-        $form = $this->createForm(ProjectType::class, $project,[
+        $form = $this->createForm(ProjectType::class, $project, [
             'userId' => $this->getUser()->getId(),
             'teamRepository' => $this->getDoctrine()->getRepository(Team::class)
         ]);
@@ -158,7 +158,7 @@ class ProjectController extends Controller
      */
     public function delete(Request $request, Project $project): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $project->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($project);
             $em->flush();
@@ -249,7 +249,7 @@ class ProjectController extends Controller
             'userRole' => $this->getUser(),
             'comments' => $task->getComments(),
             'form' => $form->createView()
-            ]);
+        ]);
     }
 
     /**
@@ -284,7 +284,7 @@ class ProjectController extends Controller
      */
     public function deleteTask(Request $request, Project $project, Task $task): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $task->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($task);
             $em->flush();
@@ -292,10 +292,5 @@ class ProjectController extends Controller
 
         return $this->redirectToRoute('project_task_index', ['id' => $project->getId()]);
     }
-
-
-
-
-
 
 }

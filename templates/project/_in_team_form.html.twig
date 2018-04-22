@@ -1,0 +1,21 @@
+{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+    {{ form_errors(form) }}
+
+    <div class="form-row form-group">
+        <div class="col">
+            {{ form_label(form.name, null, {'attr': {'class': 'col-form-dlabel'}}) }}
+            {{ form_errors(form.name) }}
+            {{ form_widget(form.name) }}
+        </div>
+    </div>
+    <div class="form-row form-group">
+        <div class="col">
+            {{ form_label(form.description) }}
+            {{ form_errors(form.description) }}
+            {{ form_widget(form.description) }}
+        </div>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+    </div>
+{{ form_end(form) }}
