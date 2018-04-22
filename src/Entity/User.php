@@ -284,4 +284,10 @@ class User implements UserInterface, \Serializable
         return $this->getName() . " " . $this->getLastName();
     }
 
+    public function equals(User $user){
+        if($this->getMail() == $user->getMail()) return true;
+
+        return false;
+    }
+
 }

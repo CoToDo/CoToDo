@@ -27,30 +27,33 @@ class UserController extends Controller
 
     /**
      * @Route("/{id}", name="user_show", methods="GET")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_USER')"))
      */
     public function show(User $user): Response
     {
-        return $this->render('user/show.html.twig', ['user' => $user]);
+        return $this->render('user/show.html.twig', [
+            'user' => $user,
+            'userRole' => $this->getUser()]);
     }
 
     /**
      * @Route("/{id}/edit", name="user_edit", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
+     * @Security("userIn.equals(user)")
      */
-    public function edit(Request $request, User $user): Response
+    public function edit(Request $request, User $userIn): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $userIn);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('user_edit', ['id' => $user->getId()]);
+            return $this->redirectToRoute('user_edit', ['id' => $userIn->getId()]);
         }
 
         return $this->render('user/edit.html.twig', [
-            'user' => $user,
+            'user' => $userIn,
             'form' => $form->createView(),
         ]);
     }
@@ -58,12 +61,13 @@ class UserController extends Controller
     /**
      * @Route("/{id}", name="user_delete", methods="DELETE")
      * @Security("has_role('ROLE_USER')")
+     * @Security("userIn.equals(user)")
      */
-    public function delete(Request $request, User $user): Response
+    public function delete(Request $request, User $userIn): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$userIn->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($user);
+            $em->remove($userIn);
             $em->flush();
         }
 
