@@ -232,7 +232,11 @@ class ProjectController extends Controller
             $comment->setUser($this->getUser());
             $dateTime = new \DateTime('now');;
             $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-            $comment->setDate($dateTime);
+
+            if (null === $comment->getDate()) {
+                $comment->setDate($dateTime);
+            }
+
 
             echo $comment;
             $em = $this->getDoctrine()->getManager();

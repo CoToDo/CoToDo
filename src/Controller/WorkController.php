@@ -103,4 +103,46 @@ class WorkController extends Controller
 
         return $this->redirectToRoute('work_index');
     }
+
+    /**
+     * @Route("/{id}/start", name="work_set_start", methods="GET")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function setStart(Work $work): Response
+    {
+        //set startDate
+        $dateTime = new \DateTime('now');;
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        if (null === $work->getStartDate()) {
+            $work->setStartDate($dateTime);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($work);
+        $em->flush();
+
+        return $this->redirectToRoute('dashboard');
+    }
+
+    /**
+     * @Route("/{id}/end", name="work_set_end", methods="GET")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function setEnd(Work $work): Response
+    {
+        //set createDate
+        $dateTime = new \DateTime('now');;
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        if (null === $work->getEndDate()) {
+            $work->setEndDate($dateTime);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($work);
+        $em->flush();
+
+        return $this->redirectToRoute('dashboard');
+    }
+
+
 }
