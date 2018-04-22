@@ -253,4 +253,14 @@ class Task
         }
         return null;
     }
+
+    public function getWork($user)
+    {
+        foreach ($user->getWorks() as $work) {
+            if ($this->getId() == $work->getTask()->getId()) {
+                return $work;
+            }
+        }
+        return null;
+    }
 }

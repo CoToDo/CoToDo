@@ -110,4 +110,16 @@ class Work
     {
         return "" . $this->getDescription();
     }
+
+    public function isStartSet()
+    {
+        if($this->getStartDate()===null) return false;
+        return true;
+    }
+
+    public function isEndSet()
+    {
+        if($this->getEndDate()===null) return false;
+        return true;
+    }
 }
