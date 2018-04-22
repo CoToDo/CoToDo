@@ -47,7 +47,7 @@ class ProjectController extends Controller
         $form->handleRequest($request);
 
         //Automatically set createDate
-        $dateTime = new \DateTime('now');;
+        $dateTime = new \DateTime('now');
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         if (null === $project->getCreateDate()) {
             $project->setCreateDate($dateTime);

@@ -90,7 +90,7 @@ class TeamController extends Controller
             $em->persist($project);
             $em->flush();
 
-            return $this->redirectToRoute('project_index');
+            return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
         }
 
         return $this->render('project/in_team_new.html.twig', [
