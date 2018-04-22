@@ -28,8 +28,10 @@
                     <td>{{ task.deadline ? task.deadline|date('Y-m-d') : '' }}</td>
                     <td>
                         <a class="btn btn-outline-secondary" href="{{ path('project_task_show', {'idp': project.id , 'id': task.id}) }}">Show</a>
-                        <a class="btn btn-outline-primary" href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
-                        <a class="btn btn-outline-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
+                        {% if project.team.admin(userRole) %}
+                            <a class="btn btn-outline-primary" href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
+                            <a class="btn btn-outline-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
+                        {% endif %}
                     </td>
                 </tr>
             {% else %}
@@ -39,7 +41,8 @@
             {% endfor %}
             </tbody>
         </table>
-
-        <a class="btn btn-outline-success" href="{{ path('project_task_new', {'id':project.id}) }}">Create new</a>
+        {% if project.team.admin(userRole) %}
+            <a class="btn btn-outline-success" href="{{ path('project_task_new', {'id':project.id}) }}">Create new</a>
+        {% endif %}
     </div>
 {% endblock %}
