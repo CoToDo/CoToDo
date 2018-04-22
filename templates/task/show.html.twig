@@ -94,7 +94,7 @@
             <h3>Comments</h3>
 
             {% for comment in task.comments %}
-                <div class="m-5">
+                <div class="w-100 py-4">
                     <p class="pright"> {{ comment.user }} {{ comment.date ? comment.date|date('Y-m-d H:i:s') : '' }} </p>
                     <textarea class="form-control" rows="4">{{ comment.text }}</textarea>
                 </div>
