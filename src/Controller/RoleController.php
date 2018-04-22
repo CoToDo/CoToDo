@@ -20,7 +20,7 @@ class RoleController extends Controller
     /**
      * @Route("/{id}/edit", name="role_edit", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
-     * @Security("role.getTeam().isAdmin(user)")
+     * @Security("(role.getTeam().isOnlyAdmin(user) and (role.isRoleUser() or role.isRoleAdmin())) or role.getTeam().isLeader(user)")
      */
     public function edit(Request $request, Role $role): Response
     {
