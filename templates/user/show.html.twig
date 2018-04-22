@@ -11,22 +11,22 @@
             <tbody>
                 <tr>
                     <th>Name</th>
-                    <td>{{ user.name }}</td>
+                    <td>{{ userIn.name }}</td>
                 </tr>
                 <tr>
                     <th>Last name</th>
-                    <td>{{ user.lastName }}</td>
+                    <td>{{ userIn.lastName }}</td>
                 </tr>
                 <tr>
                     <th>Email</th>
-                    <td>{{ user.mail }}</td>
+                    <td>{{ userIn.mail }}</td>
                 </tr>
 
             </tbody>
         </table>
 
-        {% if user.equals(userRole) %}
-            <a class="btn btn-outline-primary"  href="{{ path('user_edit', {'id': user.id}) }}">Edit</a>
+        {% if userIn.equals(userRole) %}
+            <a class="btn btn-outline-primary"  href="{{ path('user_edit', {'id': userIn.id}) }}">Edit</a>
 
             {{ include('user/_delete_form.html.twig') }}
         {% endif %}

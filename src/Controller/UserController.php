@@ -29,10 +29,10 @@ class UserController extends Controller
      * @Route("/{id}", name="user_show", methods="GET")
      * @Security("has_role('ROLE_USER')"))
      */
-    public function show(User $user): Response
+    public function show(User $userIn): Response
     {
         return $this->render('user/show.html.twig', [
-            'user' => $user,
+            'userIn' => $userIn,
             'userRole' => $this->getUser()]);
     }
 

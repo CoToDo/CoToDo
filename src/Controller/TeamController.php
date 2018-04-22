@@ -6,7 +6,7 @@ use App\Constants;
 use App\Entity\Team;
 use App\Entity\Role;
 use App\Entity\Project;
-use App\Form\ProjectType;
+use App\Form\TeamProjectType;
 use App\Entity\User;
 use App\Form\RoleType;
 use App\Form\TeamType;
@@ -73,9 +73,7 @@ class TeamController extends Controller
     public function newProject(Request $request, Team $team): Response
     {
         $project = new Project();
-        $form = $this->createForm(ProjectType::class, $project, [
-            'userId' => $this->getUser()->getId()
-        ]);
+        $form = $this->createForm(TeamProjectType::class, $project, []);
         $form->handleRequest($request);
 
         //Automatically set createDate
@@ -95,7 +93,7 @@ class TeamController extends Controller
             return $this->redirectToRoute('project_index');
         }
 
-        return $this->render('project/new.html.twig', [
+        return $this->render('project/in_team_new.html.twig', [
             'project' => $project,
             'form' => $form->createView(),
         ]);
