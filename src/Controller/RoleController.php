@@ -24,11 +24,15 @@ class RoleController extends Controller
      */
     public function edit(Request $request, Role $role): Response
     {
-        $user = $this->getUser();
         $userRole = $role->getTeam()->getMemberRole($this->getUser());
         $lastUserId = $role->getUser()->getId();
+        $roleBefore = $role->getType();
         $form = $this->createForm(RoleType::class, $role);
         $form->handleRequest($request);
+
+        if($userRole == Constants::ADMIN && $roleBefore == Constants::LEADER) {
+            return $this->returnWrong($role, $form);
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -63,7 +67,13 @@ class RoleController extends Controller
      */
     public function delete(Request $request, Role $role): Response
     {
-        $this->canDoIt($role, $role->getType());
+        $userRole = $role->getTeam()->getMemberRole($this->getUser());
+        $roleBefore = $role->getType();
+
+        if($userRole == Constants::ADMIN && $roleBefore == Constants::LEADER) {
+            return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+        }
+
         if ($this->isCsrfTokenValid('delete' . $role->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($role, $role->getType());
@@ -72,14 +82,5 @@ class RoleController extends Controller
 
         return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
     }
-
-    private function canDoIt(Role $role, $lastRoleType)
-    {
-        if ($lastRoleType == Constants::ADMIN && $role->getType() == Constants::LEADER) {
-            return false;
-        }
-        return true;
-    }
-
 
 }
