@@ -7,7 +7,7 @@
 
         <h1>Projects</h1>
 
-        <table class="table">
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -18,12 +18,11 @@
             </thead>
             <tbody>
             {% for project in projects %}
-                <tr>
+                <tr class='clickable-row' data-href="{{ path('project_show', {'id': project.id}) }}">
                     <td>{{ project.name }}</td>
                     <td>{{ project.description }}</td>
                     <td>{{ project.createDate ? project.createDate|date('Y-m-d H:i:s') : '' }}</td>
                     <td>
-                        <a class="btn btn-outline-secondary" href="{{ path('project_show', {'id': project.id}) }}">Show</a>
                         {% if project.team.admin(userRole) %}
                             <a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>
                         {% endif %}
