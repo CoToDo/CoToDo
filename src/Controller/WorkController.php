@@ -107,6 +107,7 @@ class WorkController extends Controller
     /**
      * @Route("/{id}/start", name="work_set_start", methods="GET")
      * @Security("has_role('ROLE_USER')")
+     * @Security("work.getUser().equals(user)")
      */
     public function setStart(Work $work): Response
     {
@@ -127,6 +128,7 @@ class WorkController extends Controller
     /**
      * @Route("/{id}/end", name="work_set_end", methods="GET")
      * @Security("has_role('ROLE_USER')")
+     * @Security("work.getUser().equals(user)")
      */
     public function setEnd(Work $work): Response
     {

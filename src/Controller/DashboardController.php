@@ -38,5 +38,5 @@ class DashboardController extends Controller
             'tasks' => $taskRepository->findMyTasksSortedByPriorityMatch($user->getId(), $param)
         ]);
     }
-    
+
 }
