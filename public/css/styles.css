@@ -24,36 +24,10 @@
 .clickable-row{
         cursor: pointer;
 }
-.button-navbar{
-
-        color: #00304A !important;
-        text-align: center;
-}
-.button-navbar:hover,
-.button-navbar:active,
-.button-navbar:focus{
-        font-size: 103%;
-        color: #001C2B !important;
-}
-.button-search{
-        border-color: #00304A;
-        color: #00304A;
-}
-.button-search:hover{
-        background-color: #26607F;
-}
 .navbar-background{
         background-color: #4ABFFF;
 }
-.dropdown-navbnar{
-        background-color: #2C6F94;
-}
-.dropdown-navbnar:hover{
-        background-color: #26607F;
-}
-.dropdown-toggle:focus, .dropdown-toggle:active{
-        background: #26607F !important;
-}
+
 .navicon{
         align-self: center;
 }
@@ -73,4 +47,8 @@
 .auto-expand{
         box-sizing: border-box;
         resize: none;
+}
+
+.pointer-events-none{
+        pointer-events: none;
 }
