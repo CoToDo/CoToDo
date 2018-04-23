@@ -20,6 +20,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class WorkController extends Controller
 {
 
+    const ASSIGNED_BY = "Assigned by ";
+
     /**
      * @Route("/{id}/create", name="work_new", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
@@ -37,6 +39,7 @@ class WorkController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $work->setDescription(WorkController::ASSIGNED_BY . $this->getUser()->getUserName());
             if ($task->isUserSet($work->getUser())) {
                 //user has work on task
                 return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
@@ -101,13 +104,15 @@ class WorkController extends Controller
      */
     public function delete(Request $request, Work $work): Response
     {
+        $task = $work->getTask();
+        $project = $task->getProject();
         if ($this->isCsrfTokenValid('delete' . $work->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($work);
             $em->flush();
         }
 
-        return $this->redirectToRoute('task_show', ['idp' => $work->getTask()->getProject(), 'id' => $work->getTask()]);
+        return $this->redirectToRoute('project_task_show', ['idp' => $project->getId(), 'id' => $task->getId()]);
     }
 
     /**
@@ -163,7 +168,7 @@ class WorkController extends Controller
         $work = new Work();
         $work->setTask($task);
         $work->setUser($this->getUser());
-        $work->setDescription("Assign by yourself by " . $this->getUser()->getUserName());
+        $work->setDescription(WorkController::ASSIGNED_BY . $this->getUser()->getUserName());
 
         if ($task->isUserSet($work->getUser())) {
             //user has work on task

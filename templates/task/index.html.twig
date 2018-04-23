@@ -27,12 +27,11 @@
                     <td>{{ task.completionDate ? task.completionDate|date('Y-m-d H:i:s') : '' }}</td>
                     <td>{{ task.deadline ? task.deadline|date('Y-m-d') : '' }}</td>
                     <td>
-                        <a class="btn btn-outline-secondary" href="{{ path('project_task_show', {'idp': project.id , 'id': task.id}) }}">Show</a>
                         {% if project.team.admin(userRole) %}
                             <a class="btn btn-outline-primary" href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
                             <a class="btn btn-outline-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
-                            <a class="btn btn-outline-warning" href="{{ path('work_assign_yourself', {'id': task.id}) }}">Assign yourself</a>
                         {% endif %}
+                        <a class="btn btn-outline-warning" href="{{ path('work_assign_yourself', {'id': task.id}) }}">Assign yourself</a>
                     </td>
                 </tr>
             {% else %}
@@ -45,5 +44,6 @@
         {% if project.team.admin(userRole) %}
             <a class="btn btn-outline-success" href="{{ path('project_task_new', {'id':project.id}) }}">Create new</a>
         {% endif %}
+        <a class="btn btn-outline-secondary" href="{{ path('project_show', {'id': project.id}) }}">Back to project</a>
     </div>
 {% endblock %}

@@ -15,7 +15,7 @@ class WorkType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('description')
+//            ->add('description')
 //            ->add('startDate', DateTimeType::class, [
 //                'widget' => 'single_text',
 //            ])
