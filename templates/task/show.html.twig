@@ -97,8 +97,13 @@
 
             {% for comment in task.comments %}
                 <div class="mb-4">
-                    <textarea readonly class="form-control auto-expand" rows="3">{{ comment.text }}</textarea>
                     <p class="pright"> {{ comment.user }} {{ comment.date ? comment.date|date('Y-m-d H:i:s') : '' }} </p>
+                    <textarea readonly class="form-control auto-expand" rows="3">{{ comment.text }}</textarea>
+                    {% if comment.author(user) %}
+                        <div class="mt-1">
+                            {{ include('comment/_delete_form.html.twig') }}
+                        </div>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>

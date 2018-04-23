@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
@@ -95,5 +96,16 @@ class Comment
         return $this->getText();
     }
 
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function isAuthor($user)
+    {
+        if($user->getId() == $this->getUser()->getId()){
+                return true;
+        }
+        return false;
+    }
 
 }

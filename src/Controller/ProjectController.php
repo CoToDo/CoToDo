@@ -246,6 +246,7 @@ class ProjectController extends Controller
         }
 
         return $this->render('task/show.html.twig', [
+            'user' => $this->getUser(),
             'task' => $task,
             'project' => $project,
             'team' => $project->getTeam(),

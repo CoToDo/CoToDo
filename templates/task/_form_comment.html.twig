@@ -2,7 +2,7 @@
     {{ form_errors(form) }}
     <div class="form-row form-group">
         <div class="col">
-            {{ form_label(form.text) }}
+            {{ form_label(form.text, 'New comment', {}) }}
             {{ form_errors(form.text) }}
             {{ form_widget(form.text, {'attr': {'class': 'auto-expand'}} )}}
         </div>
