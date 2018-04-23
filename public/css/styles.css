@@ -27,6 +27,10 @@
 .clickable-row{
         cursor: pointer;
 }
+
+.clickable-column {
+        cursor: pointer;
+}
 .navbar-background{
         background-color: #4ABFFF;
 }
