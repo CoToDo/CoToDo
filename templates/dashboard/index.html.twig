@@ -26,18 +26,18 @@
                     <td>{{ task.priority }}</td>
                     <td>{{ task.createDate ? task.createDate|date('Y-m-d H:i:s') : '' }}</td>
                     <td>{{ task.completionDate ? task.completionDate|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>{{ task.deadline ? task.deadline|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ task.deadline ? task.deadline|date('Y-m-d') : '' }}</td>
                     <td>
                         <a class="btn btn-success" href="#">Comment</a>
+                        {% if task.completionDate == null %}
+                            {% if not task.work(user).startSet %}
+                                <a class="btn btn-outline-dark" href="{{ path('work_set_start', {'id' : task.workId(user)} ) }}">Start</a>
+                            {% endif %}
 
-                        {% if not task.work(user).startSet %}
-                            <a class="btn btn-outline-dark" href="{{ path('work_set_start', {'id' : task.workId(user)} ) }}">Start</a>
+                            {% if task.work(user).startSet and not task.work(user).endSet%}
+                                <a class="btn btn-outline-dark" href="{{ path('work_set_end', {'id' : task.workId(user)} ) }}">Finished</a>
+                            {% endif %}
                         {% endif %}
-
-                        {% if task.work(user).startSet and not task.work(user).endSet%}
-                            <a class="btn btn-outline-dark" href="{{ path('work_set_end', {'id' : task.workId(user)} ) }}">Finished</a>
-                        {% endif %}
-
 
                     </td>
                 </tr>

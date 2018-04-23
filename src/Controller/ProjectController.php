@@ -175,6 +175,7 @@ class ProjectController extends Controller
     public function indexTasks(Project $project): Response
     {
         return $this->render('task/index.html.twig', [
+            'team' => $project->getTeam(),
             'tasks' => $project->getTasks(),
             'project' => $project,
             'userRole' => $this->getUser()]);
