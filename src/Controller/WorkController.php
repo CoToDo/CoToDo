@@ -161,7 +161,7 @@ class WorkController extends Controller
     /**
      * @Route("/{id}/assign", name="work_assign_yourself", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
-     * @Security("task.getProject().getTeam().isAdmin(user)")
+     * @Security("task.getProject().getTeam().isMember(user)")
      */
     public function assignYourself(Request $request, Task $task): Response
     {
