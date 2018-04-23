@@ -56,6 +56,7 @@
                                 <a class="btn btn-outline-primary" href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
                                 <a class="btn btn-outline-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
                             {% endif %}
+                            <a class="btn btn-outline-warning" href="{{ path('work_assign_yourself', {'id': task.id}) }}">Assign yourself</a>
                         </td>
                     </tr>
 

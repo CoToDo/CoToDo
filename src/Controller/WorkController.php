@@ -101,13 +101,15 @@ class WorkController extends Controller
      */
     public function delete(Request $request, Work $work): Response
     {
+        $task = $work->getTask();
+        $project = $task->getProject();
         if ($this->isCsrfTokenValid('delete' . $work->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($work);
             $em->flush();
         }
 
-        return $this->redirectToRoute('task_show', ['idp' => $work->getTask()->getProject(), 'id' => $work->getTask()]);
+        return $this->redirectToRoute('project_task_show', ['idp' => $project->getId(), 'id' => $task->getId()]);
     }
 
     /**
