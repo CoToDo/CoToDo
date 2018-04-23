@@ -3,7 +3,7 @@
 {% block title %}Project{% endblock %}
 
 {% block body %}
-    <div class="main-div-crud">
+    <div class="main-div-crud-big">
         <div class="m-5">
             <h1 class="my-5">{{ project.name }}</h1>
 
@@ -56,7 +56,12 @@
                                 <a class="btn btn-outline-primary" href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
                                 <a class="btn btn-outline-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
                             {% endif %}
+
                             <a class="btn btn-outline-warning" href="{{ path('work_assign_yourself', {'id': task.id}) }}">Assign yourself</a>
+
+                            {% if task.completionDate is null and (team.admin(userRole) or team.leader(userRole)) %}
+                                <a class="btn btn-outline-success" href="{{ path('project_task_complete', {'idp': project.id, 'id': task.id}) }}">Complete task</a>
+                            {% endif %}
                         </td>
                     </tr>
 

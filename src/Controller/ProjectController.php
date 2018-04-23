@@ -281,6 +281,29 @@ class ProjectController extends Controller
     }
 
     /**
+     * @Route("/{idp}/tasks/{id}/complete", name="project_task_complete", methods="GET")
+     * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
+     * @Security("has_role('ROLE_USER')")
+     * @Security("project.getTeam().isAdmin(user) or project.getTeam().isLeader(user)")
+     */
+    public function completeTask(Project $project, Task $task): Response
+    {
+        $dateTime = new \DateTime('now');
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        if($task->getCompletionDate() == null){
+            $task->setCompletionDate($dateTime);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($task);
+        $em->flush();
+
+        return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
+
+    }
+
+
+    /**
      * @Route("/{idp}/tasks/{id}", name="project_task_delete", methods="DELETE")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")
