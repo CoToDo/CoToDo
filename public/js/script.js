@@ -54,8 +54,6 @@ jQuery(document).ready(function($) {
 
 });
 
-
-
 jQuery.each(jQuery('.auto-expand'), function() {
     var offset = this.offsetHeight - this.clientHeight;
 
@@ -65,3 +63,12 @@ jQuery.each(jQuery('.auto-expand'), function() {
 function autoResizeTextArea(el, offset) {
     jQuery(el).css('height', 'auto').css('height', el.scrollHeight + offset);
 }
+
+jQuery(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+});

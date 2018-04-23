@@ -35,7 +35,8 @@ class DashboardController extends Controller
         $user = $this->getUser();
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
-            'tasks' => $taskRepository->findMyTasksSortedByPriorityMatch($user->getId(), $param)
+            'tasks' => $taskRepository->findMyTasksSortedByPriorityMatch($user->getId(), $param),
+            'user' => $this->getUser()
         ]);
     }
 
