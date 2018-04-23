@@ -36,6 +36,12 @@ class WorkController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if($task->isUserSet($work->getUser())) {
+                //user has work on task
+                return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
+            }
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($work);
             $em->flush();

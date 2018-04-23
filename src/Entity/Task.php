@@ -263,4 +263,12 @@ class Task
         }
         return null;
     }
+
+    public function isUserSet(User $user)
+    {
+        foreach($this->getWorks() as $work) {
+            if($work->getUser()->equals($user)) return true;
+        }
+        return false;
+    }
 }
