@@ -37,7 +37,7 @@ class WorkController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if($task->isUserSet($work->getUser())) {
+            if ($task->isUserSet($work->getUser())) {
                 //user has work on task
                 return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
             }
@@ -101,13 +101,13 @@ class WorkController extends Controller
      */
     public function delete(Request $request, Work $work): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$work->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $work->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($work);
             $em->flush();
         }
 
-        return $this->redirectToRoute('work_index');
+        return $this->redirectToRoute('task_show', ['idp' => $work->getTask()->getProject(), 'id' => $work->getTask()]);
     }
 
     /**
@@ -151,6 +151,30 @@ class WorkController extends Controller
         $em->flush();
 
         return $this->redirectToRoute('dashboard');
+    }
+
+    /**
+     * @Route("/{id}/assign", name="work_assign_yourself", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
+     * @Security("task.getProject().getTeam().isAdmin(user)")
+     */
+    public function assignYourself(Request $request, Task $task): Response
+    {
+        $work = new Work();
+        $work->setTask($task);
+        $work->setUser($this->getUser());
+        $work->setDescription("Assign by yourself by " . $this->getUser()->getUserName());
+
+        if ($task->isUserSet($work->getUser())) {
+            //user has work on task
+            return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($work);
+        $em->flush();
+
+        return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
     }
 
 
