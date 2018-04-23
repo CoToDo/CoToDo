@@ -41,6 +41,14 @@
                 </tbody>
             </table>
 
+            <a class="btn btn-outline-secondary" href="{{ path('project_task_index', {'id': project.id}) }}">Back to
+                list</a>
+            {% if team.admin(userRole) %}
+                <a class="btn btn-outline-primary"
+                   href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
+                {{ include('task/_delete_form.html.twig') }}
+            {% endif %}
+
         </div>
 
         <div class="m-5">
@@ -79,14 +87,8 @@
             </table>
 
 
-            <a class="btn btn-outline-secondary" href="{{ path('project_task_index', {'id': project.id}) }}">Back to
-                list</a>
             {% if team.admin(userRole) %}
-                <a class="btn btn-outline-primary"
-                   href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
                 <a class="btn btn-outline-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
-
-                {{ include('task/_delete_form.html.twig') }}
             {% endif %}
         </div>
 
@@ -94,9 +96,9 @@
             <h3>Comments</h3>
 
             {% for comment in task.comments %}
-                <div class="w-100 py-4">
+                <div class="mb-4">
+                    <textarea readonly class="form-control auto-expand" rows="3">{{ comment.text }}</textarea>
                     <p class="pright"> {{ comment.user }} {{ comment.date ? comment.date|date('Y-m-d H:i:s') : '' }} </p>
-                    <textarea class="form-control" rows="4">{{ comment.text }}</textarea>
                 </div>
             {% endfor %}
         </div>

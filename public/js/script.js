@@ -12,8 +12,6 @@ jQuery(document).ready(function() {
     // add the "add a tag" anchor and li to the tags ul
     $collectionHolder.append($newLinkButton);
 
-    // count the current form inputs we have (e.g. 2), use that as the new
-    // index when inserting a new item (e.g. 2)
     $collectionHolder.data('index', $collectionHolder.find(':input').length);
 
     $addTagLink.on('click', function(e) {
@@ -33,13 +31,7 @@ function addTagForm($collectionHolder, $newLinkLi) {
     var index = $collectionHolder.data('index');
 
     var newForm = prototype;
-    // You need this only if you didn't set 'label' => false in your tags field in TaskType
-    // Replace '__name__label__' in the prototype's HTML to
-    // instead be a number based on how many items we have
-    // newForm = newForm.replace(/__name__label__/g, index);
 
-    // Replace '__name__' in the prototype's HTML to
-    // instead be a number based on how many items we have
     newForm = newForm.replace(/__name__/g, index);
 
     // increase the index with one for the next item
@@ -53,5 +45,23 @@ jQuery(document).ready(function($) {
     $(".clickable-row").click(function() {
         window.location = $(this).data("href");
     });
+
+
+    jQuery.each(jQuery('.auto-expand'), function() {
+        var offset = this.offsetHeight - this.clientHeight;
+        autoResizeTextArea(this, offset);
+    });
+
 });
 
+
+
+jQuery.each(jQuery('.auto-expand'), function() {
+    var offset = this.offsetHeight - this.clientHeight;
+
+    jQuery(this).on('keyup input', function() { autoResizeTextArea(this, offset); });
+});
+
+function autoResizeTextArea(el, offset) {
+    jQuery(el).css('height', 'auto').css('height', el.scrollHeight + offset);
+}
