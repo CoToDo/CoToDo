@@ -1,21 +1,27 @@
 {{ form_start(form) }}
     {{ form_errors(form) }}
 
-    <div class="form-row form-group">
-        <div class="col">
-            {{ form_label(form.type) }}
-            {{ form_errors(form.type) }}
-            {{ form_widget(form.type) }}
-        </div>
+{% for message in app.flashes('warning') %}
+    <div class="flash-notice">
+        {{ message }}
     </div>
-    <div class="form-row form-group">
-        <div class="col">
-            {{ form_label(form.user) }}
-            {{ form_errors(form.user) }}
-            {{ form_widget(form.user) }}
-        </div>
+{% endfor %}
+
+<div class="form-row form-group">
+    <div class="col">
+        {{ form_label(form.type) }}
+        {{ form_errors(form.type) }}
+        {{ form_widget(form.type) }}
     </div>
-    <div class="form-group">
-        <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+</div>
+<div class="form-row form-group">
+    <div class="col">
+        {{ form_label(form.user) }}
+        {{ form_errors(form.user) }}
+        {{ form_widget(form.user) }}
     </div>
+</div>
+<div class="form-group">
+    <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+</div>
 {{ form_end(form) }}

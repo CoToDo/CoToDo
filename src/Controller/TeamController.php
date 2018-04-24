@@ -11,6 +11,7 @@ use App\Entity\User;
 use App\Form\RoleType;
 use App\Form\TeamType;
 use App\Repository\TeamRepository;
+use App\WarningMessages;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  */
 class TeamController extends Controller
 {
+
     /**
      * @Route("/", name="team_index", methods="GET")
      * @Security("has_role('ROLE_USER')")
@@ -164,10 +166,13 @@ class TeamController extends Controller
         $role->setTeam($team);
 
         $user = $this->getUser();
+
+        // TODO nejspíš zbytečné je to v anotaci
         if(!$role->getTeam()->isMember($user)) {
             return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
         }
 
+        // TODO taky nejspíš zbytečné
         $userRole = $role->getTeam()->getMemberRole($this->getUser());
         if ($userRole == Constants::USER) {
             return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
@@ -178,12 +183,16 @@ class TeamController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             if($userRole == Constants::ADMIN && $role->getType() == Constants::LEADER) {
-                return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
+                $this->addFlash('warning',WarningMessages::ADMIN_TO_LEADER);
+                return $this->render('role/new.html.twig', ['role' => $role, 'form' => $form->createView()]);
+//                return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
             }
 
             if($team->isMember($role->getUser())) {
                 //user has already in team
-                return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
+                $this->addFlash('warning',WarningMessages::WARNING_USER);
+                return $this->render('role/new.html.twig', ['role' => $role, 'form' => $form->createView()]);
+//                return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
             }
 
             $em = $this->getDoctrine()->getManager();
@@ -193,9 +202,6 @@ class TeamController extends Controller
             return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
         }
 
-        return $this->render('role/new.html.twig', [
-            'role' => $role,
-            'form' => $form->createView(),
-        ]);
+        return $this->render('role/new.html.twig', ['role' => $role, 'form' => $form->createView()]);
     }
 }

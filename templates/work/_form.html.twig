@@ -1,34 +1,7 @@
 {{ form_start(form) }}
     {{ form_errors(form) }}
     {#{{ form_widget(form) }}#}
-    {#<div class="form-row form-group">#}
-        {#<div class="col">#}
-            {#{{ form_label(form.description) }}#}
-            {#{{ form_errors(form.description) }}#}
-            {#{{ form_widget(form.description) }}#}
-        {#</div>#}
-    {#</div>#}
-    {#<div class="form-row form-group">#}
-        {#<div class="col">#}
-            {#{{ form_label(form.startDate) }}#}
-            {#{{ form_errors(form.startDate) }}#}
-            {#{{ form_widget(form.startDate) }}#}
-        {#</div>#}
-        {#<div class="col">#}
-            {#{{ form_label(form.endDate) }}#}
-            {#{{ form_errors(form.endDate) }}#}
-            {#{{ form_widget(form.endDate) }}#}
-        {#</div>#}
-    {#</div>#}
-    {#<div class="form-row form-group">#}
-        {#<div class="col">#}
-            {#{{ form_label(form.task) }}#}
-            {#{{ form_errors(form.task) }}#}
-            {#{{ form_widget(form.task) }}#}
-        {#</div>#}
-    {#</div>#}
-
-{% for message in app.flashes('notice') %}
+{% for message in app.flashes('warning') %}
     <div class="flash-notice">
         {{ message }}
     </div>

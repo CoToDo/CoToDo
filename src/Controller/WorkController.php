@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Entity\Work;
 use App\Form\WorkType;
 use App\Repository\WorkRepository;
+use App\WarningMessages;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,6 @@ class WorkController extends Controller
 {
 
     const ASSIGNED_BY = "Assigned by ";
-    const WARNING_USER = "User has already work on that task";
 
     /**
      * @Route("/{id}/create", name="work_new", methods="GET|POST")
@@ -44,10 +44,7 @@ class WorkController extends Controller
             if ($task->isUserSet($work->getUser())) {
                 //user has work on task
 
-                $this->addFlash(
-                    'notice',
-                    WorkController::WARNING_USER
-                );
+                $this->addFlash('warning',WarningMessages::WARNING_USER);
                 return $this->render('work/new.html.twig', [
                     'work' => $work,
                     'task' => $task,
@@ -182,10 +179,7 @@ class WorkController extends Controller
 
         if ($task->isUserSet($work->getUser())) {
             //user has work on task
-            $this->addFlash(
-                'notice',
-                WorkController::WARNING_USER
-            );
+            $this->addFlash('warning',WarningMessages::WARNING_USER);
             return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
         }
 
