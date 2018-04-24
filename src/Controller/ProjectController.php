@@ -124,7 +124,6 @@ class ProjectController extends Controller
             'team' => $project->getTeam(),
             'userRole' => $this->getUser(),
             'tasks' => $taskRepository->findUncompleteTasks($project->getId())]);
-
     }
 
     /**

@@ -2,7 +2,7 @@
     {{ form_errors(form) }}
 
 {% for message in app.flashes('warning') %}
-    <div class="flash-notice">
+    <div class="flash-notice alert alert-warning">
         {{ message }}
     </div>
 {% endfor %}
