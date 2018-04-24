@@ -5,6 +5,11 @@
 {% block body %}
     <div class="main-div-crud">
 
+        {% for message in app.flashes('notice') %}
+            <div class="flash-notice">
+                {{ message }}
+            </div>
+        {% endfor %}
         <div class="m-5">
             <h1>Task</h1>
 

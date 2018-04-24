@@ -21,6 +21,7 @@ class WorkController extends Controller
 {
 
     const ASSIGNED_BY = "Assigned by ";
+    const WARNING_USER = "User has already work on that task";
 
     /**
      * @Route("/{id}/create", name="work_new", methods="GET|POST")
@@ -42,7 +43,16 @@ class WorkController extends Controller
             $work->setDescription(WorkController::ASSIGNED_BY . $this->getUser()->getUserName());
             if ($task->isUserSet($work->getUser())) {
                 //user has work on task
-                return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
+
+                $this->addFlash(
+                    'notice',
+                    WorkController::WARNING_USER
+                );
+                return $this->render('work/new.html.twig', [
+                    'work' => $work,
+                    'task' => $task,
+                    'form' => $form->createView(),
+                ]);
             }
 
             $em = $this->getDoctrine()->getManager();
@@ -172,6 +182,10 @@ class WorkController extends Controller
 
         if ($task->isUserSet($work->getUser())) {
             //user has work on task
+            $this->addFlash(
+                'notice',
+                WorkController::WARNING_USER
+            );
             return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
         }
 
