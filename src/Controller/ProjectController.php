@@ -305,6 +305,27 @@ class ProjectController extends Controller
 
     }
 
+    /**
+     * @Route("/{idp}/tasks/{id}/reopen", name="project_task_reopen", methods="GET")
+     * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
+     * @Security("has_role('ROLE_USER')")
+     * @Security("project.getTeam().isAdmin(user) or project.getTeam().isLeader(user)")
+     */
+    public function reopenTask(Project $project, Task $task): Response
+    {
+
+        if($task->getCompletionDate() != null){
+            $task->removeCompletionDate();
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($task);
+        $em->flush();
+
+        return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
+
+    }
+
 
     /**
      * @Route("/{idp}/tasks/{id}", name="project_task_delete", methods="DELETE")

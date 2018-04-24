@@ -128,6 +128,13 @@ class Task
         return $this;
     }
 
+    public function removeCompletionDate(): self
+    {
+        $this->completionDate =null;
+
+        return $this;
+    }
+
     public function getDeadline(): ?\DateTimeInterface
     {
         return $this->deadline;

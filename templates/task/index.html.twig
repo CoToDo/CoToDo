@@ -40,6 +40,8 @@
 
                         {% if task.completionDate is null and (team.admin(userRole) or team.leader(userRole)) %}
                             <a class="btn btn-outline-success" href="{{ path('project_task_complete', {'idp': project.id, 'id': task.id}) }}">Complete task</a>
+                        {% else %}
+                            <a class="btn btn-outline-success" href="{{ path('project_task_reopen', {'idp': project.id, 'id': task.id}) }}">Reopen</a>
                         {% endif %}
                     </td>
                 </tr>
