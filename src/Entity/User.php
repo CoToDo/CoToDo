@@ -52,17 +52,20 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user", cascade={"remove"})
+     * @ORM\JoinColumn(name="comment_id", referencedColumnName="comment_id", onDelete="CASCADE")
      */
     private $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Work", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\Work", mappedBy="user", cascade={"remove"})
+     * @ORM\JoinColumn(name="work_id", referencedColumnName="work_id", onDelete="CASCADE")
      */
     private $works;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Role", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\Role", mappedBy="user", cascade={"remove"})
+     * @ORM\JoinColumn(name="role_id", referencedColumnName="role_id", onDelete="CASCADE")
      */
     private $roles;
 
