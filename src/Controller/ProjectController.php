@@ -10,6 +10,7 @@ use App\Form\CommentType;
 use App\Form\ProjectType;
 use App\Form\TaskType;
 use App\Repository\ProjectRepository;
+use App\Repository\TaskRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -115,13 +116,14 @@ class ProjectController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isMember(user)")
      */
-    public function show(Project $project): Response
+    public function show(TaskRepository $taskRepository, Project $project): Response
     {
         return $this->render('project/show.html.twig', [
             'project' => $project,
             'subprojects' => $project->getSubProjects(),
             'team' => $project->getTeam(),
-            'userRole' => $this->getUser()]);
+            'userRole' => $this->getUser(),
+            'tasks' => $taskRepository->findUncompleteTasks($project->getId())]);
 
     }
 
@@ -172,11 +174,11 @@ class ProjectController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isMember(user)")
      */
-    public function indexTasks(Project $project): Response
+    public function indexTasks(TaskRepository $taskRepository, Project $project): Response
     {
         return $this->render('task/index.html.twig', [
             'team' => $project->getTeam(),
-            'tasks' => $project->getTasks(),
+            'tasks' => $taskRepository->findTasksSortedByCompletionDate($project->getId()),
             'project' => $project,
             'userRole' => $this->getUser()]);
     }

@@ -44,7 +44,7 @@
                 </thead>
                 <tbody>
 
-                {% for task in project.tasks %}
+                {% for task in tasks %}
                     <tr class='clickable-row' data-href="{{ path('project_task_show', {'idp': project.id , 'id': task.id}) }}">
                         <td>{{ task.name }}</td>
                         <td>{{ task.priority }}</td>
