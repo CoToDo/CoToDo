@@ -27,6 +27,7 @@ class TaskRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t')
             ->join('t.works',"w")
             ->where('w.user = :val')
+            ->andWhere('t.completionDate IS NULL')
             ->setParameter('val', $id)
             ->orderBy('t.priority, t.deadline', 'ASC')
 //            ->setMaxResults(10)
@@ -51,6 +52,38 @@ class TaskRepository extends ServiceEntityRepository
             ->getResult()
             ;
     }
+
+    /**
+     * @return Task[] Returns an array of Task objects
+     */
+    public function findTasksSortedByCompletionDate($id)
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.project',"p")
+            ->where('p.id = :val')
+            ->setParameter('val', $id)
+            ->orderBy('t.completionDate, t.priority, t.deadline', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @return Task[] Returns an array of Task objects
+     */
+    public function findUncompleteTasks($id)
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.project',"p")
+            ->where('p.id = :val')
+            ->andWhere('t.completionDate IS NULL')
+            ->setParameter('val', $id)
+            ->orderBy('t.priority, t.deadline', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     /*
     public function findOneBySomeField($value): ?Task
     {
