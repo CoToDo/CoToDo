@@ -41,16 +41,26 @@ class Work
      */
     private $user;
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
+    /**
+     * @param string $description
+     * @return Work
+     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -58,11 +68,18 @@ class Work
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getStartDate(): ?\DateTimeInterface
     {
         return $this->startDate;
     }
 
+    /**
+     * @param \DateTimeInterface $startDate
+     * @return Work
+     */
     public function setStartDate(\DateTimeInterface $startDate): self
     {
         $this->startDate = $startDate;
@@ -70,11 +87,18 @@ class Work
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getEndDate(): ?\DateTimeInterface
     {
         return $this->endDate;
     }
 
+    /**
+     * @param \DateTimeInterface $endDate
+     * @return Work
+     */
     public function setEndDate(\DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
@@ -82,11 +106,18 @@ class Work
         return $this;
     }
 
+    /**
+     * @return Task|null
+     */
     public function getTask(): ?Task
     {
         return $this->task;
     }
 
+    /**
+     * @param Task|null $task
+     * @return Work
+     */
     public function setTask(?Task $task): self
     {
         $this->task = $task;
@@ -94,11 +125,18 @@ class Work
         return $this;
     }
 
+    /**
+     * @return User|null
+     */
     public function getUser(): ?User
     {
         return $this->user;
     }
 
+    /**
+     * @param User|null $user
+     * @return Work
+     */
     public function setUser(?User $user): self
     {
         $this->user = $user;
@@ -106,17 +144,26 @@ class Work
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return "" . $this->getDescription();
     }
 
+    /**
+     * @return bool
+     */
     public function isStartSet()
     {
         if($this->getStartDate()===null) return false;
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function isEndSet()
     {
         if($this->getEndDate()===null) return false;

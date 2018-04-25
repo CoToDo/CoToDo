@@ -69,6 +69,9 @@ class User implements UserInterface, \Serializable
      */
     private $roles;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -76,16 +79,26 @@ class User implements UserInterface, \Serializable
         $this->roles = new ArrayCollection();
     }
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return User
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -93,11 +106,18 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
+    /**
+     * @param string $lastName
+     * @return User
+     */
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
@@ -105,11 +125,18 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getMail(): ?string
     {
         return $this->mail;
     }
 
+    /**
+     * @param string $mail
+     * @return User
+     */
     public function setMail(string $mail): self
     {
         $this->mail = $mail;
@@ -117,6 +144,10 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @param string $password
+     * @return User
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -132,6 +163,10 @@ class User implements UserInterface, \Serializable
         return $this->comments;
     }
 
+    /**
+     * @param Comment $comment
+     * @return User
+     */
     public function addComment(Comment $comment): self
     {
         if (!$this->comments->contains($comment)) {
@@ -142,6 +177,10 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @param Comment $comment
+     * @return User
+     */
     public function removeComment(Comment $comment): self
     {
         if ($this->comments->contains($comment)) {
@@ -163,6 +202,10 @@ class User implements UserInterface, \Serializable
         return $this->works;
     }
 
+    /**
+     * @param Work $work
+     * @return User
+     */
     public function addWork(Work $work): self
     {
         if (!$this->works->contains($work)) {
@@ -173,6 +216,10 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @param Work $work
+     * @return User
+     */
     public function removeWork(Work $work): self
     {
         if ($this->works->contains($work)) {
@@ -186,25 +233,40 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getSalt()
     {
         return null;
     }
 
+    /**
+     * @return string
+     */
     public function getPassword()
     {
         return $this->password;
     }
 
+    /**
+     * @return array
+     */
     public function  getRoles()
     {
         return array('ROLE_USER');
     }
 
+    /**
+     *
+     */
     public function  eraseCredentials()
     {
     }
 
+    /**
+     * @return string
+     */
     public function getUsername()
     {
         return $this->mail;
@@ -251,11 +313,18 @@ class User implements UserInterface, \Serializable
             ) = unserialize($serialized);
     }
 
+    /**
+     * @return null|string
+     */
     public function __toString()
     {
         return $this->getMail();
     }
 
+    /**
+     * @param Role $role
+     * @return User
+     */
     public function addRole(Role $role): self
     {
         if (!$this->roles->contains($role)) {
@@ -266,6 +335,10 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @param Role $role
+     * @return User
+     */
     public function removeRole(Role $role): self
     {
         if ($this->roles->contains($role)) {
@@ -279,14 +352,24 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return ArrayCollection
+     */
     public function getUserRoles() {
         return $this->roles;
     }
 
+    /**
+     * @return string
+     */
     public function getFullName(){
         return $this->getName() . " " . $this->getLastName();
     }
 
+    /**
+     * @param User $user
+     * @return bool
+     */
     public function equals(User $user){
         if($this->getMail() == $user->getMail()) return true;
 

@@ -28,21 +28,35 @@ class Tag
      */
     private $tasks;
 
+
+    /**
+     * Tag constructor.
+     */
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
     }
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return Tag
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -58,6 +72,10 @@ class Tag
         return $this->tasks;
     }
 
+    /**
+     * @param Task $task
+     * @return Tag
+     */
     public function addTask(Task $task): self
     {
         if (!$this->tasks->contains($task)) {
@@ -67,6 +85,10 @@ class Tag
         return $this;
     }
 
+    /**
+     * @param Task $task
+     * @return Tag
+     */
     public function removeTask(Task $task): self
     {
         if ($this->tasks->contains($task)) {

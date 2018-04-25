@@ -68,6 +68,9 @@ class Task
      */
     private $project;
 
+    /**
+     * Task constructor.
+     */
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -75,16 +78,26 @@ class Task
         $this->comments = new ArrayCollection();
     }
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return Task
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -92,11 +105,18 @@ class Task
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getPriority(): ?string
     {
         return $this->priority;
     }
 
+    /**
+     * @param string $priority
+     * @return Task
+     */
     public function setPriority(string $priority): self
     {
         $this->priority = $priority;
@@ -104,11 +124,18 @@ class Task
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getCreateDate(): ?\DateTimeInterface
     {
         return $this->createDate;
     }
 
+    /**
+     * @param \DateTimeInterface $createDate
+     * @return Task
+     */
     public function setCreateDate(\DateTimeInterface $createDate): self
     {
         $this->createDate = $createDate;
@@ -116,11 +143,18 @@ class Task
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getCompletionDate(): ?\DateTimeInterface
     {
         return $this->completionDate;
     }
 
+    /**
+     * @param \DateTimeInterface $completionDate
+     * @return Task
+     */
     public function setCompletionDate(\DateTimeInterface $completionDate): self
     {
         $this->completionDate = $completionDate;
@@ -128,6 +162,9 @@ class Task
         return $this;
     }
 
+    /**
+     * @return Task
+     */
     public function removeCompletionDate(): self
     {
         $this->completionDate =null;
@@ -135,11 +172,18 @@ class Task
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getDeadline(): ?\DateTimeInterface
     {
         return $this->deadline;
     }
 
+    /**
+     * @param \DateTimeInterface $deadline
+     * @return Task
+     */
     public function setDeadline(\DateTimeInterface $deadline): self
     {
         $this->deadline = $deadline;
@@ -155,6 +199,10 @@ class Task
         return $this->tags;
     }
 
+    /**
+     * @param Tag $tag
+     * @return Task
+     */
     public function addTag(Tag $tag): self
     {
         if (!$this->tags->contains($tag)) {
@@ -165,6 +213,10 @@ class Task
         return $this;
     }
 
+    /**
+     * @param Tag $tag
+     * @return Task
+     */
     public function removeTag(Tag $tag): self
     {
         if ($this->tags->contains($tag)) {
@@ -183,6 +235,10 @@ class Task
         return $this->works;
     }
 
+    /**
+     * @param Work $work
+     * @return Task
+     */
     public function addWork(Work $work): self
     {
         if (!$this->works->contains($work)) {
@@ -193,6 +249,10 @@ class Task
         return $this;
     }
 
+    /**
+     * @param Work $work
+     * @return Task
+     */
     public function removeWork(Work $work): self
     {
         if ($this->works->contains($work)) {
@@ -214,6 +274,10 @@ class Task
         return $this->comments;
     }
 
+    /**
+     * @param Comment $comment
+     * @return Task
+     */
     public function addComment(Comment $comment): self
     {
         if (!$this->comments->contains($comment)) {
@@ -224,6 +288,10 @@ class Task
         return $this;
     }
 
+    /**
+     * @param Comment $comment
+     * @return Task
+     */
     public function removeComment(Comment $comment): self
     {
         if ($this->comments->contains($comment)) {
@@ -237,16 +305,26 @@ class Task
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return "" . $this->getName();
     }
 
+    /**
+     * @return Project|null
+     */
     public function getProject(): ?Project
     {
         return $this->project;
     }
 
+    /**
+     * @param Project|null $project
+     * @return Task
+     */
     public function setProject(?Project $project): self
     {
         $this->project = $project;
@@ -254,6 +332,10 @@ class Task
         return $this;
     }
 
+    /**
+     * @param $user
+     * @return null
+     */
     public function getWorkId($user)
     {
         foreach ($user->getWorks() as $work) {
@@ -264,6 +346,10 @@ class Task
         return null;
     }
 
+    /**
+     * @param $user
+     * @return null
+     */
     public function getWork($user)
     {
         foreach ($user->getWorks() as $work) {
@@ -274,6 +360,10 @@ class Task
         return null;
     }
 
+    /**
+     * @param User $user
+     * @return bool
+     */
     public function isUserSet(User $user)
     {
         foreach($this->getWorks() as $work) {

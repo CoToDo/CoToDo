@@ -32,16 +32,26 @@ class Role
      */
     private $user;
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getType(): ?string
     {
         return $this->type;
     }
 
+    /**
+     * @param string $type
+     * @return Role
+     */
     public function setType(string $type): self
     {
         $this->type = $type;
@@ -49,11 +59,18 @@ class Role
         return $this;
     }
 
+    /**
+     * @return Team|null
+     */
     public function getTeam(): ?Team
     {
         return $this->team;
     }
 
+    /**
+     * @param Team|null $team
+     * @return Role
+     */
     public function setTeam(?Team $team): self
     {
         $this->team = $team;
@@ -61,11 +78,18 @@ class Role
         return $this;
     }
 
+    /**
+     * @return User|null
+     */
     public function getUser(): ?User
     {
         return $this->user;
     }
 
+    /**
+     * @param User|null $user
+     * @return Role
+     */
     public function setUser(?User $user): self
     {
         $this->user = $user;
@@ -73,19 +97,31 @@ class Role
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
        return $this->getTeam().$this->getType().$this->getUser();
     }
 
+    /**
+     * @return bool
+     */
     public function isRoleAdmin() {
         return Constants::ADMIN == $this->getType();
     }
 
+    /**
+     * @return bool
+     */
     public function isRoleLeader() {
         return Constants::LEADER == $this->getType();
     }
 
+    /**
+     * @return bool
+     */
     public function isRoleUser() {
         return Constants::USER == $this->getType();
     }

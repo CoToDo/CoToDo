@@ -55,6 +55,9 @@ class Project
      */
     private $tasks;
 
+    /**
+     * Project constructor.
+     */
     public function __construct()
     {
         $this->managers = new ArrayCollection();
@@ -62,16 +65,26 @@ class Project
         $this->tasks = new ArrayCollection();
     }
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return Project
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -79,11 +92,18 @@ class Project
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
+    /**
+     * @param string $description
+     * @return Project
+     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -91,11 +111,18 @@ class Project
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getCreateDate(): ?\DateTimeInterface
     {
         return $this->createDate;
     }
 
+    /**
+     * @param \DateTimeInterface|null $createDate
+     * @return Project
+     */
     public function setCreateDate(?\DateTimeInterface $createDate): self
     {
         $this->createDate = $createDate;
@@ -103,11 +130,18 @@ class Project
         return $this;
     }
 
+    /**
+     * @return User|null
+     */
     public function getLeader(): ?User
     {
         return $this->leader;
     }
 
+    /**
+     * @param User|null $leader
+     * @return Project
+     */
     public function setLeader(?User $leader): self
     {
         $this->leader = $leader;
@@ -115,6 +149,9 @@ class Project
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return "" . $this->getName();
@@ -128,6 +165,10 @@ class Project
         return $this->subProjects;
     }
 
+    /**
+     * @param Project $subProject
+     * @return Project
+     */
     public function addSubProject(Project $subProject): self
     {
         if (!$this->subProjects->contains($subProject)) {
@@ -138,6 +179,10 @@ class Project
         return $this;
     }
 
+    /**
+     * @param Project $subProject
+     * @return Project
+     */
     public function removeSubProject(Project $subProject): self
     {
         if ($this->subProjects->contains($subProject)) {
@@ -167,11 +212,18 @@ class Project
         $this->parentProject = $parentProject;
     }
 
+    /**
+     * @return Team|null
+     */
     public function getTeam(): ?Team
     {
         return $this->team;
     }
 
+    /**
+     * @param Team|null $team
+     * @return Project
+     */
     public function setTeam(?Team $team): self
     {
         $this->team = $team;
@@ -187,6 +239,10 @@ class Project
         return $this->tasks;
     }
 
+    /**
+     * @param Task $task
+     * @return Project
+     */
     public function addTask(Task $task): self
     {
         if (!$this->tasks->contains($task)) {
@@ -197,6 +253,10 @@ class Project
         return $this;
     }
 
+    /**
+     * @param Task $task
+     * @return Project
+     */
     public function removeTask(Task $task): self
     {
         if ($this->tasks->contains($task)) {

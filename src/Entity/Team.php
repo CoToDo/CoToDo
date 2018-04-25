@@ -36,22 +36,35 @@ class Team
      */
     private $roles;
 
+    /**
+     * Team constructor.
+     */
     public function __construct()
     {
         $this->projects = new ArrayCollection();
         $this->roles = new ArrayCollection();
     }
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return null|string
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return Team
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -67,6 +80,10 @@ class Team
         return $this->projects;
     }
 
+    /**
+     * @param Project $project
+     * @return Team
+     */
     public function addProject(Project $project): self
     {
         if (!$this->projects->contains($project)) {
@@ -77,6 +94,10 @@ class Team
         return $this;
     }
 
+    /**
+     * @param Project $project
+     * @return Team
+     */
     public function removeProject(Project $project): self
     {
         if ($this->projects->contains($project)) {
@@ -98,6 +119,10 @@ class Team
         return $this->roles;
     }
 
+    /**
+     * @param Role $role
+     * @return Team
+     */
     public function addRole(Role $role): self
     {
         if (!$this->roles->contains($role)) {
@@ -108,6 +133,10 @@ class Team
         return $this;
     }
 
+    /**
+     * @param Role $role
+     * @return Team
+     */
     public function removeRole(Role $role): self
     {
         if ($this->roles->contains($role)) {
@@ -121,12 +150,21 @@ class Team
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function __toString()
     {
         return $this->getName();
     }
 
 
+    /**
+     * Check if user is member of a team
+     *
+     * @param $user
+     * @return bool
+     */
     public function isMember($user)
     {
         foreach ($user->getUserRoles() as $role) {
@@ -137,6 +175,10 @@ class Team
         return false;
     }
 
+    /**
+     * @param $user
+     * @return null
+     */
     public function getMemberRole($user)
     {
         foreach ($user->getUserRoles() as $role) {
@@ -147,6 +189,12 @@ class Team
         return null;
     }
 
+    /**
+     * Check if user is just leader
+     *
+     * @param $user
+     * @return bool
+     */
     public function isLeader($user)
     {
         foreach ($this->getRoles() as $role) {
@@ -157,6 +205,12 @@ class Team
         return false;
     }
 
+    /**
+     * Check if user is admin or leader
+     *
+     * @param $user
+     * @return bool
+     */
     public function isAdmin($user)
     {
         foreach ($this->getRoles() as $role) {
@@ -167,6 +221,12 @@ class Team
         return false;
     }
 
+    /**
+     * Check if user is just admin
+     *
+     * @param $user
+     * @return bool
+     */
     public function isOnlyAdmin($user)
     {
         foreach ($this->getRoles() as $role) {
