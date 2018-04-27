@@ -11,14 +11,10 @@
             </div>
         {% endfor %}
         <div class="m-5">
-            <h1>Task</h1>
+            <h1>{{ task.name }}</h1>
 
             <table class="table">
                 <tbody>
-                <tr>
-                    <th>Name</th>
-                    <td>{{ task.name }}</td>
-                </tr>
                 <tr>
                     <th>Priority</th>
                     <td>{{ task.priority }}</td>
