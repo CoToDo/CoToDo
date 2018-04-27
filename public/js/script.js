@@ -124,6 +124,32 @@ function sortTable(n) {
                 dir = "desc";
                 switching = true;
             }
+
         }
     }
+    //list of all icons with sorting arrows
+    var arrowIcons = rows[0].getElementsByTagName("I");
+    var arrowIcon;
+
+    //set default sorting icon to all columns
+    for (i = 0; i < arrowIcons.length; i++) {
+        arrowIcon = $(arrowIcons[i]);
+        if(arrowIcon.hasClass("fa-sort-down")) arrowIcon.removeClass("fa-sort-down");
+        if(arrowIcon.hasClass("fa-sort-up")) arrowIcon.removeClass("fa-sort-up");
+        arrowIcon.addClass("fa-sort");
+    }
+
+
+    var sortedArrowIcon = $(arrowIcons[n]);
+    if(sortedArrowIcon.hasClass("fa-sort")) sortedArrowIcon.removeClass("fa-sort");
+    if(sortedArrowIcon.hasClass("fa-sort-down")) sortedArrowIcon.removeClass("fa-sort-down");
+    if(sortedArrowIcon.hasClass("fa-sort-up")) sortedArrowIcon.removeClass("fa-sort-up");
+
+    //set sorting icon to a column that is currently used for sorting
+    if(dir == 'asc'){
+        sortedArrowIcon.addClass("fa-sort-up");
+    }else{
+        sortedArrowIcon.addClass("fa-sort-down");
+    }
+
 }
