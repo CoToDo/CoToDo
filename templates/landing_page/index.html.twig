@@ -1,0 +1,16 @@
+{% extends 'home.html.twig' %}
+
+{% block title %}CoToDo{% endblock %}
+
+{% block body %}
+
+<div class="landMenu">
+    <div class="clearfix">
+        <img class="logoland" src="{{ asset('icon.svg') }}" alt="CoToDo icon" />
+        <img class="logo" src="{{ asset('LogoFinal.svg') }}"  alt="CoToDo logo"/>
+        <a class="btn btn-dark land" href="{{ path('login') }}">Login</a>
+        <a class="btn btn-dark land" href="{{ path('registration') }}">Registration</a>
+    </div>
+</div>
+
+{% endblock %}

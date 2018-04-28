@@ -124,3 +124,34 @@ fieldset[disabled] .btn-dark.active {
         color: #2C6F94;
         background-color: #FFFFFF;
 }
+
+.logoland {
+        float: right;
+        width: 40%;
+        height: 55vh;
+}
+
+.clearfix {
+        overflow: auto;
+        text-align: center;
+        font-size: 20vh;
+        padding: 5vh;
+}
+
+.logo {
+        width: 60%;
+        height: 20%;
+        height: 20vh;
+        margin: 0;
+}
+
+.land {
+        font-size: 3vh;
+        padding-left: 3vh;
+        padding-right: 3vh;
+}
+
+.landMenu {
+        margin: auto;
+        width: 70%;
+}
