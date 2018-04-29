@@ -131,6 +131,7 @@ class Comment
     }
 
     /**
+     * Check if user is author of comment
      * @param User $user
      * @return bool
      */

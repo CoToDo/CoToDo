@@ -361,6 +361,7 @@ class Task
     }
 
     /**
+     * Check if user is set to this task
      * @param User $user
      * @return bool
      */

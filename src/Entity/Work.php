@@ -153,6 +153,7 @@ class Work
     }
 
     /**
+     * Check if start date is set
      * @return bool
      */
     public function isStartSet()
@@ -162,6 +163,7 @@ class Work
     }
 
     /**
+     * Check if end date is set
      * @return bool
      */
     public function isEndSet()

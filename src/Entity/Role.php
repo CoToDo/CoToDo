@@ -106,6 +106,7 @@ class Role
     }
 
     /**
+     * Check if this role is Admin
      * @return bool
      */
     public function isRoleAdmin() {
@@ -113,6 +114,7 @@ class Role
     }
 
     /**
+     * Check if this role is Leader
      * @return bool
      */
     public function isRoleLeader() {
@@ -120,6 +122,7 @@ class Role
     }
 
     /**
+     * Check if this role is User
      * @return bool
      */
     public function isRoleUser() {
