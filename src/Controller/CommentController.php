@@ -14,6 +14,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class CommentController extends Controller
 {
     /**
+     * Delete comment
+     * @param Comment $comment
+     * @return Response
      * @Route("/{id}", name="comment_delete", methods="DELETE")
      * @Security("has_role('ROLE_USER')")
      * @Security("comment.isAuthor(user)")
@@ -23,7 +26,6 @@ class CommentController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->remove($comment);
         $em->flush();
-
         return $this->redirectToRoute('project_task_show', ['idp' => $comment->getTask()->getProject()->getId(), 'id' => $comment->getTask()->getId()]);
     }
 }

@@ -24,6 +24,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class ProjectController extends Controller
 {
     /**
+     * Render user's projects
+     * @param ProjectRepository $projectRepository
+     * @return Response
      * @Route("/", name="project_index", methods="GET")
      * @Security("has_role('ROLE_USER')")
      */
@@ -35,12 +38,14 @@ class ProjectController extends Controller
     }
 
     /**
+     * Render create view for create project
+     * @param Request $request
+     * @return Response
      * @Route("/create", name="project_new", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      */
     public function new(Request $request): Response
     {
-
         $project = new Project();
         $form = $this->createForm(ProjectType::class, $project, [
             'userId' => $this->getUser()->getId(),
@@ -48,7 +53,7 @@ class ProjectController extends Controller
         ]);
         $form->handleRequest($request);
 
-        //Automatically set createDate
+        // Automatically set createDate
         $dateTime = new \DateTime('now');
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         if (null === $project->getCreateDate()) {
@@ -72,13 +77,16 @@ class ProjectController extends Controller
     }
 
     /**
+     * Render view for create new subproject
+     * @param Request $request
+     * @param Project $parentProject
+     * @return Response
      * @Route("/{id}/create", name="subproject_new", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      * @Security("parentProject.getTeam().isAdmin(user)")
      */
     public function newSubproject(Request $request, Project $parentProject): Response
     {
-
         $project = new Project();
         $project->setParentProject($parentProject);
         $form = $this->createForm(ProjectType::class, $project, [
@@ -87,7 +95,7 @@ class ProjectController extends Controller
         ]);
         $form->handleRequest($request);
 
-        //Automatically set createDate
+        // Automatically set createDate
         $dateTime = new \DateTime('now');;
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         if (null === $project->getCreateDate()) {
@@ -112,6 +120,10 @@ class ProjectController extends Controller
     }
 
     /**
+     * Render project details
+     * @param TaskRepository $taskRepository
+     * @param Project $project
+     * @return Response
      * @Route("/{id}", name="project_show", methods="GET")
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isMember(user)")
@@ -127,6 +139,10 @@ class ProjectController extends Controller
     }
 
     /**
+     * Render edit form for project
+     * @param Request $request
+     * @param Project $project
+     * @return Response
      * @Route("/{id}/edit", name="project_edit", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isAdmin(user)")
@@ -152,6 +168,10 @@ class ProjectController extends Controller
     }
 
     /**
+     * Delete project
+     * @param Request $request
+     * @param Project $project
+     * @return Response
      * @Route("/{id}", name="project_delete", methods="DELETE")
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isLeader(user)")
@@ -169,6 +189,10 @@ class ProjectController extends Controller
 
 
     /**
+     * Render project's tasks
+     * @param TaskRepository $taskRepository
+     * @param Project $project
+     * @return Response
      * @Route("/{id}/tasks", name="project_task_index", methods="GET")
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isMember(user)")
@@ -183,6 +207,10 @@ class ProjectController extends Controller
     }
 
     /**
+     * Render form for create task on project
+     * @param Request $request
+     * @param Project $project
+     * @return Response
      * @Route("/{id}/tasks/create", name="project_task_new", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isAdmin(user)")
@@ -192,7 +220,7 @@ class ProjectController extends Controller
         $task = new Task();
         $task->setProject($project);
 
-        //Automatically set createDate
+        // Automatically set createDate
         $dateTime = new \DateTime('now');
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         if (null === $task->getCreateDate()) {
@@ -218,6 +246,11 @@ class ProjectController extends Controller
     }
 
     /**
+     * Render project's tasks details
+     * @param Request $request
+     * @param Project $project
+     * @param Task $task
+     * @return Response
      * @Route("/{idp}/tasks/{id}", name="project_task_show", methods="GET|POST")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")
@@ -237,7 +270,6 @@ class ProjectController extends Controller
             if (null === $comment->getDate()) {
                 $comment->setDate($dateTime);
             }
-
 
             echo $comment;
             $em = $this->getDoctrine()->getManager();
@@ -259,6 +291,11 @@ class ProjectController extends Controller
     }
 
     /**
+     * Render project's tasks edit form
+     * @param Request $request
+     * @param Project $project
+     * @param Task $task
+     * @return Response
      * @Route("/{idp}/tasks/{id}/edit", name="project_task_edit", methods="GET|POST")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")
@@ -283,6 +320,10 @@ class ProjectController extends Controller
     }
 
     /**
+     * Complete task button
+     * @param Project $project
+     * @param Task $task
+     * @return Response
      * @Route("/{idp}/tasks/{id}/complete", name="project_task_complete", methods="GET")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")
@@ -305,6 +346,10 @@ class ProjectController extends Controller
     }
 
     /**
+     * Reopen task button
+     * @param Project $project
+     * @param Task $task
+     * @return Response
      * @Route("/{idp}/tasks/{id}/reopen", name="project_task_reopen", methods="GET")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")
@@ -327,6 +372,11 @@ class ProjectController extends Controller
 
 
     /**
+     * Delete task
+     *@param Request $request
+     * @param Project $project
+     * @param Task $task
+     * @return Response
      * @Route("/{idp}/tasks/{id}", name="project_task_delete", methods="DELETE")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")

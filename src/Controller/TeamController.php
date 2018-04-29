@@ -25,6 +25,9 @@ class TeamController extends Controller
 {
 
     /**
+     * Render user teams
+     * @param TeamRepository $teamRepository
+     * @return Response
      * @Route("/", name="team_index", methods="GET")
      * @Security("has_role('ROLE_USER')")
      */
@@ -36,6 +39,9 @@ class TeamController extends Controller
     }
 
     /**
+     * Render form to create new Team
+     * @param Request $request
+     * @return Response
      * @Route("/create", name="team_new", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      */
@@ -68,6 +74,10 @@ class TeamController extends Controller
     }
 
     /**
+     * New project
+     * @param Request $request
+     * @param Team $team
+     * @return Response
      * @Route("/{id}/create", name="team_create_project", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      * @Security("team.isLeader(user)")
@@ -99,11 +109,12 @@ class TeamController extends Controller
             'project' => $project,
             'form' => $form->createView(),
         ]);
-
-
     }
 
     /**
+     * Render team details
+     * @param Team $team
+     * @return Response
      * @Route("/{id}", name="team_show", methods="GET")
      * @Security("has_role('ROLE_USER')")
      * @Security("team.isMember(user)")
@@ -118,6 +129,10 @@ class TeamController extends Controller
     }
 
     /**
+     * Render form to edit team
+     * @param Request $request
+     * @param Team $team
+     * @return Response
      * @Route("/{id}/edit", name="team_edit", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      * @Security("team.isLeader(user)")
@@ -140,6 +155,10 @@ class TeamController extends Controller
     }
 
     /**
+     * Delete team
+     * @param Request $request
+     * @param Team $team
+     * @return Response
      * @Route("/{id}", name="team_delete", methods="DELETE")
      * @Security("has_role('ROLE_USER')")
      * @Security("team.isLeader(user)")
@@ -156,6 +175,10 @@ class TeamController extends Controller
     }
 
     /**
+     * Render form to add new user to team
+     * @param Request $request
+     * @param Team $team
+     * @return Response
      * @Route("/{id}/add", name="team_add_user", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      * @Security("team.isAdmin(user)")
@@ -185,14 +208,12 @@ class TeamController extends Controller
             if($userRole == Constants::ADMIN && $role->getType() == Constants::LEADER) {
                 $this->addFlash('warning',WarningMessages::ADMIN_TO_LEADER);
                 return $this->render('role/new.html.twig', ['role' => $role, 'form' => $form->createView()]);
-//                return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
             }
 
             if($team->isMember($role->getUser())) {
                 //user has already in team
                 $this->addFlash('warning',WarningMessages::WARNING_USER);
                 return $this->render('role/new.html.twig', ['role' => $role, 'form' => $form->createView()]);
-//                return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
             }
 
             $em = $this->getDoctrine()->getManager();

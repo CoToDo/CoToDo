@@ -24,6 +24,9 @@ class WorkController extends Controller
     const ASSIGNED_BY = "Assigned by ";
 
     /**
+     * @param Request $request
+     * @param Task $task
+     * @return Response
      * @Route("/{id}/create", name="work_new", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      * @Security("task.getProject().getTeam().isAdmin(user)")
@@ -67,6 +70,8 @@ class WorkController extends Controller
     }
 
     /**
+     * @param Work $work
+     * @return Response
      * @Route("/{id}", name="work_show", methods="GET")
      * @Security("has_role('ROLE_USER')")
      * @Security("work.getTask().getProject().getTeam().isMember(user)")
@@ -80,9 +85,12 @@ class WorkController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param Work $work
      * @Route("/{id}/edit", name="work_edit", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      * @Security("work.getTask().getProject().getTeam().isAdmin(user)")
+     * @return Response
      */
     public function edit(Request $request, Work $work): Response
     {
@@ -105,6 +113,9 @@ class WorkController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param Work $work
+     * @return Response
      * @Route("/{id}", name="work_delete", methods="DELETE")
      * @Security("has_role('ROLE_USER')")
      * @Security("work.getTask().getProject().getTeam().isAdmin(user)")
@@ -123,13 +134,15 @@ class WorkController extends Controller
     }
 
     /**
+     * @param Work $work
+     * @return Response
      * @Route("/{id}/start", name="work_set_start", methods="GET")
      * @Security("has_role('ROLE_USER')")
      * @Security("work.getUser().equals(user)")
      */
     public function setStart(Work $work): Response
     {
-        //set startDate
+        // set startDate
         $dateTime = new \DateTime('now');;
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         if (null === $work->getStartDate()) {
@@ -144,6 +157,8 @@ class WorkController extends Controller
     }
 
     /**
+     * @param Work $work
+     * @return Response
      * @Route("/{id}/end", name="work_set_end", methods="GET")
      * @Security("has_role('ROLE_USER')")
      * @Security("work.getUser().equals(user)")
@@ -166,6 +181,9 @@ class WorkController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param Task $task
+     * @return Response
      * @Route("/{id}/assign", name="work_assign_yourself", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      * @Security("task.getProject().getTeam().isMember(user)")
@@ -189,6 +207,5 @@ class WorkController extends Controller
 
         return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
     }
-
 
 }

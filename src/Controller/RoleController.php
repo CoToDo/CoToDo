@@ -18,6 +18,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class RoleController extends Controller
 {
     /**
+     * Render edit form for role
+     * @param Request $request
+     * @param Role $role
+     * @return Response
      * @Route("/{id}/edit", name="role_edit", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      * @Security("(role.getTeam().isOnlyAdmin(user) and (role.isRoleUser() or role.isRoleAdmin())) or role.getTeam().isLeader(user)")
@@ -53,6 +57,13 @@ class RoleController extends Controller
         return $this->returnWrong($role, $form);
     }
 
+
+    /**
+     * Render wrong view
+     * @param $role
+     * @param $form
+     * @return Response
+     */
     public function returnWrong($role, $form) {
         return $this->render('role/edit.html.twig', [
             'role' => $role,
@@ -61,6 +72,10 @@ class RoleController extends Controller
     }
 
     /**
+     * Delete role
+     * @param Request $request
+     * @param Role $role
+     * @return Response
      * @Route("/{id}", name="role_delete", methods="DELETE")
      * @Security("has_role('ROLE_USER')")
      * @Security("role.getTeam().isAdmin(user)")

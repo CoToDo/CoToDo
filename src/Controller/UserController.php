@@ -17,6 +17,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class UserController extends Controller
 {
     /**
+     * Render users
+     * @param UserRepository $userRepository
+     * @return Response
      * @Route("/", name="user_index", methods="GET")
      * @Security("has_role('ROLE_ADMIN')")
      */
@@ -37,6 +40,9 @@ class UserController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param User $userIn
+     * @return Response
      * @Route("/{id}/edit", name="user_edit", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      * @Security("userIn.equals(user)")
@@ -59,6 +65,9 @@ class UserController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param User $userIn
+     * @return Response
      * @Route("/{id}", name="user_delete", methods="DELETE")
      * @Security("has_role('ROLE_USER')")
      * @Security("userIn.equals(user)")
