@@ -17,6 +17,7 @@ class RoleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            //choice field with set of role types
             ->add('type', ChoiceType::class,
                 array('choices' => array(Constants::LEADER =>Constants::LEADER,
                                          Constants::ADMIN => Constants::ADMIN,

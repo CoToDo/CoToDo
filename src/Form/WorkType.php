@@ -15,16 +15,9 @@ class WorkType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-//            ->add('description')
-//            ->add('startDate', DateTimeType::class, [
-//                'widget' => 'single_text',
-//            ])
-//            ->add('endDate', DateTimeType::class, [
-//                'widget' => 'single_text',
-//            ])
-//            ->add('task')
             ->add('user', EntityType::class, [
                 'class' => User::class,
+                //display only users from current team
                 'choices' => $options['userRepository']->findProjectTeamMembers($options['teamId'])
             ])
         ;

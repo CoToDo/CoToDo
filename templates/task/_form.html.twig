@@ -1,4 +1,5 @@
 {% import _self as formMacros %}
+{#This macro is used for creating tag prototype when adding multiple tags#}
 {% macro getTagPrototype(tagForm) %}
         <div class="mt-1 w-25"   aria-label="Close">
             {{ form_widget(tagForm.name) }}
@@ -30,9 +31,10 @@
         <div class="col">
             {{ form_label(form.tags, null, {'label_attr': {'class': 'col-form-label'}} )}}
             {{ form_errors(form.tags) }}
+            {#Collection of text fields for adding multiple tags at once#}
             <div class="tags" data-prototype="{{ formMacros.getTagPrototype(form.tags.vars.prototype)|e('html_attr') }}">
                 {% for tag in form.tags %}
-                        {{ formMacros.getTagPrototype(tag) }}
+                    {{ formMacros.getTagPrototype(tag) }}
                 {% endfor %}
             </div>
         </div>

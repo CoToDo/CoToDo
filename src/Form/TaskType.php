@@ -17,6 +17,7 @@ class TaskType extends AbstractType
     {
         $builder
             ->add('name')
+            //choice field with set of possible priority values
             ->add('priority', ChoiceType::class,
                 array('choices' => array(Priorities::A => Priorities::A,
                                          Priorities::B => Priorities::B,
@@ -27,6 +28,7 @@ class TaskType extends AbstractType
             ->add('deadline', DateType::class, [
                 'widget' => 'single_text',
             ])
+            //field with behavior which allows user to add multiple tags without reloading page
             ->add('tags', CollectionType::class, array(
                 'entry_type' => TagType::class,
                 'entry_options' => array('label' => false),

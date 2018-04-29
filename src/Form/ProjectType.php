@@ -16,6 +16,7 @@ class ProjectType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
+            //field for choosing teams from database
             ->add('team', EntityType::class, [
                 'class' => Team::class,
                 //display only those teams in which I participate

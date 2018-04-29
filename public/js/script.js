@@ -23,7 +23,7 @@ jQuery(document).ready(function() {
     });
 });
 
-
+//adds new prototype tag when Add Tag button is clicked
 function addTagForm($collectionHolder, $newLinkLi) {
     // Get the data-prototype explained earlier
     var prototype = $collectionHolder.data('prototype');
@@ -46,7 +46,7 @@ jQuery(document).ready(function($) {
         window.location = $(this).data("href");
     });
 
-
+    //This calls function autoResizeTextArea on document ready
     jQuery.each(jQuery('.auto-expand'), function() {
         var offset = this.offsetHeight - this.clientHeight;
         autoResizeTextArea(this, offset);
@@ -54,12 +54,14 @@ jQuery(document).ready(function($) {
 
 });
 
+//This calls function autoResizeTextArea everytime when textarea registers user input
+//Used for auto expanding comments in task show template
 jQuery.each(jQuery('.auto-expand'), function() {
     var offset = this.offsetHeight - this.clientHeight;
 
     jQuery(this).on('keyup input', function() { autoResizeTextArea(this, offset); });
 });
-
+//Automatically resizes text area for comments
 function autoResizeTextArea(el, offset) {
     jQuery(el).css('height', 'auto').css('height', el.scrollHeight + offset);
 }
