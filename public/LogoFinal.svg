@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="67.374008mm"
+   height="22.324736mm"
+   viewBox="0 0 67.374008 22.324736"
+   version="1.1"
+   id="svg4579"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="LogoFinal.svg">
+  <defs
+     id="defs4573" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8"
+     inkscape:cx="176.68749"
+     inkscape:cy="-3.5859432"
+     inkscape:document-units="mm"
+     inkscape:current-layer="g57-7"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="986"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata4576">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Vrstva 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-65.720736,-10.859953)">
+    <g
+       style="display:inline"
+       id="g57-7"
+       transform="translate(-6.3143947,-57.332443)">
+      <ellipse
+         style="fill:none;stroke:#000000;stroke-width:1.32099998;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none"
+         stroke-miterlimit="10"
+         cx="134.05952"
+         cy="84.460228"
+         rx="4.6891108"
+         ry="5.1263046"
+         id="ellipse3732-7" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1.32099998;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none"
+         inkscape:connector-curvature="0"
+         stroke-miterlimit="10"
+         d="m 129.84977,68.862169 -2.06018,12.004269 -0.72337,4.212991 c 0,0 -1.14182,5.050976 -4.7821,4.765881 -3.63992,-0.285456 -3.49719,-3.497551 -3.56819,-4.425281 -0.0714,-0.92773 0.80302,-5.834537 5.28164,-6.231363 0,0 1.99783,0.05803 3.46115,2.448718"
+         id="path3734-5" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1.32099998;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none"
+         inkscape:connector-curvature="0"
+         stroke-miterlimit="10"
+         d="m 93.463695,79.071979 c 3.78625,-0.573794 0,0 3.78625,-0.573794 3.615595,-0.45827 0,0 3.615595,-0.45827"
+         id="path3736-1"
+         sodipodi:nodetypes="ccc" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1.32099998;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none"
+         inkscape:connector-curvature="0"
+         stroke-miterlimit="10"
+         d="m 79.619699,81.177483 c 0,0 -1.909524,-4.436814 -5.507272,0.311406 -2.613792,3.449975 -0.946833,6.116749 -0.262028,7.136387 0.711836,1.059645 3.001607,1.149751 3.956369,0.856006 1.219313,-0.375201 2.464937,-1.537567 2.464937,-1.537567"
+         id="path3738-1" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1.32099998;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none"
+         inkscape:connector-curvature="0"
+         stroke-miterlimit="10"
+         d="m 104.88864,85.257478 c -2.40042,6.47537 -7.368503,5.023945 -8.038531,0 -0.669667,-5.023944 3.092795,-16.395309 3.092795,-16.395309"
+         id="path3740-5" />
+      <ellipse
+         style="fill:none;stroke:#000000;stroke-width:1.32099998;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none"
+         stroke-miterlimit="10"
+         cx="111.56548"
+         cy="84.460228"
+         rx="4.6891108"
+         ry="5.1263046"
+         id="ellipse3742-6" />
+      <ellipse
+         style="fill:none;stroke:#000000;stroke-width:1.32099998;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none"
+         stroke-miterlimit="10"
+         cx="87.733551"
+         cy="84.460228"
+         rx="4.6891108"
+         ry="5.1263046"
+         id="ellipse3744-3" />
+    </g>
+  </g>
+</svg>

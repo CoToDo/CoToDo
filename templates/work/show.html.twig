@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Work{% endblock %}
+
+{% block body %}
+    <div class="main-div-crud">
+        <h1>Work</h1>
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Worker</th>
+                    <td>{{ work.user.fullName }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ work.description }}</td>
+                </tr>
+                <tr>
+                    <th>StartDate</th>
+                    <td>{{ work.startDate ? work.startDate|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>EndDate</th>
+                    <td>{{ work.endDate ? work.endDate|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a class="btn btn-outline-secondary" href="{{ path('project_task_show', {'idp' : work.task.project.id, 'id': work.task.id}) }}">Back to task</a>
+
+        {% if team.admin(userRole) %}
+            <a class="btn btn-outline-primary" href="{{ path('work_edit', {'id': work.id}) }}">Edit</a>
+            {{ include('work/_delete_form.html.twig') }}
+        {% endif %}
+
+
+
+    </div>
+{% endblock %}

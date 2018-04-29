@@ -1,0 +1,13 @@
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+    <div class="form-row form-group">
+        <div class="col">
+            {{ form_label(form.text, 'New comment', {}) }}
+            {{ form_errors(form.text) }}
+            {{ form_widget(form.text, {'attr': {'class': 'auto-expand'}} )}}
+        </div>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-outline-success">{{ button_label|default('Add Comment') }}</button>
+    </div>
+{{ form_end(form) }}

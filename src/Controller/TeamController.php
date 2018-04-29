@@ -1,0 +1,228 @@
+<?php
+
+namespace App\Controller;
+
+use App\Constants;
+use App\Entity\Team;
+use App\Entity\Role;
+use App\Entity\Project;
+use App\Form\TeamProjectType;
+use App\Entity\User;
+use App\Form\RoleType;
+use App\Form\TeamType;
+use App\Repository\TeamRepository;
+use App\WarningMessages;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
+/**
+ * @Route("/teams")
+ */
+class TeamController extends Controller
+{
+
+    /**
+     * Render user teams
+     * @param TeamRepository $teamRepository
+     * @return Response
+     * @Route("/", name="team_index", methods="GET")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function index(TeamRepository $teamRepository): Response
+    {
+        return $this->render('team/index.html.twig', [
+            'teams' => $teamRepository->findMyTeams($this->getUser()->getId()),
+            'userRole' => $this->getUser()]);
+    }
+
+    /**
+     * Render form to create new Team
+     * @param Request $request
+     * @return Response
+     * @Route("/create", name="team_new", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function new(Request $request): Response
+    {
+        $team = new Team();
+        $form = $this->createForm(TeamType::class, $team);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($team);
+            $em->flush();
+
+            $user = $this->getUser();
+            $role = new Role();
+            $role->setUser($user);
+            $role->setTeam($team);
+            $role->setType(Constants::LEADER);
+            $em->persist($role);
+            $em->flush();
+
+            return $this->redirectToRoute('team_index');
+        }
+
+        return $this->render('team/new.html.twig', [
+            'team' => $team,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * New project
+     * @param Request $request
+     * @param Team $team
+     * @return Response
+     * @Route("/{id}/create", name="team_create_project", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
+     * @Security("team.isLeader(user)")
+     */
+    public function newProject(Request $request, Team $team): Response
+    {
+        $project = new Project();
+        $form = $this->createForm(TeamProjectType::class, $project, []);
+        $form->handleRequest($request);
+
+        //Automatically set createDate
+        $dateTime = new \DateTime('now');;
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        if (null === $project->getCreateDate()) {
+            $project->setCreateDate($dateTime);
+        }
+
+        $project->setTeam($team);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($project);
+            $em->flush();
+
+            return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
+        }
+
+        return $this->render('project/in_team_new.html.twig', [
+            'project' => $project,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Render team details
+     * @param Team $team
+     * @return Response
+     * @Route("/{id}", name="team_show", methods="GET")
+     * @Security("has_role('ROLE_USER')")
+     * @Security("team.isMember(user)")
+     */
+    public function show(Team $team): Response
+    {
+        return $this->render('team/show.html.twig', [
+            'team' => $team,
+            'roles' => $team->getRoles(),
+            'projects' => $team->getProjects(),
+            'userRole' => $this->getUser()]);
+    }
+
+    /**
+     * Render form to edit team
+     * @param Request $request
+     * @param Team $team
+     * @return Response
+     * @Route("/{id}/edit", name="team_edit", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
+     * @Security("team.isLeader(user)")
+     */
+    public function edit(Request $request, Team $team): Response
+    {
+        $form = $this->createForm(TeamType::class, $team);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('team_edit', ['id' => $team->getId()]);
+        }
+
+        return $this->render('team/edit.html.twig', [
+            'team' => $team,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Delete team
+     * @param Request $request
+     * @param Team $team
+     * @return Response
+     * @Route("/{id}", name="team_delete", methods="DELETE")
+     * @Security("has_role('ROLE_USER')")
+     * @Security("team.isLeader(user)")
+     */
+    public function delete(Request $request, Team $team): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $team->getId(), $request->request->get('_token'))) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($team);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('team_index');
+    }
+
+    /**
+     * Render form to add new user to team
+     * @param Request $request
+     * @param Team $team
+     * @return Response
+     * @Route("/{id}/add", name="team_add_user", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
+     * @Security("team.isAdmin(user)")
+     */
+    public function addUser(Request $request, Team $team): Response
+    {
+        $role = new Role();
+        $role->setTeam($team);
+
+        $user = $this->getUser();
+
+        // TODO nejspíš zbytečné je to v anotaci
+        if(!$role->getTeam()->isMember($user)) {
+            return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+        }
+
+        // TODO taky nejspíš zbytečné
+        $userRole = $role->getTeam()->getMemberRole($this->getUser());
+        if ($userRole == Constants::USER) {
+            return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+        }
+
+        $form = $this->createForm(RoleType::class, $role);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if($userRole == Constants::ADMIN && $role->getType() == Constants::LEADER) {
+                $this->addFlash('warning',WarningMessages::ADMIN_TO_LEADER);
+                return $this->render('role/new.html.twig', ['role' => $role, 'form' => $form->createView()]);
+            }
+
+            if($team->isMember($role->getUser())) {
+                //user has already in team
+                $this->addFlash('warning',WarningMessages::WARNING_USER);
+                return $this->render('role/new.html.twig', ['role' => $role, 'form' => $form->createView()]);
+            }
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($role);
+            $em->flush();
+
+            return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
+        }
+
+        return $this->render('role/new.html.twig', ['role' => $role, 'form' => $form->createView()]);
+    }
+}

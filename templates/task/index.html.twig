@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tasks{% endblock %}
+
+{% block body %}
+    <div class="main-div-crud-list">
+
+        <h1>{{ project.name }} tasks</h1>
+        <input class="form-control mr-sm-2" id="myInput" type="search" placeholder="Filter..">
+        <br>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Priority</th>
+                    <th>Create date</th>
+                    <th>Completion date</th>
+                    <th>Deadline</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="myTable">
+            {% for task in tasks %}
+                <tr class='clickable-row' data-href="{{ path('project_task_show', {'idp': project.id , 'id': task.id}) }}">
+                    <td>{{ task.name }}</td>
+                    <td>{{ task.priority }}</td>
+                    <td>{{ task.createDate ? task.createDate|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ task.completionDate ? task.completionDate|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ task.deadline ? task.deadline|date('Y-m-d') : '' }}</td>
+                    <td>
+                        {% if project.team.admin(userRole) %}
+                            <a class="btn btn-outline-primary" href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
+                            <a class="btn btn-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
+                        {% endif %}
+
+                        {% if not task.userSet(userRole)%}
+                            <a class="btn btn-outline-warning" href="{{ path('work_assign_yourself', {'id': task.id}) }}">Assign yourself</a>
+                        {% endif %}
+
+                        {% if task.completionDate is null and (team.admin(userRole) or team.leader(userRole)) %}
+                            <a class="btn btn-outline-success" href="{{ path('project_task_complete', {'idp': project.id, 'id': task.id}) }}">Complete task</a>
+                        {% else %}
+                            <a class="btn btn-outline-success" href="{{ path('project_task_reopen', {'idp': project.id, 'id': task.id}) }}">Reopen</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% if project.team.admin(userRole) %}
+            <a class="btn btn-outline-success" href="{{ path('project_task_new', {'id':project.id}) }}">Create new</a>
+        {% endif %}
+        <a class="btn btn-outline-secondary" href="{{ path('project_show', {'id': project.id}) }}">Back to project</a>
+    </div>
+{% endblock %}

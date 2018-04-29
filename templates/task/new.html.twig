@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Task{% endblock %}
+
+{% block body %}
+    <div class="main-div-crud">
+
+        <h1>Create new task</h1>
+
+        {{ include('task/_form.html.twig') }}
+
+        <a class="btn btn-outline-primary" href="{{ path('project_task_index', {'id': project.id}) }}">Back to list</a>
+    </div>
+{% endblock %}

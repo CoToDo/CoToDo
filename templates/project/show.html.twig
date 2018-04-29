@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Project{% endblock %}
+
+{% block body %}
+    <div class="main-div-crud-big">
+        <div class="m-5">
+            <h1 class="my-5">{{ project.name }}</h1>
+
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ project.description }}</td>
+                    </tr>
+                    <tr>
+                        <th>Create date</th>
+                        <td>{{ project.createDate ? project.createDate|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Team</th>
+                        <td>{{ project.team  }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% if team.admin(userRole) %}
+                <a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>
+            {% endif %}
+        </div>
+        <div class="m-5">
+
+            <h2>Tasks</h2>
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Priority</th>
+                    <th>Create date</th>
+                    <th>Completion date</th>
+                    <th>Deadline</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for task in tasks %}
+                    <tr class='clickable-row' data-href="{{ path('project_task_show', {'idp': project.id , 'id': task.id}) }}">
+                        <td>{{ task.name }}</td>
+                        <td>{{ task.priority }}</td>
+                        <td>{{ task.createDate ? task.createDate|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>{{ task.completionDate ? task.completionDate|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>{{ task.deadline ? task.deadline|date('Y-m-d') : '' }}</td>
+                        <td>
+                            {% if team.admin(userRole) %}
+                                <a class="btn btn-outline-primary" href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
+                                <a class="btn btn-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
+                            {% endif %}
+
+                            {% if not task.userSet(userRole)%}
+                                <a class="btn btn-outline-warning" href="{{ path('work_assign_yourself', {'id': task.id}) }}">Assign yourself</a>
+                            {% endif %}
+
+                            {% if task.completionDate is null and (team.admin(userRole) or team.leader(userRole)) %}
+                                <a class="btn btn-outline-success" href="{{ path('project_task_complete', {'idp': project.id, 'id': task.id}) }}">Complete task</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                {% else %}
+                    <tr>
+                        <td colspan="6">No records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if team.admin(userRole) %}
+                <a class="btn btn-outline-success" href="{{ path('project_task_new', {'idp': project.id, 'id': project.id}) }}">Add task</a>
+            {% endif %}
+
+            <a class="btn btn-outline-secondary " href="{{ path('project_task_index', {'id': project.id}) }}">Show all</a>
+        </div>
+
+
+
+
+        <div class="m-5">
+            <h2>Subprojects</h2>
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Create date</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for subproject in subprojects %}
+                    <tr class='clickable-row' data-href="{{ path('project_show', {'id': subproject.id}) }}">
+                        <td>{{ subproject.name }}</td>
+                        <td>{{ subproject.description }}</td>
+                        <td>{{ subproject.createDate ? subproject.createDate|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>
+                            {% if team.admin(userRole) %}
+                                <a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': subproject.id}) }}">Edit</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">No records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if team.admin(userRole) %}
+                <a class="btn btn-outline-success" href="{{ path('subproject_new', {'id': project.id}) }}">Add subproject</a>
+            {% endif %}
+
+
+        </div>
+
+        <div class="m-5">
+            <a class="btn btn-outline-secondary" href="{{ path('project_index') }}">Back to list</a>
+        </div>
+
+    </div>
+{% endblock %}

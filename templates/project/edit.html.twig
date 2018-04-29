@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit project{% endblock %}
+
+{% block body %}
+    <div class="main-div-crud">
+
+        <h1>Edit project</h1>
+
+        {{ include('project/_form.html.twig', {'button_label': 'Update'}) }}
+
+        <a class="btn btn-outline-secondary" href="{{ path('project_index') }}">Back to list</a>
+
+        {{ include('project/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

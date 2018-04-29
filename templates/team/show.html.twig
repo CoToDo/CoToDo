@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Team{% endblock %}
+
+{% block body %}
+    <div class="main-div-crud">
+        <div class="m-5">
+            <h1 class="my-5">{{ team.name }}</h1>
+
+            <table class="table">
+
+                <h2>Users</h2>
+
+                <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Role</th>
+                    {% if team.admin(userRole) %}
+                        <th>Actions</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for role in roles %}
+                    <tr>
+                        <td>{{ role.user }}</td>
+                        <td>{{ role.type }}</td>
+
+                        {% if team.leader(userRole) %}
+                            <td>
+                                <a class="btn btn-outline-primary" href="{{ path('role_edit', {'id': role.id}) }}">Edit</a>
+                                {{ include('role/_delete_form.html.twig') }}
+                            </td>
+                        {% elseif team.onlyAdmin(userRole) and (role.roleUser() or role.roleAdmin()) %}
+                            <td>
+                                <a class="btn btn-outline-primary" href="{{ path('role_edit', {'id': role.id}) }}">Edit</a>
+                                {{ include('role/_delete_form.html.twig') }}
+                            </td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">No records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {% if team.admin(userRole) %}
+                <a class="btn btn-outline-success" href="{{ path('team_add_user', {'id': team.id}) }}">Add user</a>
+            {% endif %}
+
+        </div>
+        <div class="m-5">
+            <table class="table table-hover">
+
+                <h2>Projects</h2>
+
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Create date</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for project in projects %}
+                    <tr class='clickable-row' data-href="{{ path('project_show', {'id': project.id}) }}">
+                        <td>{{ project.name }}</td>
+                        <td>{{ project.description }}</td>
+                        <td>{{ project.createDate ? project.createDate|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>
+                            {% if team.admin(userRole) %}
+                                <a class="btn btn-outline-primary"
+                                   href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>
+                            {% endif %}
+
+                            {% if project.team.leader(userRole) %}
+                                {{ include('project/_delete_form.html.twig') }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">No records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <a class="btn btn-outline-secondary" href="{{ path('team_index') }}">Back to list</a>
+            {% if team.leader(userRole) %}
+                <a class="btn btn-outline-success" href="{{ path('team_create_project', {'id': team.id}) }}">Add project</a>
+                <a class="btn btn-outline-primary" href="{{ path('team_edit', {'id': team.id}) }}">Edit team</a>
+                {{ include('team/_delete_form.html.twig') }}
+            {% endif %}
+
+
+        </div>
+    </div>
+{% endblock %}

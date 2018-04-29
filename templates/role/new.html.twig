@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Role{% endblock %}
+
+{% block body %}
+    <div class="main-div-crud">
+
+        <h1>Create new role</h1>
+
+        {{ include('role/_form.html.twig') }}
+
+        <a class="btn btn-outline-secondary" href="{{ path('team_show', {'id': role.team.id }) }}">Back to team</a>
+    </div>
+{% endblock %}
