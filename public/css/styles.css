@@ -140,7 +140,6 @@ fieldset[disabled] .btn-dark.active {
 
 .logo {
         width: 60%;
-        height: 20%;
         height: 20vh;
         margin: 0;
 }
@@ -154,4 +153,10 @@ fieldset[disabled] .btn-dark.active {
 .landMenu {
         margin: auto;
         width: 70%;
+}
+
+.landing-description{
+        width: 60%;
+        font-size: 25px;
+        color: #5b5b5b;
 }
