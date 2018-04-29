@@ -14,6 +14,10 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class ProjectRepository extends ServiceEntityRepository
 {
+    /**
+     * ProjectRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Project::class);
@@ -30,22 +34,9 @@ class ProjectRepository extends ServiceEntityRepository
             ->andWhere('r.user = :id')
             ->setParameter('id', $id)
             ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
 
-
-    /*
-    public function findOneBySomeField($value): ?Project
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

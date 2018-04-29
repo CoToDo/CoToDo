@@ -16,6 +16,10 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class TeamRepository extends ServiceEntityRepository
 {
+    /**
+     * TeamRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Team::class);
@@ -31,7 +35,6 @@ class TeamRepository extends ServiceEntityRepository
             ->andWhere('r.user = :id')
             ->setParameter('id', $id)
             ->orderBy('t.name', 'ASC')
-//            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
@@ -48,21 +51,9 @@ class TeamRepository extends ServiceEntityRepository
             ->setParameter('id', $id)
             ->setParameter('leader', Constants::LEADER)
             ->orderBy('t.name', 'ASC')
-//            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
             ;
     }
 
-    /*
-    public function findOneBySomeField($value): ?Team
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
