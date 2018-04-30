@@ -82,7 +82,7 @@ class NotificationModel
     }
 
     private function setLinkToProjectAndTask(Notification $notification, $projectId, $taskId) {
-        $notification->setLink(NotificationConstants::PROJECTS . $projectId . NotificationConstants::TASKS . $taskId;
+        $notification->setLink(NotificationConstants::PROJECTS . $projectId . NotificationConstants::TASKS . $taskId);
         return $notification;
     }
 
