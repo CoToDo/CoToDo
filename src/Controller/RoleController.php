@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Constants;
 use App\Entity\Role;
 use App\Form\RoleType;
+use App\Model\NotificationModel;
 use App\Repository\RoleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,7 +50,14 @@ class RoleController extends Controller
                 return $this->returnWrong($role, $form);
             }
 
-            $this->getDoctrine()->getManager()->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            // persist notification
+            $notificationModel = new NotificationModel();
+            $notification = $notificationModel->teamRole($role->getUser(), $role->getTeam());
+            $em->persist($notification);
+            $em->flush();
 
             return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
         }

@@ -7,6 +7,7 @@ use App\Entity\Team;
 use App\Entity\User;
 use App\Entity\Work;
 use App\Form\WorkType;
+use App\Model\NotificationModel;
 use App\Repository\WorkRepository;
 use App\WarningMessages;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -57,6 +58,12 @@ class WorkController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($work);
+            $em->flush();
+
+            // persist notification
+            $notificationModel = new NotificationModel();
+            $notification = $notificationModel->work($work->getUser(), $work->getTask()->getProject(), $work->getTask());
+            $em->persist($notification);
             $em->flush();
 
             return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
@@ -166,7 +173,7 @@ class WorkController extends Controller
      */
     public function setEnd(Work $work): Response
     {
-        //set createDate
+        // set createDate
         $dateTime = new \DateTime('now');;
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         if (null === $work->getEndDate()) {

@@ -170,6 +170,14 @@ class TeamController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($team);
             $em->flush();
+
+            // persist notifications
+            $notificationModel = new NotificationModel();
+            foreach ($team->getRoles() as $role) {
+                $notification = $notificationModel->teamDelete($role->getUser(), $team);
+                $em->persist($notification);
+                $em->flush();
+            }
         }
 
         return $this->redirectToRoute('team_index');
