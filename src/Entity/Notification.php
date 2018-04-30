@@ -37,6 +37,11 @@ class Notification
      */
     private $link;
 
+    /**
+     * @ORM\Column(type="string", length=9)
+     */
+    private $type;
+
     public function getId()
     {
         return $this->id;
@@ -86,6 +91,18 @@ class Notification
     public function setLink(string $link): self
     {
         $this->link = $link;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }
