@@ -9,6 +9,7 @@ use App\Entity\Team;
 use App\Form\CommentType;
 use App\Form\ProjectType;
 use App\Form\TaskType;
+use App\Model\NotificationModel;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -246,7 +247,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * Render project's tasks details
+     * Render project's tasks details + adding comments form
      * @param Request $request
      * @param Project $project
      * @param Task $task
@@ -264,17 +265,24 @@ class ProjectController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setTask($task);
             $comment->setUser($this->getUser());
-            $dateTime = new \DateTime('now');;
+            $dateTime = new \DateTime('now');
             $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
             if (null === $comment->getDate()) {
                 $comment->setDate($dateTime);
             }
 
-            echo $comment;
             $em = $this->getDoctrine()->getManager();
             $em->persist($comment);
             $em->flush();
+
+            // persist notification
+            $notificationModel = new NotificationModel();
+            foreach ($task->getWorks() as $work) {
+                $notification = $notificationModel->commment($work->getUser(), $task->getProject(), $task);
+                $em->persist($notification);
+                $em->flush();
+            }
 
             return $this->redirectToRoute('project_task_show', ['id' => $task->getId(), 'idp' => $project->getId()]);
         }
@@ -341,8 +349,15 @@ class ProjectController extends Controller
         $em->persist($task);
         $em->flush();
 
-        return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
+        // persist notifications
+        $notificationModel = new NotificationModel();
+        foreach ($task->getWorks() as $work) {
+            $notification = $notificationModel->close($work->getUser(), $task->getProject(), $task);
+            $em->persist($notification);
+            $em->flush();
+        }
 
+        return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
     }
 
     /**
@@ -357,8 +372,7 @@ class ProjectController extends Controller
      */
     public function reopenTask(Project $project, Task $task): Response
     {
-
-        if($task->getCompletionDate() != null){
+        if ($task->getCompletionDate() != null) {
             $task->removeCompletionDate();
         }
 
@@ -366,10 +380,16 @@ class ProjectController extends Controller
         $em->persist($task);
         $em->flush();
 
+        // persist notifications
+        $notificationModel = new NotificationModel();
+        foreach ($task->getWorks() as $work) {
+            $notification = $notificationModel->reOpen($work->getUser(), $task->getProject(), $task);
+            $em->persist($notification);
+            $em->flush();
+        }
+
         return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
-
     }
-
 
     /**
      * Delete task

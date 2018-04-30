@@ -70,6 +70,11 @@ class User implements UserInterface, \Serializable
     private $roles;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Notification", mappedBy="user", orphanRemoval=true)
+     */
+    private $notifications;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -77,6 +82,7 @@ class User implements UserInterface, \Serializable
         $this->comments = new ArrayCollection();
         $this->works = new ArrayCollection();
         $this->roles = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     /**
@@ -374,6 +380,37 @@ class User implements UserInterface, \Serializable
         if($this->getMail() == $user->getMail()) return true;
 
         return false;
+    }
+
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->contains($notification)) {
+            $this->notifications->removeElement($notification);
+            // set the owning side to null (unless already changed)
+            if ($notification->getUser() === $this) {
+                $notification->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
 }
