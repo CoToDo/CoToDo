@@ -10,6 +10,7 @@ use App\Form\TeamProjectType;
 use App\Entity\User;
 use App\Form\RoleType;
 use App\Form\TeamType;
+use App\Model\NotificationModel;
 use App\Repository\TeamRepository;
 use App\WarningMessages;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -218,6 +219,12 @@ class TeamController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($role);
+            $em->flush();
+
+            // persist notification
+            $notificationModel = new NotificationModel();
+            $notification = $notificationModel->teamAdd($user, $team);
+            $em->persist($notification);
             $em->flush();
 
             return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
