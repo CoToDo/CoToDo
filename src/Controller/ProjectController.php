@@ -257,7 +257,7 @@ class ProjectController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isMember(user)")
      */
-    public function showTask(Request $request, Project $project, Task $task): Response
+    public function showTask(Request $request, Project $project, Task $task, \Swift_Mailer $mailer): Response
     {
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
@@ -282,6 +282,19 @@ class ProjectController extends Controller
                 $notification = $notificationModel->commment($work->getUser(), $task->getProject(), $task);
                 $em->persist($notification);
                 $em->flush();
+
+                $message = (new \Swift_Message('CoToDo Notification'))
+                    ->setFrom('info.cotodo@gmail.com')
+                    ->setTo($notification->getUser()->getMail())
+                    ->setBody(
+                        $this->renderView(
+                        // templates/emails/team_add.html.twig
+                            'emails/task_comment.html.twig',
+                            array('notification' => $notification)
+                        ),
+                        'text/html'
+                    );
+                $mailer->send($message);
             }
 
             return $this->redirectToRoute('project_task_show', ['id' => $task->getId(), 'idp' => $project->getId()]);
@@ -337,7 +350,7 @@ class ProjectController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isAdmin(user) or project.getTeam().isLeader(user)")
      */
-    public function completeTask(Project $project, Task $task): Response
+    public function completeTask(Project $project, Task $task, \Swift_Mailer $mailer): Response
     {
         $dateTime = new \DateTime('now');
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
@@ -355,6 +368,19 @@ class ProjectController extends Controller
             $notification = $notificationModel->close($work->getUser(), $task->getProject(), $task);
             $em->persist($notification);
             $em->flush();
+
+            $message = (new \Swift_Message('CoToDo Notification'))
+                ->setFrom('info.cotodo@gmail.com')
+                ->setTo($notification->getUser()->getMail())
+                ->setBody(
+                    $this->renderView(
+                    // templates/emails/team_add.html.twig
+                        'emails/task_close.html.twig',
+                        array('notification' => $notification)
+                    ),
+                    'text/html'
+                );
+            $mailer->send($message);
         }
 
         return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
@@ -370,7 +396,7 @@ class ProjectController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isAdmin(user) or project.getTeam().isLeader(user)")
      */
-    public function reopenTask(Project $project, Task $task): Response
+    public function reopenTask(Project $project, Task $task, \Swift_Mailer $mailer): Response
     {
         if ($task->getCompletionDate() != null) {
             $task->removeCompletionDate();
@@ -386,6 +412,19 @@ class ProjectController extends Controller
             $notification = $notificationModel->reOpen($work->getUser(), $task->getProject(), $task);
             $em->persist($notification);
             $em->flush();
+
+            $message = (new \Swift_Message('CoToDo Notification'))
+                ->setFrom('info.cotodo@gmail.com')
+                ->setTo($notification->getUser()->getMail())
+                ->setBody(
+                    $this->renderView(
+                    // templates/emails/team_add.html.twig
+                        'emails/task_reopen.html.twig',
+                        array('notification' => $notification)
+                    ),
+                    'text/html'
+                );
+            $mailer->send($message);
         }
 
         return $this->redirectToRoute('project_show', ['id' => $project->getId()]);

@@ -62,9 +62,22 @@ class WorkController extends Controller
 
             // persist notification
             $notificationModel = new NotificationModel();
-            $notification = $notificationModel->work($work->getUser(), $work->getTask()->getProject(), $work->getTask(), $mailer);
+            $notification = $notificationModel->work($work->getUser(), $work->getTask()->getProject(), $work->getTask());
             $em->persist($notification);
             $em->flush();
+
+            $message = (new \Swift_Message('CoToDo Notification'))
+                ->setFrom('info.cotodo@gmail.com')
+                ->setTo($notification->getUser()->getMail())
+                ->setBody(
+                    $this->renderView(
+                    // templates/emails/registration.html.twig
+                        'emails/task_work.html.twig',
+                        array('notification' => $notification)
+                    ),
+                    'text/html'
+                );
+            $mailer->send($message);
 
             return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
         }
