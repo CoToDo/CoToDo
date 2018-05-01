@@ -4,22 +4,16 @@
             {{ include('emails/team_add.html.twig', { 'notification': n }) }}
         {% elseif n.isTeamDelete() %}
             {{ include('emails/team_delete.html.twig', { 'notification': n }) }}
-            <p> TEAM DELETE </p>
         {% elseif n.isTeamRole() %}
             {{ include('emails/team_role.html.twig', { 'notification': n }) }}
-            <p> TEAM ROLE </p>
         {% elseif n.isWork %}
             {{ include('emails/task_work.html.twig', { 'notification': n }) }}
-            <p> W WORK </p>
         {% elseif n.isReOpen() %}
             {{ include('emails/task_reopen.html.twig', { 'notification': n }) }}
-            <p> W RE OPEN </p>
         {% elseif n.isClose() %}
             {{ include('emails/task_close.html.twig', { 'notification': n }) }}
-            <p> W CLOSE </p>
         {% elseif n.isComment() %}
             {{ include('emails/task_comment.html.twig', { 'notification': n }) }}
-            <p> W COMMENT </p>
         {% endif %}
     {% endfor %}
 </div>
