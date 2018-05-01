@@ -22,4 +22,5 @@ abstract class NotificationConstants
     const WORK = "WORK";
     const CLOSE = "CLOSE";
     const COMMENT = "COMMENT";
+
 }
