@@ -13,7 +13,7 @@ use App\Entity\Project;
 use App\Entity\Task;
 use App\Entity\Team;
 use App\Entity\User;
-use App\Repository\NotificationConstants;
+use App\NotificationConstants;
 
 class NotificationModel
 {

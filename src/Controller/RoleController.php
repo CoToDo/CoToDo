@@ -27,7 +27,7 @@ class RoleController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("(role.getTeam().isOnlyAdmin(user) and (role.isRoleUser() or role.isRoleAdmin())) or role.getTeam().isLeader(user)")
      */
-    public function edit(Request $request, Role $role): Response
+    public function edit(Request $request, Role $role, \Swift_Mailer $mailer): Response
     {
         $userRole = $role->getTeam()->getMemberRole($this->getUser());
         $lastUserId = $role->getUser()->getId();
@@ -58,6 +58,19 @@ class RoleController extends Controller
             $notification = $notificationModel->teamRole($role->getUser(), $role->getTeam());
             $em->persist($notification);
             $em->flush();
+
+            $message = (new \Swift_Message('CoToDo Notification'))
+                ->setFrom('info.cotodo@gmail.com')
+                ->setTo($notification->getUser()->getMail())
+                ->setBody(
+                    $this->renderView(
+                    // templates/emails/team_add.html.twig
+                        'emails/team_role.html.twig',
+                        array('notification' => $notification)
+                    ),
+                    'text/html'
+                );
+            $mailer->send($message);
 
             return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
         }

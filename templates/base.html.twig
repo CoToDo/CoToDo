@@ -40,11 +40,14 @@
                 </form>
             </div>
 
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-item nav-link button-navbar" href="#"><i class="fas fa-bell"></i></a>
-                    {#{{ render(controller('App\\Controller\\NotificationController::index')) }}#}
+            <div class="btn-group">
+                <button class="btn dropdown-toggle btn-dark" type="button" id="dropdownNotification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    {{ render(controller('App\\Controller\\NotificationController::index')) }}
                 </div>
+            </div>
             </div>
 
             <div class="btn-group">
