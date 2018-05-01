@@ -1,5 +1,21 @@
 <div class="example-wrapper">
     {% for n in notifications %}
-        <p> {{ n.type }} </p>
+        {% if n.isTeamAdd() %}
+            {{ include('') }}
+           {#{{ include('emails/team_add.html.twig') }}#}
+            <p> TEAM ADD </p>
+        {% elseif n.isTeamDelete() %}
+            <p> TEAM DELETE </p>
+        {% elseif n.isTeamRole() %}
+            <p> TEAM ROLE </p>
+        {% elseif n.isWork %}
+            <p> W WORK </p>
+        {% elseif n.isReOpen() %}
+            <p> W RE OPEN </p>
+        {% elseif n.isClose() %}
+            <p> W CLOSE </p>
+        {% elseif n.isComment() %}
+            <p> W COMMENT </p>
+        {% endif %}
     {% endfor %}
 </div>

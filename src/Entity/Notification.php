@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\NotificationConstants;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -106,4 +107,33 @@ class Notification
 
         return $this;
     }
+
+    public function isTeamAdd() {
+        return $this->getType() == NotificationConstants::TEAM_ADD;
+    }
+
+    public function isTeamDelete() {
+        return $this->getType() == NotificationConstants::TEAM_DELETE;
+    }
+
+    public function isTeamRole() {
+        return $this->getType() == NotificationConstants::TEAM_ROLE;
+    }
+
+    public function isReOpen() {
+        return $this->getType() == NotificationConstants::REOPEN;
+    }
+
+    public function isClose() {
+        return $this->getType() == NotificationConstants::CLOSE;
+    }
+
+    public function isComment() {
+        return $this->getType() == NotificationConstants::COMMENT;
+    }
+
+    public function isWork() {
+        return $this->getType() == NotificationConstants::WORK;
+    }
+
 }
