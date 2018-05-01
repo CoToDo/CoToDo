@@ -32,7 +32,7 @@ class WorkController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("task.getProject().getTeam().isAdmin(user)")
      */
-    public function create(Request $request, Task $task): Response
+    public function create(Request $request, Task $task, \Swift_Mailer $mailer): Response
     {
         $work = new Work();
         $work->setTask($task);
@@ -62,7 +62,7 @@ class WorkController extends Controller
 
             // persist notification
             $notificationModel = new NotificationModel();
-            $notification = $notificationModel->work($work->getUser(), $work->getTask()->getProject(), $work->getTask());
+            $notification = $notificationModel->work($work->getUser(), $work->getTask()->getProject(), $work->getTask(), $mailer);
             $em->persist($notification);
             $em->flush();
 

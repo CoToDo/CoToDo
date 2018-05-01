@@ -6,7 +6,7 @@
  * Time: 4:03 PM
  */
 
-namespace App\Repository;
+namespace App;
 
 
 abstract class NotificationConstants
