@@ -164,7 +164,7 @@ class TeamController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("team.isLeader(user)")
      */
-    public function delete(Request $request, Team $team): Response
+    public function delete(Request $request, Team $team, \Swift_Mailer $mailer): Response
     {
         if ($this->isCsrfTokenValid('delete' . $team->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
@@ -177,6 +177,19 @@ class TeamController extends Controller
                 $notification = $notificationModel->teamDelete($role->getUser(), $team);
                 $em->persist($notification);
                 $em->flush();
+
+                $message = (new \Swift_Message('CoToDo Notification'))
+                    ->setFrom('info.cotodo@gmail.com')
+                    ->setTo($notification->getUser()->getMail())
+                    ->setBody(
+                        $this->renderView(
+                        // templates/emails/team_add.html.twig
+                            'emails/team_delete.html.twig',
+                            array('notification' => $notification)
+                        ),
+                        'text/html'
+                    );
+                $mailer->send($message);
             }
         }
 
@@ -192,7 +205,7 @@ class TeamController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("team.isAdmin(user)")
      */
-    public function addUser(Request $request, Team $team): Response
+    public function addUser(Request $request, Team $team, \Swift_Mailer $mailer): Response
     {
         $role = new Role();
         $role->setTeam($team);
@@ -234,6 +247,19 @@ class TeamController extends Controller
             $notification = $notificationModel->teamAdd($user, $team);
             $em->persist($notification);
             $em->flush();
+
+            $message = (new \Swift_Message('CoToDo Notification'))
+                ->setFrom('info.cotodo@gmail.com')
+                ->setTo($notification->getUser()->getMail())
+                ->setBody(
+                    $this->renderView(
+                    // templates/emails/team_add.html.twig
+                        'emails/team_add.html.twig',
+                        array('notification' => $notification)
+                    ),
+                    'text/html'
+                );
+            $mailer->send($message);
 
             return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
         }

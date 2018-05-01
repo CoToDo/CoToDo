@@ -52,7 +52,7 @@ class NotificationModel
         return $notification;
     }
 
-    public function work(User $user, Project $project, Task $task,  \Swift_Mailer $mailer)
+    public function work(User $user, Project $project, Task $task)
     {
         $notification = $this->prepareNotification($user);
         $notification->setType(NotificationConstants::WORK);
@@ -106,21 +106,6 @@ class NotificationModel
         $notification->setShow(true);
         $notification->setUser($user);
         return $notification;
-    }
-
-    private function sendMailNotification($userMail, \Swift_Mailer $mailer ){
-        $message = (new \Swift_Message('CoToDo Notification'))
-            ->setFrom('info.cotodo@gmail.com')
-            ->setTo()
-            ->setBody(
-                $this->renderView(
-                // templates/emails/registration.html.twig
-                    'emails/registration.html.twig',
-                    array('name' => $name)
-                ),
-                'text/html'
-            );
-        $mailer->send($message);
     }
 
 }
