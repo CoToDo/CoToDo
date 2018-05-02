@@ -32,9 +32,9 @@ class TaskRepository extends ServiceEntityRepository
             ->join('t.works',"w")
             ->where('w.user = :val')
             ->andWhere('t.completionDate IS NULL')
+            ->andWhere('w.endDate IS NULL')
             ->setParameter('val', $id)
             ->orderBy('t.priority, t.deadline', 'ASC')
-//            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;

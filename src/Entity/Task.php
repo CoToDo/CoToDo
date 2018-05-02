@@ -368,7 +368,7 @@ class Task
     public function isUserSet(User $user)
     {
         foreach($this->getWorks() as $work) {
-            if($work->getUser()->equals($user)) return true;
+            if($work->getUser()->equals($user) && $work->getEndDate() == null) return true;
         }
         return false;
     }

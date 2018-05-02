@@ -107,34 +107,6 @@ class WorkController extends Controller
     /**
      * @param Request $request
      * @param Work $work
-     * @Route("/{id}/edit", name="work_edit", methods="GET|POST")
-     * @Security("has_role('ROLE_USER')")
-     * @Security("work.getTask().getProject().getTeam().isAdmin(user)")
-     * @return Response
-     */
-    public function edit(Request $request, Work $work): Response
-    {
-        $form = $this->createForm(WorkType::class, $work, [
-            'teamId' => $work->getTask()->getProject()->getTeam()->getId(),
-            'userRepository' => $this->getDoctrine()->getRepository(User::class),
-        ]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('project_task_index', ['id' => $work->getTask()->getProject()->getId()]);
-        }
-
-        return $this->render('work/edit.html.twig', [
-            'work' => $work,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param Work $work
      * @return Response
      * @Route("/{id}", name="work_delete", methods="DELETE")
      * @Security("has_role('ROLE_USER')")

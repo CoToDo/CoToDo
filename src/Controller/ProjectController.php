@@ -306,7 +306,7 @@ class ProjectController extends Controller
         return $this->render('task/show.html.twig', [
             'user' => $this->getUser(),
             'task' => $task,
-            'works' => $workRepository->findUniqueWorks(),
+            'works' => $workRepository->findUniqueWorks($task->getId()),
             'project' => $project,
             'team' => $project->getTeam(),
             'userRole' => $this->getUser(),
