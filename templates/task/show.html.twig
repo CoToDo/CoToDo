@@ -54,6 +54,8 @@
                 {{ include('task/_delete_form.html.twig') }}
             {% endif %}
 
+            <a class="btn btn-outline-dark" href="{{ path('project_task_history', {'idp': project.id , 'id': task.id}) }}">History</a>
+
         </div>
 
         <div class="m-5">
