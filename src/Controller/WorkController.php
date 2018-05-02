@@ -197,6 +197,14 @@ class WorkController extends Controller
         $em->persist($work);
         $em->flush();
 
+        $newWork = new Work();
+        $newWork->setUser($work->getUser());
+        $newWork->setDescription($work->getDescription());
+        $newWork->setTask($work->getTask());
+
+        $em->persist($newWork);
+        $em->flush();
+
         return $this->redirectToRoute('dashboard');
     }
 
