@@ -7,6 +7,9 @@
         <div class="m-5">
             <h1 class="my-5">{{ project.name }}</h1>
 
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{ percent }}%" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
             <table class="table">
                 <tbody>
                     <tr>

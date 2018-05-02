@@ -135,6 +135,7 @@ class ProjectController extends Controller
         return $this->render('project/show.html.twig', [
             'project' => $project,
             'subprojects' => $project->getSubProjects(),
+            'percent' => $this->getPercent($project->getTasks()->count(), count($taskRepository->getCountClosedTasks($project->getId()))),
             'team' => $project->getTeam(),
             'userRole' => $this->getUser(),
             'tasks' => $taskRepository->findUncompleteTasks($project->getId())]);
@@ -430,7 +431,6 @@ class ProjectController extends Controller
                 );
             $mailer->send($message);
         }
-
         return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
     }
 
@@ -452,8 +452,14 @@ class ProjectController extends Controller
             $em->remove($task);
             $em->flush();
         }
-
         return $this->redirectToRoute('project_task_index', ['id' => $project->getId()]);
+    }
+
+
+    private function getPercent($allTasks, $closed) {
+        if($allTasks == 0) return 0;
+        return ($closed / $allTasks) * 100;
+
     }
 
 }

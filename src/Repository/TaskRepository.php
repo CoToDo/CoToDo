@@ -88,4 +88,17 @@ class TaskRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @return Task[] Returns count of closed tasks in project
+     */
+    public function getCountClosedTasks($projectId) {
+        return $this->createQueryBuilder('t')
+        ->andWhere('t.project = :id')
+            ->setParameter('id', $projectId)
+            ->andWhere('t.completionDate IS NOT NULL')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 }
