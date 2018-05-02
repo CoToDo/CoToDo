@@ -52,6 +52,8 @@ class UserController extends Controller
         $form = $this->createForm(UserType::class, $userIn);
         $form->handleRequest($request);
 
+        $userIn->setPlainPassword($form->get('')->getData());
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
