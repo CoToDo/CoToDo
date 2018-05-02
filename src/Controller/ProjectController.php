@@ -391,6 +391,20 @@ class ProjectController extends Controller
     }
 
     /**
+     * @Route("/{idp}/tasks/{id}/history", name="project_task_history", methods="GET|POST")
+     * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
+     * @Security("has_role('ROLE_USER')")
+     * @Security("project.getTeam().isMember(user)")
+     */
+    public function showTaskHistory( WorkRepository $workRepository, Task $task): Response
+    {
+        return $this->render('task/history.html.twig', [
+            'task' => $task,
+            'works' => $workRepository->findClosedWorks($task->getId())
+        ]);
+    }
+
+    /**
      * Reopen task button
      * @param Project $project
      * @param Task $task

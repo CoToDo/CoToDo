@@ -49,4 +49,16 @@ class WorkRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findClosedWorks($taskId) {
+        return $this->createQueryBuilder('w')
+            ->join('w.task', 't')
+            ->andWhere('t.id = :id')
+            ->setParameter('id', $taskId)
+            ->andWhere('w.endDate IS NOT NULL')
+            ->orderBy('w.endDate', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 }
