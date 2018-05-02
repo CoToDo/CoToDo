@@ -67,6 +67,9 @@
                             {% if task.completionDate is null and (team.admin(userRole) or team.leader(userRole)) %}
                                 <a class="btn btn-outline-success" href="{{ path('project_task_complete', {'idp': project.id, 'id': task.id}) }}">Complete task</a>
                             {% endif %}
+
+                            <a class="btn btn-outline-dark" href="{{ path('project_task_history', {'idp': project.id , 'id': task.id}) }}">History</a>
+
                         </td>
                     </tr>
 
