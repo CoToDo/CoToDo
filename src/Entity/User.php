@@ -75,6 +75,11 @@ class User implements UserInterface, \Serializable
     private $notifications;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Notification", mappedBy="who")
+     */
+    private $notificationsCreate;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -83,6 +88,7 @@ class User implements UserInterface, \Serializable
         $this->works = new ArrayCollection();
         $this->roles = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->notificationsCreate = new ArrayCollection();
     }
 
     /**
@@ -407,6 +413,37 @@ class User implements UserInterface, \Serializable
             // set the owning side to null (unless already changed)
             if ($notification->getUser() === $this) {
                 $notification->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotificationsCreate(): Collection
+    {
+        return $this->notificationsCreate;
+    }
+
+    public function addNotificationsCreate(Notification $notificationsCreate): self
+    {
+        if (!$this->notificationsCreate->contains($notificationsCreate)) {
+            $this->notificationsCreate[] = $notificationsCreate;
+            $notificationsCreate->setWho($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotificationsCreate(Notification $notificationsCreate): self
+    {
+        if ($this->notificationsCreate->contains($notificationsCreate)) {
+            $this->notificationsCreate->removeElement($notificationsCreate);
+            // set the owning side to null (unless already changed)
+            if ($notificationsCreate->getWho() === $this) {
+                $notificationsCreate->setWho(null);
             }
         }
 

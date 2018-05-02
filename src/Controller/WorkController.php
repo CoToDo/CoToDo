@@ -62,7 +62,7 @@ class WorkController extends Controller
 
             // persist notification
             $notificationModel = new NotificationModel();
-            $notification = $notificationModel->work($work->getUser(), $work->getTask()->getProject(), $work->getTask());
+            $notification = $notificationModel->work($work->getUser(), $work->getTask()->getProject(), $work->getTask(), $this->getUser());
             $em->persist($notification);
             $em->flush();
 

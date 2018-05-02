@@ -174,7 +174,7 @@ class TeamController extends Controller
             // persist notifications
             $notificationModel = new NotificationModel();
             foreach ($team->getRoles() as $role) {
-                $notification = $notificationModel->teamDelete($role->getUser(), $team);
+                $notification = $notificationModel->teamDelete($role->getUser(), $team, $this->getUser());
                 $em->persist($notification);
                 $em->flush();
 
@@ -244,7 +244,7 @@ class TeamController extends Controller
 
             // persist notification
             $notificationModel = new NotificationModel();
-            $notification = $notificationModel->teamAdd($user, $team);
+            $notification = $notificationModel->teamAdd($role->getUser(), $team, $this->getUser());
             $em->persist($notification);
             $em->flush();
 

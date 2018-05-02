@@ -279,7 +279,7 @@ class ProjectController extends Controller
             // persist notification
             $notificationModel = new NotificationModel();
             foreach ($task->getWorks() as $work) {
-                $notification = $notificationModel->commment($work->getUser(), $task->getProject(), $task);
+                $notification = $notificationModel->commment($work->getUser(), $task->getProject(), $task, $this->getUser());
                 $em->persist($notification);
                 $em->flush();
 
@@ -365,7 +365,7 @@ class ProjectController extends Controller
         // persist notifications
         $notificationModel = new NotificationModel();
         foreach ($task->getWorks() as $work) {
-            $notification = $notificationModel->close($work->getUser(), $task->getProject(), $task);
+            $notification = $notificationModel->close($work->getUser(), $task->getProject(), $task, $this->getUser());
             $em->persist($notification);
             $em->flush();
 
@@ -409,7 +409,7 @@ class ProjectController extends Controller
         // persist notifications
         $notificationModel = new NotificationModel();
         foreach ($task->getWorks() as $work) {
-            $notification = $notificationModel->reOpen($work->getUser(), $task->getProject(), $task);
+            $notification = $notificationModel->reOpen($work->getUser(), $task->getProject(), $task, $this->getUser());
             $em->persist($notification);
             $em->flush();
 

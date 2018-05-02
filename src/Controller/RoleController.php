@@ -55,7 +55,7 @@ class RoleController extends Controller
 
             // persist notification
             $notificationModel = new NotificationModel();
-            $notification = $notificationModel->teamRole($role->getUser(), $role->getTeam());
+            $notification = $notificationModel->teamRole($role->getUser(), $role->getTeam(), $this->getUser());
             $em->persist($notification);
             $em->flush();
 

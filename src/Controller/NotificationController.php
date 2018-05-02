@@ -20,13 +20,4 @@ class NotificationController extends Controller
         ]);
     }
 
-//    public function show()
-//    {
-//        $notificationRepository = $this->getDoctrine()->getManager()->getRepository(NotificationRepository::class);
-//        $notifications = $notificationRepository->findMyNotifications();
-//        return $this->render('notification/index.html.twig', [
-//            'controller_name' => 'NotificationController',
-//            'notifications' => $notifications
-//        ]);
-//    }
 }

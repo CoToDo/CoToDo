@@ -18,59 +18,58 @@ use App\NotificationConstants;
 class NotificationModel
 {
 
-    // TODO mozna posilat jen idcko teamu?
-    public function teamAdd(User $user, Team $team)
+    public function teamAdd(User $user, Team $team, User $who)
     {
-        $notification = $this->prepareNotification($user);
+        $notification = $this->prepareNotification($user, $who);
         $notification->setType(NotificationConstants::TEAM_ADD);
         $notification = $this->setLinkToTeam($notification, $team->getId());
         return $notification;
     }
 
-    public function teamDelete(User $user, Team $team)
+    public function teamDelete(User $user, Team $team, User $who)
     {
         // TODO Link to where? the team is already deleted, in link name of team?
-        $notification = $this->prepareNotification($user);
+        $notification = $this->prepareNotification($user, $who);
         $notification->setType(NotificationConstants::TEAM_DELETE);
         $notification->setLink($team->getName()/*NotificationConstants::TEAMS*/);
         return $notification;
     }
 
-    public function teamRole(User $user, Team $team)
+    public function teamRole(User $user, Team $team, User $who)
     {
-        $notification = $this->prepareNotification($user);
+        $notification = $this->prepareNotification($user, $who);
         $notification->setType(NotificationConstants::TEAM_ROLE);
         $notification = $this->setLinkToTeam($notification, $team->getId());
         return $notification;
     }
 
-    public function commment(User $user, Project $project, Task $task)
+    public function commment(User $user, Project $project, Task $task, User $who)
     {
-        $notification = $this->prepareNotification($user);
+        $notification = $this->prepareNotification($user, $who);
         $notification->setType(NotificationConstants::COMMENT);
         $notification = $this->setLinkToProjectAndTask($notification, $project->getId(), $task->getId());
         return $notification;
     }
 
-    public function work(User $user, Project $project, Task $task)
+    public function work(User $user, Project $project, Task $task, User $who)
     {
-        $notification = $this->prepareNotification($user);
+        $notification = $this->prepareNotification($user, $who);
         $notification->setType(NotificationConstants::WORK);
         $notification = $this->setLinkToProjectAndTask($notification, $project->getId(), $task->getId());
         return $notification;
     }
 
-    public function close(User $user, Project $project, Task $task)
+    public function close(User $user, Project $project, Task $task, User $who)
     {
-        $notification = $this->prepareNotification($user);
+        $notification = $this->prepareNotification($user, $who);
         $notification->setType(NotificationConstants::CLOSE);
         $notification = $this->setLinkToProjectAndTask($notification, $project->getId(), $task->getId());
         return $notification;
     }
 
-    public function reOpen(User $user, Project $project, Task $task)
+    public function reOpen(User $user, Project $project, Task $task, User $who)
     {
-        $notification = $this->prepareNotification($user);
+        $notification = $this->prepareNotification($user, $who);
         $notification->setType(NotificationConstants::REOPEN);
         $notification = $this->setLinkToProjectAndTask($notification, $project->getId(), $task->getId());
         return $notification;
@@ -100,11 +99,12 @@ class NotificationModel
      * @param User $user
      * @return Notification
      */
-    private function prepareNotification(User $user) {
+    private function prepareNotification(User $user, User $who) {
         $notification = new Notification();
         $notification->setDate(NotificationModel::setDateTime());
         $notification->setShow(true);
         $notification->setUser($user);
+        $notification->setWho($who);
         return $notification;
     }
 

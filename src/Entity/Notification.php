@@ -43,6 +43,12 @@ class Notification
      */
     private $type;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="notificationsCreate")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $who;
+
     public function getId()
     {
         return $this->id;
@@ -134,6 +140,18 @@ class Notification
 
     public function isWork() {
         return $this->getType() == NotificationConstants::WORK;
+    }
+
+    public function getWho(): ?User
+    {
+        return $this->who;
+    }
+
+    public function setWho(?User $who): self
+    {
+        $this->who = $who;
+
+        return $this;
     }
 
 }
