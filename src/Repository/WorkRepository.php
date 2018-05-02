@@ -40,10 +40,10 @@ class WorkRepository extends ServiceEntityRepository
 
     public function findUniqueWorks($taskId) {
         return $this->createQueryBuilder('w')
-            ->distinct()
             ->join('w.task', 't')
             ->andWhere('t.id = :id')
             ->setParameter('id', $taskId)
+            ->andWhere('w.endDate IS NULL')
             ->getQuery()
             ->getResult()
             ;
