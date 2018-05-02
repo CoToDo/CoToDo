@@ -22,4 +22,31 @@ class WorkRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Work::class);
     }
+
+    /**
+     * @return Work[] Return work with not set finish date
+     */
+    public function findWorkWithoutFinishDate($userId)
+    {
+        return $this->createQueryBuilder('w')
+            ->join('w.user', 'u')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $userId)
+            ->andWhere('w.endDate IS NULL')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findUniqueWorks($taskId) {
+        return $this->createQueryBuilder('w')
+            ->distinct()
+            ->join('w.task', 't')
+            ->andWhere('t.id = :id')
+            ->setParameter('id', $taskId)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 }

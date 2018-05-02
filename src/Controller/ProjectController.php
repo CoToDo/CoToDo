@@ -12,6 +12,7 @@ use App\Form\TaskType;
 use App\Model\NotificationModel;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
+use App\Repository\WorkRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -251,13 +252,15 @@ class ProjectController extends Controller
      * @param Request $request
      * @param Project $project
      * @param Task $task
+     * @param WorkRepository $workRepository
+     * @param \Swift_Mailer $mailer
      * @return Response
      * @Route("/{idp}/tasks/{id}", name="project_task_show", methods="GET|POST")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isMember(user)")
      */
-    public function showTask(Request $request, Project $project, Task $task, \Swift_Mailer $mailer): Response
+    public function showTask(Request $request, Project $project, Task $task, WorkRepository $workRepository, \Swift_Mailer $mailer): Response
     {
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
@@ -303,6 +306,7 @@ class ProjectController extends Controller
         return $this->render('task/show.html.twig', [
             'user' => $this->getUser(),
             'task' => $task,
+            'works' => $workRepository->findUniqueWorks(),
             'project' => $project,
             'team' => $project->getTeam(),
             'userRole' => $this->getUser(),
