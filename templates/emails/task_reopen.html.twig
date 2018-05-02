@@ -5,4 +5,4 @@
 
 
 {# example, assuming you have a route named "login" #}
-Go to: <a href="localhost:8000{{ notification.link }}">{{ notification.link }}</a>.
+Go to: <a href="{{ app.request.getSchemeAndHttpHost() }}{{ notification.link }}">{{ notification.link }}</a>.
