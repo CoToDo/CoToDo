@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @method Project|null find($id, $lockMode = null, $lockVersion = null)
@@ -39,5 +41,14 @@ class ProjectRepository extends ServiceEntityRepository
         ;
     }
 
+
+    public function findAllSearch()
+    {
+        return $this->createQueryBuilder('p')
+            ->getQuery()
+            ->getResult()
+//            ->getArrayResult()
+    ;
+    }
 
 }

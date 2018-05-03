@@ -1,0 +1,15 @@
+{% block body %}
+    {% for project in projects %}
+        {{ project }}
+    {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    var projects=[];
+    {% for project in projects %}
+        projects.push("{{ project }}");
+    {% endfor %}
+    autocomplete(document.getElementById("myInput1"), projects);
+</script>
+{% endblock %}
