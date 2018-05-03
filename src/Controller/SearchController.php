@@ -18,4 +18,14 @@ class SearchController extends Controller
             'controller_name' => 'SearchController',
         ]);
     }
+
+    /**
+     * @Route("/searchProjects", name="search_projects")
+     */
+    public function showProjects() {
+        return $this->render('search/show_projects.html.twig', [
+            'controller_name' => 'SearchController',
+        ]);
+    }
+
 }
