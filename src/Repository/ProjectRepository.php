@@ -48,8 +48,18 @@ class ProjectRepository extends ServiceEntityRepository
             ->select('p.name')
             ->getQuery()
             ->getResult()
-//            ->getArrayResult()
-    ;
+        ;
     }
 
+
+    public function findProjectsMatch($param)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.name LIKE :param')
+            ->setParameter('param', '%' . $param . '%' )
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

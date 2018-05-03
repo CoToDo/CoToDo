@@ -1,9 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Search Projects{% endblock %}
+{% block title %}Projects{% endblock %}
 
 {% block body %}
+    <div class="main-div-crud-list">
 
-    Search Tasks
+        <h1>Projects</h1>
 
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Create date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for project in projects %}
+                <tr class='clickable-row' data-href="{{ path('project_show', {'id': project.id}) }}">
+                    <td>{{ project.name }}</td>
+                    <td>{{ project.description }}</td>
+                    <td>{{ project.createDate ? project.createDate|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>
+                        {#{% if project.team.admin(userRole) %}#}
+                            {#<a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>#}
+                        {#{% endif %}#}
+
+                        {#{% if project.team.leader(userRole) %}#}
+                            {#{{ include('project/_delete_form.html.twig') }}#}
+                        {#{% endif %}#}
+
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a class="btn btn-dark" href="{{ path('project_new') }}">Create new</a>
+    </div>
 {% endblock %}

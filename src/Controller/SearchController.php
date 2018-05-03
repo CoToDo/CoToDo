@@ -20,13 +20,14 @@ class SearchController extends Controller
     }
 
     /**
-     * @Route("/searchProjects", name="search_projects")
+     * @Route("/searchProjects/{param}", name="search_projects")
      */
-    public function showProjects() {
-
+    public function showProjects(ProjectRepository $projectRepository, $param){
 
         return $this->render('search/show_projects.html.twig', [
             'controller_name' => 'SearchController',
+            'projects' =>$projectRepository->findProjectsMatch($param)
+
         ]);
     }
 
