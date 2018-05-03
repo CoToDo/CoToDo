@@ -45,6 +45,7 @@ class ProjectRepository extends ServiceEntityRepository
     public function findAllSearch()
     {
         return $this->createQueryBuilder('p')
+            ->select('p.name')
             ->getQuery()
             ->getResult()
 //            ->getArrayResult()

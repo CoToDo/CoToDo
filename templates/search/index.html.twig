@@ -1,9 +1,6 @@
 {% block javascripts %}
 <script>
-    var projects=[];
-    {% for project in projects %}
-        projects.push("{{ project }}");
-    {% endfor %}
+    var projects = {{ projects|json_encode|raw }};
     autocomplete(document.getElementById("myInput1"), projects);
 </script>
 {% endblock %}
