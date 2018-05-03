@@ -23,6 +23,8 @@ class SearchController extends Controller
      * @Route("/searchProjects", name="search_projects")
      */
     public function showProjects() {
+
+
         return $this->render('search/show_projects.html.twig', [
             'controller_name' => 'SearchController',
         ]);
