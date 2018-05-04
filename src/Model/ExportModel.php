@@ -16,7 +16,16 @@ class ExportModel
 
     public function exportUser(User $user) {
 
+//        foreach ($user->getUserRoles() as $role) {
+//            $role->getTeam()->getProjects()
+//        }
+
+
+        $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
         foreach ($user->getWorks() as $work) {
+            if($work->getEndDate() != null) {
+                continue;
+            }
             $row = "";
             $work->getTask()->getCompletionDate(); // x
             if($work->getTask()->getCompletionDate() != null) {
@@ -36,8 +45,12 @@ class ExportModel
                 $row .= "@" . $tag->getName() . " "; // @
             }
 
-//            echo $row . "\r\n";
+            $row .= "\r\n";
+            fwrite($myfile, $row);
+
         }
+
+        fclose($myfile);
 
     }
 
