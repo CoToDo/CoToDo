@@ -27,7 +27,6 @@ class SearchController extends Controller
         return $this->render('search/show_projects.html.twig', [
             'controller_name' => 'SearchController',
             'projects' =>$projectRepository->findProjectsMatch($param)
-
         ]);
     }
 
