@@ -8,24 +8,19 @@
 
 namespace App\Model;
 
-
 use App\Entity\User;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ExportModel
 {
 
     public function exportUser(User $user) {
-
-//        foreach ($user->getUserRoles() as $role) {
-//            $role->getTeam()->getProjects()
-//        }
-
-
-        $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
+        $myfile = fopen("tmptodo.txt", "w") or die("Unable to open file!");
         foreach ($user->getWorks() as $work) {
             if($work->getEndDate() != null) {
                 continue;
             }
+
             $row = "";
             $work->getTask()->getCompletionDate(); // x
             if($work->getTask()->getCompletionDate() != null) {
@@ -33,7 +28,6 @@ class ExportModel
             }
 
             $row .= "(" . $work->getTask()->getPriority() . ") ";
-
             if($work->getTask()->getCompletionDate() != null) {
                 $row .= $work->getTask()->getCompletionDate()->format('Y-m-d H:i:s') . " ";
             }
@@ -45,12 +39,17 @@ class ExportModel
                 $row .= "@" . $tag->getName() . " "; // @
             }
 
-            $row .= "\r\n";
+            $row .= "\n";
             fwrite($myfile, $row);
-
         }
-
         fclose($myfile);
+        readfile("tmptodo.txt");
+
+        $fileSystem = new Filesystem();
+        $fileSystem->remove("tmptodo.txt");
+
+        header('Content-disposition: attachment; filename=todo.txt');
+        header('Content-type: text/plain');
 
     }
 
