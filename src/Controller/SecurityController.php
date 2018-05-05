@@ -22,6 +22,9 @@ class SecurityController extends Controller
      */
     public function login(Request $request, AuthenticationUtils $authenticationUtils)
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('dashboard');
+        }
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
@@ -44,6 +47,9 @@ class SecurityController extends Controller
      */
     public function registration(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('dashboard');
+        }
         // 1) build the form
         $user = new User();
         $form = $this->createForm(UserType::class, $user);

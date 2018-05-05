@@ -15,6 +15,9 @@ class LandingPageController extends Controller
      */
     public function index()
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('dashboard');
+        }
         return $this->render('landing_page/index.html.twig', [
             'controller_name' => 'LandingPageController',
         ]);
