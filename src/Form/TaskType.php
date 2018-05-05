@@ -19,16 +19,22 @@ class TaskType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $arr = array();
+        for($i = 65; $i < 90; ++$i) {
+            $arr[chr($i)] = chr($i);
+        }
+
         $builder
             ->add('name')
             //choice field with set of possible priority values
             ->add('priority', ChoiceType::class,
-                array('choices' => array(Priorities::A => Priorities::A,
-                                         Priorities::B => Priorities::B,
-                                         Priorities::C => Priorities::C,
-                                         Priorities::D => Priorities::D,
-                                         Priorities::E => Priorities::E,
-                                         Priorities::F => Priorities::F)))
+                array('choices' => $arr))
+//                array('choices' => array(Priorities::A => Priorities::A,
+//                                         Priorities::B => Priorities::B,
+//                                         Priorities::C => Priorities::C,
+//                                         Priorities::D => Priorities::D,
+//                                         Priorities::E => Priorities::E,
+//                                         Priorities::F => Priorities::F)))
             ->add('deadline', DateType::class, [
                 'widget' => 'single_text',
             ])

@@ -50,7 +50,6 @@ class ExportModel
 
         header('Content-disposition: attachment; filename=todo.txt');
         header('Content-type: text/plain');
-
     }
 
 }
