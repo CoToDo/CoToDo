@@ -1,3 +1,3 @@
-{% extends 'emails/base_notification_email.html.twig' %}
+{% extends 'notification/base_notification.html.twig' %}
 {% block notification_text %}<b>{{ notification.who }}</b> commented a task where you are assigned.{% endblock %}
 {% block notification_icon %}<i class="fas fa-comment float right"></i>{% endblock %}

@@ -13,19 +13,19 @@
         {% for n in notifications %}
             <div class="dropdown-divider"></div>
             {% if n.isTeamAdd() %}
-                {{ include('emails/team_add.html.twig', { 'notification': n }) }}
+                {{ include('notification/team_add.html.twig', { 'notification': n }) }}
             {% elseif n.isTeamDelete() %}
-                {{ include('emails/team_delete.html.twig', { 'notification': n }) }}
+                {{ include('notification/team_delete.html.twig', { 'notification': n }) }}
             {% elseif n.isTeamRole() %}
-                {{ include('emails/team_role.html.twig', { 'notification': n }) }}
+                {{ include('notification/team_role.html.twig', { 'notification': n }) }}
             {% elseif n.isWork %}
-                {{ include('emails/task_work.html.twig', { 'notification': n }) }}
+                {{ include('notification/task_work.html.twig', { 'notification': n }) }}
             {% elseif n.isReOpen() %}
-                {{ include('emails/task_reopen.html.twig', { 'notification': n }) }}
+                {{ include('notification/task_reopen.html.twig', { 'notification': n }) }}
             {% elseif n.isClose() %}
-                {{ include('emails/task_close.html.twig', { 'notification': n }) }}
+                {{ include('notification/task_close.html.twig', { 'notification': n }) }}
             {% elseif n.isComment() %}
-                {{ include('emails/task_comment.html.twig', { 'notification': n }) }}
+                {{ include('notification/task_comment.html.twig', { 'notification': n }) }}
             {% endif %}
         {% endfor %}
     </div>
