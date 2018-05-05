@@ -11,7 +11,7 @@ namespace App;
 
 abstract class WarningMessages
 {
-    const WARNING_USER = "User has already work on that task";
+    const WARNING_USER = "User has is already assigned to this task!";
     const ADMIN_TO_LEADER = "Admin can't promote anyone to leader!";
 
 }
