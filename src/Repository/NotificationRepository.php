@@ -29,7 +29,6 @@ class NotificationRepository extends ServiceEntityRepository
             ->setParameter('val', $user)
             ->andWhere('n.show = true')
             ->orderBy('n.date', 'ASC')
-            ->setMaxResults(5)
             ->getQuery()
             ->getResult()
         ;

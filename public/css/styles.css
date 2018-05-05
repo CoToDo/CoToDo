@@ -206,3 +206,8 @@ fieldset[disabled] .btn-dark.active {
         background-color: DodgerBlue !important;
         color: #ffffff;
 }
+.scrollable-menu {
+        height: auto;
+        max-height: 600px;
+        overflow-x: hidden;
+}

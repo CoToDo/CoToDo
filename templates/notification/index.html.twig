@@ -4,7 +4,7 @@
         <i class="fas fa-bell"></i>
         <span class="badge badge-light">{{ notifications | length }}</span>
     </button>
-    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+    <div class="dropdown-menu dropdown-menu-right scrollable-menu" aria-labelledby="navbarDropdown">
         <h5 class="dropdown-header">Notifications</h5>
         {% if notifications | length == 0 %}
             <div class="dropdown-divider"></div>

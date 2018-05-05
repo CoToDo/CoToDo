@@ -8,9 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class SearchController extends Controller
 {
-    /**
-     * @Route("/search", name="search")
-     */
     public function index(ProjectRepository $projectRepository)
     {
         return $this->render('search/index.html.twig', [
