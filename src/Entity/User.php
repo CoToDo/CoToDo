@@ -274,6 +274,7 @@ class User implements UserInterface, \Serializable
      */
     public function  eraseCredentials()
     {
+        $this->plainPassword = null;
     }
 
     /**
@@ -298,6 +299,7 @@ class User implements UserInterface, \Serializable
     public function setPlainPassword($plainPassword): void
     {
         $this->plainPassword = $plainPassword;
+        $this->password = null;
     }
 
 
