@@ -15,7 +15,6 @@ class ExportModel
 {
 
     public function exportUser(User $user) {
-        $myfile = fopen("tmptodo.txt", "w") or die("Unable to open file!");
         foreach ($user->getWorks() as $work) {
             if($work->getEndDate() != null) {
                 continue;
@@ -46,13 +45,8 @@ class ExportModel
             $row .= "due:" . $work->getTask()->getDeadline()->format('Y-m-d') . " ";
 
             $row .= "\n";
-            fwrite($myfile, $row);
+            echo "$row";
         }
-        fclose($myfile);
-        readfile("tmptodo.txt");
-
-        $fileSystem = new Filesystem();
-        $fileSystem->remove("tmptodo.txt");
 
         header('Content-disposition: attachment; filename=todo.txt');
         header('Content-type: text/plain');
