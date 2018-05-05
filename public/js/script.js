@@ -148,7 +148,7 @@ function sortTable(n) {
     if(sortedArrowIcon.hasClass("fa-sort-up")) sortedArrowIcon.removeClass("fa-sort-up");
 
     //set sorting icon to a column that is currently used for sorting
-    if(dir == 'asc'){
+    if(dir == 'desd'){
         sortedArrowIcon.addClass("fa-sort-up");
     }else{
         sortedArrowIcon.addClass("fa-sort-down");
