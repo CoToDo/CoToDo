@@ -12,6 +12,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class TaskType extends AbstractType
 {
+
+    const A = 65;
+    const Z = 90;
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -19,7 +23,7 @@ class TaskType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $arr = array();
-        for($i = 65; $i < 90; ++$i) {
+        for($i = TaskType::A; $i <= TaskType::Z; ++$i) {
             $arr[chr($i)] = chr($i);
         }
 
@@ -28,12 +32,6 @@ class TaskType extends AbstractType
             //choice field with set of possible priority values
             ->add('priority', ChoiceType::class,
                 array('choices' => $arr))
-//                array('choices' => array(Priorities::A => Priorities::A,
-//                                         Priorities::B => Priorities::B,
-//                                         Priorities::C => Priorities::C,
-//                                         Priorities::D => Priorities::D,
-//                                         Priorities::E => Priorities::E,
-//                                         Priorities::F => Priorities::F)))
             ->add('deadline', DateType::class, [
                 'widget' => 'single_text',
             ])
