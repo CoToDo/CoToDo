@@ -34,7 +34,7 @@ class ExportModel
             $row .= $work->getTask()->getCreateDate()->format('Y-m-d') . " ";
 
             $row .= $work->getTask()->getName() . " ";
-            $row .= "+" . $work->getTask()->getProject()->getName() . " "; //+
+            $row .= "+" . str_replace(' ', '_', $work->getTask()->getProject()->getName()) . " "; //+
             foreach ($work->getTask()->getTags() as $tag) {
                 $row .= "@" . $tag->getName() . " "; // @
             }
