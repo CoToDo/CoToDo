@@ -282,7 +282,7 @@ class ProjectController extends Controller
 
             // persist notification
             $notificationModel = new NotificationModel();
-            foreach ($task->getWorks() as $work) {
+            foreach ($workRepository->findUniqueWorks($task->getId()) as $work) {
                 $notification = $notificationModel->commment($work->getUser(), $task->getProject(), $task, $this->getUser());
                 $em->persist($notification);
                 $em->flush();
@@ -355,7 +355,7 @@ class ProjectController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isAdmin(user) or project.getTeam().isLeader(user)")
      */
-    public function completeTask(Project $project, Task $task, \Swift_Mailer $mailer): Response
+    public function completeTask(WorkRepository $workRepository, Project $project, Task $task, \Swift_Mailer $mailer): Response
     {
         $dateTime = new \DateTime('now');
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
@@ -369,7 +369,7 @@ class ProjectController extends Controller
 
         // persist notifications
         $notificationModel = new NotificationModel();
-        foreach ($task->getWorks() as $work) {
+        foreach ($workRepository->findUniqueWorks($task->getId()) as $work) {
             $notification = $notificationModel->close($work->getUser(), $task->getProject(), $task, $this->getUser());
             $em->persist($notification);
             $em->flush();
@@ -415,7 +415,7 @@ class ProjectController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isAdmin(user) or project.getTeam().isLeader(user)")
      */
-    public function reopenTask(Project $project, Task $task, \Swift_Mailer $mailer): Response
+    public function reopenTask(WorkRepository $workRepository, Project $project, Task $task, \Swift_Mailer $mailer): Response
     {
         if ($task->getCompletionDate() != null) {
             $task->removeCompletionDate();
@@ -427,7 +427,7 @@ class ProjectController extends Controller
 
         // persist notifications
         $notificationModel = new NotificationModel();
-        foreach ($task->getWorks() as $work) {
+        foreach ($workRepository->findUniqueWorks($task->getId()) as $work) {
             $notification = $notificationModel->reOpen($work->getUser(), $task->getProject(), $task, $this->getUser());
             $em->persist($notification);
             $em->flush();
