@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Notification;
 use App\Repository\NotificationRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -20,6 +21,8 @@ class NotificationController extends Controller
 
     /**
      * @Route("/notification/{id}", name="notification_show")
+     * @Security("has_role('ROLE_USER')")
+     * @Security("notification.getUser().equals(user)")
      */
     public function show(Notification $notification) {
        $notification->setShow(false);

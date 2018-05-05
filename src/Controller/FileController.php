@@ -16,7 +16,6 @@ class FileController extends Controller
      */
     public function export()
     {
-
         $exportModel = new ExportModel();
         $exportModel->exportUser($this->getUser());
         return $this->render('file/index.html.twig', [
