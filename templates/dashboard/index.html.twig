@@ -14,8 +14,7 @@
                 <th class='clickable-column' onclick="sortTable(0)">Name<i class="fa fa-fw fa-sort"></i></th>
                 <th class='clickable-column' onclick="sortTable(1)">Priority<i class="fa fa-fw fa-sort"></i></th>
                 <th class='clickable-column' onclick="sortTable(2)">Create date<i class="fa fa-fw fa-sort"></i></th>
-                <th class='clickable-column' onclick="sortTable(3)">Completion date<i class="fa fa-fw fa-sort"></i></th>
-                <th class='clickable-column' onclick="sortTable(4)">Deadline<i class="fa fa-fw fa-sort"></i></th>
+                <th class='clickable-column' onclick="sortTable(3)">Deadline<i class="fa fa-fw fa-sort"></i></th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -35,7 +34,7 @@
                             {% endif %}
 
                             {% if task.work(user).startSet and not task.work(user).endSet%}
-                                <a class="btn btn-outline-dark" href="{{ path('work_set_end', {'id' : task.workId(user)} ) }}">Finished</a>
+                                <a class="btn btn-outline-dark" href="{{ path('work_set_end', {'id' : task.workId(user)} ) }}">Finish</a>
                             {% endif %}
                         {% endif %}
 
