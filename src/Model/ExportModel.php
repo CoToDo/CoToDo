@@ -25,9 +25,10 @@ class ExportModel
             $work->getTask()->getCompletionDate(); // x
             if($work->getTask()->getCompletionDate() != null) {
                 $row .= "x ";
+            }else{
+                $row .= "(" . $work->getTask()->getPriority() . ") ";
             }
 
-            $row .= "(" . $work->getTask()->getPriority() . ") ";
             if($work->getTask()->getCompletionDate() != null) {
                 $row .= $work->getTask()->getCompletionDate()->format('Y-m-d H:i:s') . " ";
             }
@@ -37,6 +38,9 @@ class ExportModel
             $row .= "+" . $work->getTask()->getProject()->getName() . " "; //+
             foreach ($work->getTask()->getTags() as $tag) {
                 $row .= "@" . $tag->getName() . " "; // @
+            }
+            if($work->getTask()->getCompletionDate() != null) {
+                $row .= "pri:" . $work->getTask()->getPriority();
             }
 
             $row .= "\n";
