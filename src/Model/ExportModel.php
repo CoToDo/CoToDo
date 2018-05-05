@@ -30,9 +30,9 @@ class ExportModel
             }
 
             if($work->getTask()->getCompletionDate() != null) {
-                $row .= $work->getTask()->getCompletionDate()->format('Y-m-d H:i:s') . " ";
+                $row .= $work->getTask()->getCompletionDate()->format('Y-m-d') . " ";
             }
-            $row .= $work->getTask()->getCreateDate()->format('Y-m-d H:i:s') . " ";
+            $row .= $work->getTask()->getCreateDate()->format('Y-m-d') . " ";
 
             $row .= $work->getTask()->getName() . " ";
             $row .= "+" . $work->getTask()->getProject()->getName() . " "; //+
@@ -40,8 +40,10 @@ class ExportModel
                 $row .= "@" . $tag->getName() . " "; // @
             }
             if($work->getTask()->getCompletionDate() != null) {
-                $row .= "pri:" . $work->getTask()->getPriority();
+                $row .= "pri:" . $work->getTask()->getPriority() . " ";
             }
+
+            $row .= "due:" . $work->getTask()->getDeadline()->format('Y-m-d') . " ";
 
             $row .= "\n";
             fwrite($myfile, $row);
