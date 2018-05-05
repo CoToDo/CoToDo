@@ -1,19 +1,32 @@
-<div class="example-wrapper">
-    {% for n in notifications %}
-        {% if n.isTeamAdd() %}
-            {{ include('emails/team_add.html.twig', { 'notification': n }) }}
-        {% elseif n.isTeamDelete() %}
-            {{ include('emails/team_delete.html.twig', { 'notification': n }) }}
-        {% elseif n.isTeamRole() %}
-            {{ include('emails/team_role.html.twig', { 'notification': n }) }}
-        {% elseif n.isWork %}
-            {{ include('emails/task_work.html.twig', { 'notification': n }) }}
-        {% elseif n.isReOpen() %}
-            {{ include('emails/task_reopen.html.twig', { 'notification': n }) }}
-        {% elseif n.isClose() %}
-            {{ include('emails/task_close.html.twig', { 'notification': n }) }}
-        {% elseif n.isComment() %}
-            {{ include('emails/task_comment.html.twig', { 'notification': n }) }}
+<div class="btn-group">
+    <button class="btn dropdown-toggle btn-dark" type="button" id="dropdownNotification" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-bell"></i>
+        <span class="badge badge-light">{{ notifications | length }}</span>
+    </button>
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+        <h5 class="dropdown-header">Notifications</h5>
+        {% if notifications | length == 0 %}
+            <div class="dropdown-divider"></div>
+            <p class="dropdown-item mb-0"> No notifications</p>
         {% endif %}
-    {% endfor %}
+        {% for n in notifications %}
+            <div class="dropdown-divider"></div>
+            {% if n.isTeamAdd() %}
+                {{ include('emails/team_add.html.twig', { 'notification': n }) }}
+            {% elseif n.isTeamDelete() %}
+                {{ include('emails/team_delete.html.twig', { 'notification': n }) }}
+            {% elseif n.isTeamRole() %}
+                {{ include('emails/team_role.html.twig', { 'notification': n }) }}
+            {% elseif n.isWork %}
+                {{ include('emails/task_work.html.twig', { 'notification': n }) }}
+            {% elseif n.isReOpen() %}
+                {{ include('emails/task_reopen.html.twig', { 'notification': n }) }}
+            {% elseif n.isClose() %}
+                {{ include('emails/task_close.html.twig', { 'notification': n }) }}
+            {% elseif n.isComment() %}
+                {{ include('emails/task_comment.html.twig', { 'notification': n }) }}
+            {% endif %}
+        {% endfor %}
+    </div>
 </div>

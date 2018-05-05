@@ -8,16 +8,6 @@
         margin: 0 8vw;
 }
 
-.example-wrapper {
-        margin: 1em auto;
-        max-width: 800px;
-        width: 95%;
-        font: 18px/1.5 sans-serif;
-}
-.example-wrapper code {
-        background: #F5F5F5;
-        padding: 2px 6px;
-}
 .tablecenter {
         border-radius: 5px;
         width: 0%;
@@ -48,10 +38,29 @@
         color: #2C6F94 !important;
 }
 
+.dropdown-menu{
+        min-width: 20rem;
+}
+.dropdown-header{
+        padding: 0.5rem 1.5rem;
+        font-size: 1.2rem;
+}
+.dropdown-divider{
+        margin: 0;
+}
+.dropdown-item{
+        padding: .6rem 1.5rem;
+}
+
 .dropdown-item:active,
 .dropdown-item:hover,
 .dropdown-item:focus{
-        background-color: #2C6F94 !important;
+        background-color: #abe1ff !important;
+}
+
+.notification-date{
+        font-size: 0.7rem;
+        color: grey;
 }
 
 .pright {

@@ -1,8 +1,3 @@
-{# templates/emails/work.html.twig #}
-<h3>Assigning</h3>
-
-<p>You have been assigned to task by {{ notification.who }}.</p>
-
-
-{# example, assuming you have a route named "login" #}
-Go to: <a href="{{ app.request.getSchemeAndHttpHost() }}{{ notification.link }}">{{ notification.link }}</a>.
+{% extends 'emails/base_notification.html.twig' %}
+{% block notification_text %}You have been assigned to a task by <b>{{ notification.who }}</b>.{% endblock %}
+{% block notification_icon %}<i class="fas fa-tasks float-right"></i>{% endblock %}

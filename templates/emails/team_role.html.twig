@@ -1,8 +1,3 @@
-{# templates/emails/work.html.twig #}
-<h3>Changed role</h3>
-
-<p>Your role has been changed by {{ notification.who }}.</p>
-
-
-{# example, assuming you have a route named "login" #}
-Go to: <a href="{{ app.request.getSchemeAndHttpHost() }}{{ notification.link }}">{{ notification.link }}</a>.
+{% extends 'emails/base_notification.html.twig' %}
+{% block notification_text %}Your role has been changed by <b>{{ notification.who }}</b>. {% endblock %}
+{% block notification_icon %}<i class="fas fa-user-edit float-right"></i>{% endblock %}
