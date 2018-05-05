@@ -1,4 +1,4 @@
-<a class="dropdown-item" href="{% block notification_link %}{{ app.request.getSchemeAndHttpHost() }}{{ notification.link }}{% endblock %}">
+<a class="dropdown-item" href="{% block notification_link %}{{ path('notification_show', {'id': notification.id}) }}{% endblock %}">
     <p class="mb-0"> {% block notification_text %}{% endblock %} {% block notification_icon %}{% endblock %}</p>
     <p class="mb-0 notification-date">{{ notification.date | date("H:i:s j.n.Y") }}</p>
 </a>
