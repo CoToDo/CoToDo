@@ -23,14 +23,21 @@ class SearchController extends Controller
     }
 
     /**
-     * @Route("/searchProjects/{param}", name="search_projects")
+     * @Route("/searchProjects", name="search_projects", methods="GET|POST")
      */
-    public function showProjects(ProjectRepository $projectRepository, $param)
+    public function showProjects(Request $request, ProjectRepository $projectRepository)
     {
+        $data = "";
+        foreach ($request->get('search') as $r) {
+//            echo $r . "\r\n";
+            $data = $r;
+            break;
+        }
+
 
         return $this->render('search/show_projects.html.twig', [
             'controller_name' => 'SearchController',
-            'projects' => $projectRepository->findProjectsMatch($param)
+            'projects' => $projectRepository->findProjectsMatch($data)
         ]);
     }
 
@@ -41,6 +48,7 @@ class SearchController extends Controller
     {
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
 
