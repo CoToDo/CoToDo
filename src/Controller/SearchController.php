@@ -36,6 +36,13 @@ class SearchController extends Controller
             break;
         }
 
+        if(count($projectRepository->findProjectsMatch($data))==1){
+            foreach($projectRepository->findProjectsMatch($data) as $project){
+                return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
+            }
+
+        }
+
         return $this->render('search/show_projects.html.twig', [
             'controller_name' => 'SearchController',
             'projects' => $projectRepository->findProjectsMatch($data)
