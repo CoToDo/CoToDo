@@ -4,7 +4,7 @@
             {{ form_errors(form.search) }}
             {{ form_widget(form.search, { 'id': 'myInput1' }, {'attr' : {'class': 'form-control mr-sm-2'}} ) }}
     </div>
-    <div class="form-group inline">
+    <div class="d-inline-block">
         <button class="btn btn-dark">{{ button_label|default('Search') }}</button>
     </div>
 {{ form_end(form) }}

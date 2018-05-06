@@ -52,7 +52,11 @@
             {#</div>#}
         {#</form>#}
     {#</div>#}
-    {{ render(controller('App\\Controller\\SearchController::searchAction')) }}
+
+    <div class="w-50 p-0">
+        {{ render(controller('App\\Controller\\SearchController::searchAction')) }}
+    </div>
+
 
     <div class="btn-group">
         {{ render(controller('App\\Controller\\NotificationController::index')) }}
