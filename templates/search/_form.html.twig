@@ -1,10 +1,8 @@
-{{ form_start(form) }}
+{{ form_start(form, {'attr': {'autocomplete': 'off' }}) }}
     {{ form_errors(form) }}
-    <div class="form-row form-group">
-        <div class="col">
+    <div class="autocomplete d-inline-block">
             {{ form_errors(form.search) }}
-            {{ form_widget(form.search) }}
-        </div>
+            {{ form_widget(form.search, { 'id': 'myInput1' }, {'attr' : {'class': 'form-control mr-sm-2'}} ) }}
     </div>
     <div class="form-group inline">
         <button class="btn btn-dark">{{ button_label|default('Search') }}</button>

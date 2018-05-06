@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\SearchType;
 use App\Repository\ProjectRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,6 +14,7 @@ class SearchController extends Controller
 {
     /**
      * @Route("/search", name="search")
+     * @Security("has_role('ROLE_USER')")
      */
     public function index(ProjectRepository $projectRepository)
     {
@@ -24,16 +26,15 @@ class SearchController extends Controller
 
     /**
      * @Route("/searchProjects", name="search_projects", methods="GET|POST")
+     * @Security("has_role('ROLE_USER')")
      */
     public function showProjects(Request $request, ProjectRepository $projectRepository)
     {
         $data = "";
         foreach ($request->get('search') as $r) {
-//            echo $r . "\r\n";
             $data = $r;
             break;
         }
-
 
         return $this->render('search/show_projects.html.twig', [
             'controller_name' => 'SearchController',
@@ -43,21 +44,12 @@ class SearchController extends Controller
 
     /**
      * @Route("/tmp", name="tmp")
+     * @Security("has_role('ROLE_USER')")
      */
     public function searchAction(ProjectRepository $projectRepository, Request $request) : Response
     {
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($request);
-
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-//            $projectRepository->findProjectsMatch($form["search"]->getData())
-            echo("coje");
-
-            return $this->redirectToRoute('search_projects', ['param' => $form["search"]->getData()]);
-        }
-
         return $this->render('search/in.html.twig', [
             'form' => $form->createView(),
             'projects' => $projectRepository->findAllSearch(),
