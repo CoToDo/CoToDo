@@ -16,7 +16,7 @@ class SearchType extends AbstractType
     {
         $builder
             ->add('search')
-            ->setAction("/searchProjects", array('search'))
+            ->setAction("/searchProjects")
         ;
     }
 
