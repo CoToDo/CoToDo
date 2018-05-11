@@ -13,6 +13,7 @@ use App\Model\NotificationModel;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
 use App\Repository\WorkRepository;
+use App\WarningMessages;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -63,10 +64,22 @@ class ProjectController extends Controller
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $string = $project->getName();
+            $length = strlen($string);
+            for ($i = 0; $i < $length; $i++) {
+                if($string[$i] == '_') {
+                    $this->addFlash('warning',WarningMessages::WARNING_PROJECT_UNDERSCORE);
+                    return $this->render('project/new.html.twig', [
+                        'project' => $project,
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($project);
             $em->flush();
-
             return $this->redirectToRoute('project_index');
         }
 
@@ -468,7 +481,6 @@ class ProjectController extends Controller
         }
         return $this->redirectToRoute('project_task_index', ['id' => $project->getId()]);
     }
-
 
     private function getPercent($allTasks, $closed) {
         if($allTasks == 0) return 0;
