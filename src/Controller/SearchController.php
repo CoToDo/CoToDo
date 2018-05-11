@@ -25,17 +25,11 @@ class SearchController extends Controller
     }
 
     /**
-     * @Route("/searchProjects", name="search_projects", methods="GET|POST")
+     * @Route("/{data}", name="search_projects", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      */
-    public function showProjects(Request $request, ProjectRepository $projectRepository)
+    public function showProjects($data, ProjectRepository $projectRepository)
     {
-        $data = "";
-        foreach ($request->get('search') as $r) {
-            $data = $r;
-            break;
-        }
-
         if(count($projectRepository->findProjectsMatch($data))==1){
             foreach($projectRepository->findProjectsMatch($data) as $project){
                 return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
@@ -49,18 +43,5 @@ class SearchController extends Controller
         ]);
     }
 
-    /**
-     * @Route("/tmp", name="tmp")
-     * @Security("has_role('ROLE_USER')")
-     */
-    public function searchAction(ProjectRepository $projectRepository, Request $request) : Response
-    {
-        $form = $this->createForm(SearchType::class);
-        $form->handleRequest($request);
-        return $this->render('search/in.html.twig', [
-            'form' => $form->createView(),
-            'projects' => $projectRepository->findAllSearch(),
-        ]);
-    }
 }
 

@@ -35,28 +35,22 @@
                 My Projects</a>
             <a class="nav-item nav-link button-navbar" href="{{ path('team_index') }}"> <i class="fas fa-users"></i> My
                 Teams</a>
-            {#<a class="nav-item nav-link button-navbar" href="{{ path('file_export') }}"> <i class="fas fa-download"></i> Export TODO</a>#}
         </div>
     </div>
 
-    {#<div class="w-50 p-0">#}
-        {#<form autocomplete="off">#}
-            {#<div class="autocomplete d-inline-block" style="width:300px;">#}
-                {#<input id="myInput1" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">#}
-            {#</div>#}
-
-            {#<div class="d-inline-block">#}
-                {#<button class="btn btn-outline-info my-2 my-sm-0 btn-dark" type="submit"><i class="fas fa-search"></i>#}
-                    {#Search#}
-                {#</button>#}
-            {#</div>#}
-        {#</form>#}
-    {#</div>#}
-
     <div class="w-50 p-0">
-        {{ render(controller('App\\Controller\\SearchController::searchAction')) }}
-    </div>
+        <form autocomplete="off">
+            <div class="autocomplete d-inline-block" style="width:300px;">
+                <input id="myInput1" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            </div>
 
+            <div class="d-inline-block">
+                <button class="btn btn-outline-info my-2 my-sm-0 btn-dark" type="button" onclick="search()"><i class="fas fa-search"></i>
+                    Search
+                </button>
+            </div>
+        </form>
+    </div>
 
     <div class="btn-group">
         {{ render(controller('App\\Controller\\NotificationController::index')) }}

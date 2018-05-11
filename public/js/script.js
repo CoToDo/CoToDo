@@ -252,3 +252,9 @@ function autocomplete(inp, arr) {
         closeAllLists(e.target);
     });
 }
+
+
+function search() {
+    var elem = document.getElementById("myInput1");
+    window.location.href = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/" + elem.value;
+}

@@ -13,7 +13,6 @@
                 <th>Name</th>
                 <th>Description</th>
                 <th>Create date</th>
-                {#<th>Actions</th>#}
             </tr>
             </thead>
             <tbody>
@@ -22,16 +21,6 @@
                     <td>{{ project.name }}</td>
                     <td>{{ project.description }}</td>
                     <td>{{ project.createDate ? project.createDate|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>
-                        {#{% if project.team.admin(userRole) %}#}
-                            {#<a class="btn btn-outline-primary" href="{{ path('project_edit', {'id': project.id}) }}">Edit</a>#}
-                        {#{% endif %}#}
-
-                        {#{% if project.team.leader(userRole) %}#}
-                            {#{{ include('project/_delete_form.html.twig') }}#}
-                        {#{% endif %}#}
-
-                    </td>
                 </tr>
             {% else %}
                 <tr>
