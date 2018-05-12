@@ -256,5 +256,5 @@ function autocomplete(inp, arr) {
 
 function search() {
     var elem = document.getElementById("myInput1");
-    window.location.href = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/" + elem.value;
+    window.location.href = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/search" + elem.value;
 }
