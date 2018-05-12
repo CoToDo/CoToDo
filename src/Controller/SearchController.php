@@ -25,7 +25,7 @@ class SearchController extends Controller
     }
 
     /**
-     * @Route("/{data}", name="search_projects", methods="GET|POST")
+     * @Route("/search/{data}", name="search_projects", methods="GET|POST")
      * @Security("has_role('ROLE_USER')")
      */
     public function showProjects($data, ProjectRepository $projectRepository)
