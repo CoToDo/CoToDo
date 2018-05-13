@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ChangePasswordType;
 use App\Form\UserType;
+use App\Model\ChangePassword;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -77,5 +80,39 @@ class SecurityController extends Controller
             'security/registration.html.twig',
             array('form' => $form->createView())
         );
+    }
+
+    /**
+     * Change password
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @return Response
+     * @Route("/change-password", name="change_password")
+     * @Security("has_role('ROLE_USER')"))
+     */
+    public function changePassword(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $changePassword = new ChangePassword();
+        $user = $this->getUser();
+
+        $form = $this->createForm(ChangePasswordType::class, $changePassword);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //encode new password
+            $password = $passwordEncoder->encodePassword($user, $changePassword->getNewPassword());
+            $user->setPassword($password);
+
+            // update user with new password
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('user_show', ['id' => $this->getUser()->getId()]);
+        }
+
+        return $this->render('security/change_password.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

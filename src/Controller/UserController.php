@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\UserEditType;
 use App\Form\UserType;
+use App\Model\UserEdit;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,12 +51,18 @@ class UserController extends Controller
      */
     public function edit(Request $request, User $userIn): Response
     {
-        $form = $this->createForm(UserType::class, $userIn);
+        $userEdit = new UserEdit();
+        $userEdit->setName($userIn->getName());
+        $userEdit->setLastName($userIn->getLastName());
+        $userEdit->setMail($userIn->getMail());
+        $form = $this->createForm(UserEditType::class, $userEdit);
         $form->handleRequest($request);
 
-        $userIn->setPlainPassword($form->get('')->getData());
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $userIn->setName($userEdit->getName());
+            $userIn->setLastName($userEdit->getLastName());
+            $userIn->setMail($userEdit->getMail());
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('user_edit', ['id' => $userIn->getId()]);
