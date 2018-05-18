@@ -42,7 +42,6 @@
                 </tbody>
             </table>
 
-            <canvas id="myChart"></canvas>
 
             <a class="btn btn-outline-secondary" href="{{ path('project_task_index', {'id': project.id}) }}">Back to
                 list</a>
@@ -102,6 +101,13 @@
 
         </div>
 
+        <canvas id="myChart"></canvas>
+        <script>
+            var data = {{ works|json_encode|raw }};
+            data = [0, 10, 5, 2, 20, 30, 45];
+            graphTask(data);
+        </script>
+
         <div class="m-5">
             <h3>Comments</h3>
             {#List of comments#}
@@ -122,8 +128,6 @@
         <div class="m-5">
             {{ include('task/_form_comment.html.twig') }}
         </div>
-
-
     </div>
 
 {% endblock %}
