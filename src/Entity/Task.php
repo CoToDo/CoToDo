@@ -339,7 +339,7 @@ class Task
     public function getWorkId($user)
     {
         foreach ($user->getWorks() as $work) {
-            if ($this->getId() == $work->getTask()->getId()) {
+            if ($this->getId() == $work->getTask()->getId() && $work->getEndDate() == null) {
                 return $work->getId();
             }
         }
@@ -353,7 +353,7 @@ class Task
     public function getWork($user)
     {
         foreach ($user->getWorks() as $work) {
-            if ($this->getId() == $work->getTask()->getId()) {
+            if ($this->getId() == $work->getTask()->getId() && $work->getEndDate() == null) {
                 return $work;
             }
         }
@@ -368,7 +368,7 @@ class Task
     public function isUserSet(User $user)
     {
         foreach($this->getWorks() as $work) {
-            if($work->getUser()->equals($user)) return true;
+            if($work->getUser()->equals($user) && $work->getEndDate() == null) return true;
         }
         return false;
     }

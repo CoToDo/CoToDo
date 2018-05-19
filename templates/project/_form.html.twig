@@ -1,5 +1,10 @@
 {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
     {{ form_errors(form) }}
+{% for message in app.flashes('warning') %}
+    <div class="flash-notice alert alert-warning">
+        {{ message }}
+    </div>
+{% endfor %}
 
     <div class="form-row form-group">
         <div class="col">

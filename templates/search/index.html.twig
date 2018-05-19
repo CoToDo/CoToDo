@@ -1,0 +1,6 @@
+{% block javascripts %}
+    <script>
+        var projects = {{ projects|json_encode|raw }};
+        autocomplete(document.getElementById("myInput1"), projects);
+    </script>
+{% endblock %}

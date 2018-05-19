@@ -9,8 +9,11 @@ use App\Entity\Team;
 use App\Form\CommentType;
 use App\Form\ProjectType;
 use App\Form\TaskType;
+use App\Model\NotificationModel;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
+use App\Repository\WorkRepository;
+use App\WarningMessages;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,10 +64,22 @@ class ProjectController extends Controller
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $string = $project->getName();
+            $length = strlen($string);
+            for ($i = 0; $i < $length; $i++) {
+                if($string[$i] == '_') {
+                    $this->addFlash('warning',WarningMessages::WARNING_PROJECT_UNDERSCORE);
+                    return $this->render('project/new.html.twig', [
+                        'project' => $project,
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($project);
             $em->flush();
-
             return $this->redirectToRoute('project_index');
         }
 
@@ -133,6 +148,7 @@ class ProjectController extends Controller
         return $this->render('project/show.html.twig', [
             'project' => $project,
             'subprojects' => $project->getSubProjects(),
+            'percent' => $this->getPercent($project->getTasks()->count(), count($taskRepository->getCountClosedTasks($project->getId()))),
             'team' => $project->getTeam(),
             'userRole' => $this->getUser(),
             'tasks' => $taskRepository->findUncompleteTasks($project->getId())]);
@@ -246,17 +262,19 @@ class ProjectController extends Controller
     }
 
     /**
-     * Render project's tasks details
+     * Render project's tasks details + adding comments form
      * @param Request $request
      * @param Project $project
      * @param Task $task
+     * @param WorkRepository $workRepository
+     * @param \Swift_Mailer $mailer
      * @return Response
      * @Route("/{idp}/tasks/{id}", name="project_task_show", methods="GET|POST")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isMember(user)")
      */
-    public function showTask(Request $request, Project $project, Task $task): Response
+    public function showTask(Request $request, Project $project, Task $task, WorkRepository $workRepository, \Swift_Mailer $mailer): Response
     {
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
@@ -264,17 +282,37 @@ class ProjectController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setTask($task);
             $comment->setUser($this->getUser());
-            $dateTime = new \DateTime('now');;
+            $dateTime = new \DateTime('now');
             $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
             if (null === $comment->getDate()) {
                 $comment->setDate($dateTime);
             }
 
-            echo $comment;
             $em = $this->getDoctrine()->getManager();
             $em->persist($comment);
             $em->flush();
+
+            // persist notification
+            $notificationModel = new NotificationModel();
+            foreach ($workRepository->findUniqueWorks($task->getId()) as $work) {
+                $notification = $notificationModel->commment($work->getUser(), $task->getProject(), $task, $this->getUser());
+                $em->persist($notification);
+                $em->flush();
+
+                $message = (new \Swift_Message('CoToDo Notification'))
+                    ->setFrom('info.cotodo@gmail.com')
+                    ->setTo($notification->getUser()->getMail())
+                    ->setBody(
+                        $this->renderView(
+                        // templates/emails/team_add.html.twig
+                            'emails/task_comment.html.twig',
+                            array('notification' => $notification)
+                        ),
+                        'text/html'
+                    );
+                $mailer->send($message);
+            }
 
             return $this->redirectToRoute('project_task_show', ['id' => $task->getId(), 'idp' => $project->getId()]);
         }
@@ -282,6 +320,7 @@ class ProjectController extends Controller
         return $this->render('task/show.html.twig', [
             'user' => $this->getUser(),
             'task' => $task,
+            'works' => $workRepository->findUniqueWorks($task->getId()),
             'project' => $project,
             'team' => $project->getTeam(),
             'userRole' => $this->getUser(),
@@ -329,7 +368,7 @@ class ProjectController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isAdmin(user) or project.getTeam().isLeader(user)")
      */
-    public function completeTask(Project $project, Task $task): Response
+    public function completeTask(WorkRepository $workRepository, Project $project, Task $task, \Swift_Mailer $mailer): Response
     {
         $dateTime = new \DateTime('now');
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
@@ -341,8 +380,42 @@ class ProjectController extends Controller
         $em->persist($task);
         $em->flush();
 
-        return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
+        // persist notifications
+        $notificationModel = new NotificationModel();
+        foreach ($workRepository->findUniqueWorks($task->getId()) as $work) {
+            $notification = $notificationModel->close($work->getUser(), $task->getProject(), $task, $this->getUser());
+            $em->persist($notification);
+            $em->flush();
 
+            $message = (new \Swift_Message('CoToDo Notification'))
+                ->setFrom('info.cotodo@gmail.com')
+                ->setTo($notification->getUser()->getMail())
+                ->setBody(
+                    $this->renderView(
+                    // templates/emails/team_add.html.twig
+                        'emails/task_close.html.twig',
+                        array('notification' => $notification)
+                    ),
+                    'text/html'
+                );
+            $mailer->send($message);
+        }
+
+        return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
+    }
+
+    /**
+     * @Route("/{idp}/tasks/{id}/history", name="project_task_history", methods="GET|POST")
+     * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
+     * @Security("has_role('ROLE_USER')")
+     * @Security("project.getTeam().isMember(user)")
+     */
+    public function showTaskHistory( WorkRepository $workRepository, Task $task): Response
+    {
+        return $this->render('task/history.html.twig', [
+            'task' => $task,
+            'works' => $workRepository->findClosedWorks($task->getId())
+        ]);
     }
 
     /**
@@ -355,10 +428,9 @@ class ProjectController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isAdmin(user) or project.getTeam().isLeader(user)")
      */
-    public function reopenTask(Project $project, Task $task): Response
+    public function reopenTask(WorkRepository $workRepository, Project $project, Task $task, \Swift_Mailer $mailer): Response
     {
-
-        if($task->getCompletionDate() != null){
+        if ($task->getCompletionDate() != null) {
             $task->removeCompletionDate();
         }
 
@@ -366,10 +438,28 @@ class ProjectController extends Controller
         $em->persist($task);
         $em->flush();
 
+        // persist notifications
+        $notificationModel = new NotificationModel();
+        foreach ($workRepository->findUniqueWorks($task->getId()) as $work) {
+            $notification = $notificationModel->reOpen($work->getUser(), $task->getProject(), $task, $this->getUser());
+            $em->persist($notification);
+            $em->flush();
+
+            $message = (new \Swift_Message('CoToDo Notification'))
+                ->setFrom('info.cotodo@gmail.com')
+                ->setTo($notification->getUser()->getMail())
+                ->setBody(
+                    $this->renderView(
+                    // templates/emails/team_add.html.twig
+                        'emails/task_reopen.html.twig',
+                        array('notification' => $notification)
+                    ),
+                    'text/html'
+                );
+            $mailer->send($message);
+        }
         return $this->redirectToRoute('project_show', ['id' => $project->getId()]);
-
     }
-
 
     /**
      * Delete task
@@ -389,8 +479,13 @@ class ProjectController extends Controller
             $em->remove($task);
             $em->flush();
         }
-
         return $this->redirectToRoute('project_task_index', ['id' => $project->getId()]);
+    }
+
+    private function getPercent($allTasks, $closed) {
+        if($allTasks == 0) return 0;
+        return ($closed / $allTasks) * 100;
+
     }
 
 }

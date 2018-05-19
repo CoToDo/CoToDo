@@ -1,0 +1,32 @@
+<div class="btn-group">
+    <button class="btn dropdown-toggle-without btn-dark" type="button" id="dropdownNotification" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-bell"></i>
+        <span class="badge badge-light">{{ notifications | length }}</span>
+    </button>
+    <div class="dropdown-menu dropdown-menu-right scrollable-menu" aria-labelledby="navbarDropdown">
+        <h5 class="dropdown-header">Notifications</h5>
+        {% if notifications | length == 0 %}
+            <div class="dropdown-divider"></div>
+            <p class="dropdown-item mb-0"> No notifications</p>
+        {% endif %}
+        {% for n in notifications %}
+            <div class="dropdown-divider"></div>
+            {% if n.isTeamAdd() %}
+                {{ include('notification/team_add.html.twig', { 'notification': n }) }}
+            {% elseif n.isTeamDelete() %}
+                {{ include('notification/team_delete.html.twig', { 'notification': n }) }}
+            {% elseif n.isTeamRole() %}
+                {{ include('notification/team_role.html.twig', { 'notification': n }) }}
+            {% elseif n.isWork %}
+                {{ include('notification/task_work.html.twig', { 'notification': n }) }}
+            {% elseif n.isReOpen() %}
+                {{ include('notification/task_reopen.html.twig', { 'notification': n }) }}
+            {% elseif n.isClose() %}
+                {{ include('notification/task_close.html.twig', { 'notification': n }) }}
+            {% elseif n.isComment() %}
+                {{ include('notification/task_comment.html.twig', { 'notification': n }) }}
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

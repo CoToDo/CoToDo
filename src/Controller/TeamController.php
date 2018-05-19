@@ -10,6 +10,7 @@ use App\Form\TeamProjectType;
 use App\Entity\User;
 use App\Form\RoleType;
 use App\Form\TeamType;
+use App\Model\NotificationModel;
 use App\Repository\TeamRepository;
 use App\WarningMessages;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -163,12 +164,33 @@ class TeamController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("team.isLeader(user)")
      */
-    public function delete(Request $request, Team $team): Response
+    public function delete(Request $request, Team $team, \Swift_Mailer $mailer): Response
     {
         if ($this->isCsrfTokenValid('delete' . $team->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($team);
             $em->flush();
+
+            // persist notifications
+            $notificationModel = new NotificationModel();
+            foreach ($team->getRoles() as $role) {
+                $notification = $notificationModel->teamDelete($role->getUser(), $team, $this->getUser());
+                $em->persist($notification);
+                $em->flush();
+
+                $message = (new \Swift_Message('CoToDo Notification'))
+                    ->setFrom('info.cotodo@gmail.com')
+                    ->setTo($notification->getUser()->getMail())
+                    ->setBody(
+                        $this->renderView(
+                        // templates/emails/team_add.html.twig
+                            'emails/team_delete.html.twig',
+                            array('notification' => $notification)
+                        ),
+                        'text/html'
+                    );
+                $mailer->send($message);
+            }
         }
 
         return $this->redirectToRoute('team_index');
@@ -183,7 +205,7 @@ class TeamController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("team.isAdmin(user)")
      */
-    public function addUser(Request $request, Team $team): Response
+    public function addUser(Request $request, Team $team, \Swift_Mailer $mailer): Response
     {
         $role = new Role();
         $role->setTeam($team);
@@ -219,6 +241,25 @@ class TeamController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($role);
             $em->flush();
+
+            // persist notification
+            $notificationModel = new NotificationModel();
+            $notification = $notificationModel->teamAdd($role->getUser(), $team, $this->getUser());
+            $em->persist($notification);
+            $em->flush();
+
+            $message = (new \Swift_Message('CoToDo Notification'))
+                ->setFrom('info.cotodo@gmail.com')
+                ->setTo($notification->getUser()->getMail())
+                ->setBody(
+                    $this->renderView(
+                    // templates/emails/team_add.html.twig
+                        'emails/team_add.html.twig',
+                        array('notification' => $notification)
+                    ),
+                    'text/html'
+                );
+            $mailer->send($message);
 
             return $this->redirectToRoute('team_show', ['id' => $team->getId()]);
         }

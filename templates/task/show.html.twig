@@ -42,6 +42,7 @@
                 </tbody>
             </table>
 
+
             <a class="btn btn-outline-secondary" href="{{ path('project_task_index', {'id': project.id}) }}">Back to
                 list</a>
             <a class="btn btn-outline-secondary" href="{{ path('project_show', {'id': project.id}) }}">Back to project</a>
@@ -54,6 +55,8 @@
                 {{ include('task/_delete_form.html.twig') }}
             {% endif %}
 
+            <a class="btn btn-outline-dark" href="{{ path('project_task_history', {'idp': project.id , 'id': task.id}) }}">History</a>
+
         </div>
 
         <div class="m-5">
@@ -64,22 +67,16 @@
                 <tr>
                     <th>Worker</th>
                     <th>Description</th>
-                    <th>StartDate</th>
-                    <th>EndDate</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for work in task.works %}
+                {% for work in works %}
                     <tr class='clickable-row' data-href="{{ path('work_show', {'id': work.id}) }}">
                         <td>{{ work.user }}</td>
                         <td>{{ work.description }}</td>
-                        <td>{{ work.startDate ? work.startDate|date('Y-m-d H:i:s') : '' }}</td>
-                        <td>{{ work.endDate ? work.endDate|date('Y-m-d H:i:s') : '' }}</td>
                         <td>
                             {% if team.admin(userRole) %}
-                                <a class="btn btn-outline-primary"
-                                   href="{{ path('work_edit', {'id': work.id}) }}">Edit</a>
                                 {{ include('work/_delete_form.html.twig') }}
                             {% endif %}
                         </td>
@@ -104,6 +101,14 @@
 
         </div>
 
+        {# Graphs in next release #}
+        {#<canvas id="myChart"></canvas>#}
+        {#<script>#}
+            {#var data = {{ works|json_encode|raw }};#}
+            {#data = [0, 10, 5, 2, 20, 30, 45];#}
+            {#graphTask(data);#}
+        {#</script>#}
+
         <div class="m-5">
             <h3>Comments</h3>
             {#List of comments#}
@@ -124,7 +129,6 @@
         <div class="m-5">
             {{ include('task/_form_comment.html.twig') }}
         </div>
-
-
     </div>
+
 {% endblock %}

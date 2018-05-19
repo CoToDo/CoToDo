@@ -171,4 +171,14 @@ class Work
         if($this->getEndDate()===null) return false;
         return true;
     }
+
+
+    /**
+     * @return \DateInterval|null
+     */
+    public function getWorkTime(): ?\DateInterval
+    {
+        return $this->getStartDate()->diff($this->getEndDate());
+    }
+
 }

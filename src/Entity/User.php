@@ -70,6 +70,16 @@ class User implements UserInterface, \Serializable
     private $roles;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Notification", mappedBy="user", orphanRemoval=true)
+     */
+    private $notifications;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Notification", mappedBy="who")
+     */
+    private $notificationsCreate;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -77,6 +87,8 @@ class User implements UserInterface, \Serializable
         $this->comments = new ArrayCollection();
         $this->works = new ArrayCollection();
         $this->roles = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
+        $this->notificationsCreate = new ArrayCollection();
     }
 
     /**
@@ -262,6 +274,7 @@ class User implements UserInterface, \Serializable
      */
     public function  eraseCredentials()
     {
+        $this->plainPassword = null;
     }
 
     /**
@@ -286,6 +299,7 @@ class User implements UserInterface, \Serializable
     public function setPlainPassword($plainPassword): void
     {
         $this->plainPassword = $plainPassword;
+        $this->password = null;
     }
 
 
@@ -374,6 +388,68 @@ class User implements UserInterface, \Serializable
         if($this->getMail() == $user->getMail()) return true;
 
         return false;
+    }
+
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->contains($notification)) {
+            $this->notifications->removeElement($notification);
+            // set the owning side to null (unless already changed)
+            if ($notification->getUser() === $this) {
+                $notification->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotificationsCreate(): Collection
+    {
+        return $this->notificationsCreate;
+    }
+
+    public function addNotificationsCreate(Notification $notificationsCreate): self
+    {
+        if (!$this->notificationsCreate->contains($notificationsCreate)) {
+            $this->notificationsCreate[] = $notificationsCreate;
+            $notificationsCreate->setWho($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotificationsCreate(Notification $notificationsCreate): self
+    {
+        if ($this->notificationsCreate->contains($notificationsCreate)) {
+            $this->notificationsCreate->removeElement($notificationsCreate);
+            // set the owning side to null (unless already changed)
+            if ($notificationsCreate->getWho() === $this) {
+                $notificationsCreate->setWho(null);
+            }
+        }
+
+        return $this;
     }
 
 }

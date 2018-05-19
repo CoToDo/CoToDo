@@ -7,6 +7,7 @@ use App\Entity\Team;
 use App\Entity\User;
 use App\Entity\Work;
 use App\Form\WorkType;
+use App\Model\NotificationModel;
 use App\Repository\WorkRepository;
 use App\WarningMessages;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -31,7 +32,7 @@ class WorkController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("task.getProject().getTeam().isAdmin(user)")
      */
-    public function create(Request $request, Task $task): Response
+    public function create(Request $request, Task $task, \Swift_Mailer $mailer): Response
     {
         $work = new Work();
         $work->setTask($task);
@@ -59,6 +60,25 @@ class WorkController extends Controller
             $em->persist($work);
             $em->flush();
 
+            // persist notification
+            $notificationModel = new NotificationModel();
+            $notification = $notificationModel->work($work->getUser(), $work->getTask()->getProject(), $work->getTask(), $this->getUser());
+            $em->persist($notification);
+            $em->flush();
+
+            $message = (new \Swift_Message('CoToDo Notification'))
+                ->setFrom('info.cotodo@gmail.com')
+                ->setTo($notification->getUser()->getMail())
+                ->setBody(
+                    $this->renderView(
+                    // templates/emails/registration.html.twig
+                        'emails/task_work.html.twig',
+                        array('notification' => $notification)
+                    ),
+                    'text/html'
+                );
+            $mailer->send($message);
+
             return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
         }
 
@@ -82,34 +102,6 @@ class WorkController extends Controller
             'work' => $work,
             'team' => $work->getTask()->getProject()->getTeam(),
             'userRole' => $this->getUser()]);
-    }
-
-    /**
-     * @param Request $request
-     * @param Work $work
-     * @Route("/{id}/edit", name="work_edit", methods="GET|POST")
-     * @Security("has_role('ROLE_USER')")
-     * @Security("work.getTask().getProject().getTeam().isAdmin(user)")
-     * @return Response
-     */
-    public function edit(Request $request, Work $work): Response
-    {
-        $form = $this->createForm(WorkType::class, $work, [
-            'teamId' => $work->getTask()->getProject()->getTeam()->getId(),
-            'userRepository' => $this->getDoctrine()->getRepository(User::class),
-        ]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('project_task_index', ['id' => $work->getTask()->getProject()->getId()]);
-        }
-
-        return $this->render('work/edit.html.twig', [
-            'work' => $work,
-            'form' => $form->createView(),
-        ]);
     }
 
     /**
@@ -166,7 +158,7 @@ class WorkController extends Controller
      */
     public function setEnd(Work $work): Response
     {
-        //set createDate
+        // set createDate
         $dateTime = new \DateTime('now');;
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         if (null === $work->getEndDate()) {
@@ -175,6 +167,14 @@ class WorkController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($work);
+        $em->flush();
+
+        $newWork = new Work();
+        $newWork->setUser($work->getUser());
+        $newWork->setDescription($work->getDescription());
+        $newWork->setTask($work->getTask());
+
+        $em->persist($newWork);
         $em->flush();
 
         return $this->redirectToRoute('dashboard');

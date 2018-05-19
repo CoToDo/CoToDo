@@ -7,6 +7,10 @@
         <div class="m-5">
             <h1 class="my-5">{{ project.name }}</h1>
 
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{ percent }}%" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <br>
             <table class="table">
                 <tbody>
                     <tr>
@@ -64,6 +68,9 @@
                             {% if task.completionDate is null and (team.admin(userRole) or team.leader(userRole)) %}
                                 <a class="btn btn-outline-success" href="{{ path('project_task_complete', {'idp': project.id, 'id': task.id}) }}">Complete task</a>
                             {% endif %}
+
+                            <a class="btn btn-outline-dark" href="{{ path('project_task_history', {'idp': project.id , 'id': task.id}) }}">History</a>
+
                         </td>
                     </tr>
 

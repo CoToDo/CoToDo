@@ -1,0 +1,3 @@
+{% extends 'notification/base_notification.html.twig' %}
+{% block notification_text %}Your role has been changed by <b>{{ notification.who }}</b>. {% endblock %}
+{% block notification_icon %}<i class="fas fa-user-edit float-right"></i>{% endblock %}

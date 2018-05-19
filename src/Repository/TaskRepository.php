@@ -32,9 +32,9 @@ class TaskRepository extends ServiceEntityRepository
             ->join('t.works',"w")
             ->where('w.user = :val')
             ->andWhere('t.completionDate IS NULL')
+            ->andWhere('w.endDate IS NULL')
             ->setParameter('val', $id)
             ->orderBy('t.priority, t.deadline', 'ASC')
-//            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
@@ -83,6 +83,19 @@ class TaskRepository extends ServiceEntityRepository
             ->andWhere('t.completionDate IS NULL')
             ->setParameter('val', $id)
             ->orderBy('t.priority, t.deadline', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @return Task[] Returns count of closed tasks in project
+     */
+    public function getCountClosedTasks($projectId) {
+        return $this->createQueryBuilder('t')
+        ->andWhere('t.project = :id')
+            ->setParameter('id', $projectId)
+            ->andWhere('t.completionDate IS NOT NULL')
             ->getQuery()
             ->getResult()
             ;
