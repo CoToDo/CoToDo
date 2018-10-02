@@ -98,16 +98,14 @@
                 <a class="btn btn-outline-warning" href="{{ path('work_assign_yourself', {'id': task.id}) }}">Assign yourself</a>
             {% endif %}
 
-
         </div>
 
-        {# Graphs in next release #}
-        {#<canvas id="myChart"></canvas>#}
-        {#<script>#}
-            {#var data = {{ works|json_encode|raw }};#}
-            {#data = [0, 10, 5, 2, 20, 30, 45];#}
-            {#graphTask(data);#}
-        {#</script>#}
+        <canvas id="myChart"></canvas>
+        <script>
+            var data = {{ times|json_encode | raw }};
+            var datas = {{ users|json_encode | raw }};
+            graphTask(data,datas);
+        </script>
 
         <div class="m-5">
             <h3>Comments</h3>
