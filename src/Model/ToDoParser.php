@@ -5,13 +5,17 @@ namespace App\Model;
 
 class ToDoParser {
 
+    /** @var string regular expression for date in format YYYY-MM-DD */
     private const REG_DATE_TIME = "/^[1-9][0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/";
-//    private const REG_DATE_TIME = "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/";
 
+    /**
+     * Parse line and set data to TaskTO object
+     * @param string $line
+     * @return TaskTO
+     */
     public function parse(string $line) {
         $task = new TaskTO();
         $arLine = explode(" ", $line);
-
 
         $this->getCompletion($arLine, $task);
         $this->getPriority($arLine, $task);
@@ -19,6 +23,11 @@ class ToDoParser {
         $this->getProjects($arLine, $task);
         $this->getTags($arLine, $task);
         $this->getMessage($arLine, $task);
+        if (!$task->isPrioritySet()) {
+            // TODO get priority from pri:value
+        }
+
+        // TODO get deadline due:value
 
         return $task;
     }
@@ -58,6 +67,7 @@ class ToDoParser {
     }
 
     /**
+     * Get Dates from string and set it to TaskTO object
      * @param array $outArLine
      * @param TaskTO $task
      */
@@ -85,6 +95,7 @@ class ToDoParser {
     }
 
     /**
+     * Get projects from string and set it to TaskTO object
      * @param array $outArLine
      * @param TaskTO $task
      */
@@ -103,6 +114,7 @@ class ToDoParser {
     }
 
     /**
+     * Get tags from string and set it to TaskTO object
      * @param array $outArLine
      * @param TaskTO $task
      */
@@ -121,6 +133,7 @@ class ToDoParser {
     }
 
     /**
+     * Get message from string and set it to TaskTo object as name
      * @param array $outArLine
      * @param TaskTO $task
      */
@@ -140,10 +153,28 @@ class ToDoParser {
         $task->setName($strMessage);
     }
 
+    private function getPriorityFromSpecial($utArLine, $task) {
+
+    }
+
+    private function getDeadline($outArLine, $task) {
+
+    }
+
+    /**
+     * Is message?
+     * @param string $strItem
+     * @return bool
+     */
     private function isMessage($strItem) {
         return !$this->isProjectTagOrSpecial($strItem);
     }
 
+    /**
+     * Is Project? (Starts with '+')
+     * @param string $strItem
+     * @return bool
+     */
     private function isProject($strItem) {
         if (isset($strItem[0]) && $strItem[0] == '+') {
             return true;
@@ -151,6 +182,11 @@ class ToDoParser {
         return false;
     }
 
+    /**
+     * Is Tag? (Starts with '@')
+     * @param string $strItem
+     * @return bool
+     */
     private function isTag($strItem) {
         if (isset($strItem[0]) && $strItem[0] == '@') {
             return true;
@@ -158,6 +194,11 @@ class ToDoParser {
         return false;
     }
 
+    /**
+     * Is special? (key:vaue)
+     * @param string $strItem
+     * @return bool
+     */
     private function isSpecial($strItem) {
         if (strpos($strItem, ':') !== false) {
             return true;
@@ -165,6 +206,11 @@ class ToDoParser {
         return false;
     }
 
+    /**
+     * Is Project | Tag | Special?
+     * @param string $strItem
+     * @return bool
+     */
     private function isProjectTagOrSpecial($strItem) {
         return $this->isProject($strItem) || $this->isTag($strItem) || $this->isSpecial($strItem);
     }
