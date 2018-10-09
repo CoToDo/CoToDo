@@ -13,7 +13,7 @@ class TaskTO
     private $name = "";
 
     /** @var string */
-    private $priority = "";
+    private $priority;
 
     /** @var \DateTime */
     private $createDate;
@@ -74,7 +74,7 @@ class TaskTO
     /**
      * @return string
      */
-    public function getPriority(): string
+    public function getPriority(): ?string
     {
         return $this->priority;
     }
@@ -90,7 +90,7 @@ class TaskTO
     /**
      * @return \DateTime
      */
-    public function getCreateDate(): \DateTime
+    public function getCreateDate(): ?\DateTime
     {
         return $this->createDate;
     }
@@ -106,7 +106,7 @@ class TaskTO
     /**
      * @return \DateTime
      */
-    public function getCompletionDate(): \DateTime
+    public function getCompletionDate(): ?\DateTime
     {
         return $this->completionDate;
     }
@@ -122,7 +122,7 @@ class TaskTO
     /**
      * @return \DateTime
      */
-    public function getDeadline(): \DateTime
+    public function getDeadline(): ?\DateTime
     {
         return $this->deadline;
     }
@@ -154,7 +154,7 @@ class TaskTO
     /**
      * @return string
      */
-    public function getProject(): string
+    public function getProject(): ?string
     {
         return $this->project;
     }

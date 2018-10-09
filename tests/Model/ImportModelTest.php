@@ -15,8 +15,10 @@ class ImportModelTest extends TestCase {
             "@GroceryStore Eskimo pies"
         );
 
-        $resPriority = array("A", "B", "", "");
+        $resPriority = array("A", "B", null, null);
         $resCompletion = array(false, false, false, false);
+        $resCreationDate = array(null, null, null, null);
+        $resCompletionDate = array(null, null, null, null);
         $resMessage = array(
             "Thank Mom for the meatballs",
             "Schedule Goodwill pickup",
@@ -31,6 +33,8 @@ class ImportModelTest extends TestCase {
             $task = $m->parse($line);
             $this->assertEquals($resCompletion[$counter], $task->isCompletion());
             $this->assertEquals($resPriority[$counter], $task->getPriority());
+            $this->assertEquals($resCreationDate[$counter], $task->getCreateDate());
+            $this->assertEquals($resCompletionDate[$counter], $task->getCompletionDate());
             $counter++;
         }
 
