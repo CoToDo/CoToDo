@@ -2,9 +2,8 @@
 
 use App\Model\ToDoParser;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
-use App\Model\ImportModel;
 
-class ImportModelTest extends TestCase {
+class ToDoParserTest extends TestCase {
 
     public function testImport() {
         $parser = new ToDoParser();
