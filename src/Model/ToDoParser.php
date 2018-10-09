@@ -24,11 +24,9 @@ class ToDoParser {
         $this->getTags($arLine, $task);
         $this->getMessage($arLine, $task);
         if (!$task->isPrioritySet()) {
-            // TODO get priority from pri:value
+            $this->getPriorityFromSpecial($arLine, $task);
         }
-
-        // TODO get deadline due:value
-
+        $this->getDeadline($arLine, $task);
         return $task;
     }
 
@@ -153,12 +151,40 @@ class ToDoParser {
         $task->setName($strMessage);
     }
 
-    private function getPriorityFromSpecial($utArLine, $task) {
-
+    /**
+     * Get priority as special value (pri:value)
+     * @param array $outArLine
+     * @param TaskTO $task
+     */
+    private function getPriorityFromSpecial(&$outArLine, $task) {
+        $counter = 0;
+        foreach ($outArLine as $item) {
+            if ($this->isSpecialPriority($item)) {
+                $task->setPriority(substr($item, 4));
+                array_splice($outArLine, $counter, 1);
+                break;
+            }
+        }
     }
 
-    private function getDeadline($outArLine, $task) {
-
+    /**
+     * Get deadline as special value (due:value)
+     * @param array $outArLine
+     * @param TaskTO $task
+     */
+    private function getDeadline(&$outArLine, $task) {
+        $counter = 0;
+        foreach ($outArLine as $item) {
+            if ($this->isSpecialDeadline($item)) {
+                $deadline = substr($item, 4);
+                if (!preg_match(self::REG_DATE_TIME, $deadline)) {
+                    // TODO wrong date time format
+                }
+                $task->setDeadline(new \DateTime($deadline));
+                array_splice($outArLine, $counter, 1);
+                break;
+            }
+        }
     }
 
     /**
@@ -206,6 +232,28 @@ class ToDoParser {
         return false;
     }
 
+    /** Is special priority? (pri:value)
+     * @param string $strItem
+     * @return bool
+     */
+    private function isSpecialPriority($strItem) {
+        if (substr($strItem, 0, 4) == "pri:") {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Is Deadline? (due:value)
+     * @param string $strItem
+     * @return bool
+     */
+    private function isSpecialDeadline($strItem) {
+        if (substr($strItem, 0, 4) == "due:") {
+            return true;
+        }
+        return false;
+    }
     /**
      * Is Project | Tag | Special?
      * @param string $strItem
