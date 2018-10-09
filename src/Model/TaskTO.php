@@ -27,8 +27,8 @@ class TaskTO
     /** @var array */
     private $tags;
 
-    /** @var string */
-    private $project;
+    /** @var array */
+    private $projects;
 
     public function isPrioritySet()
     {
@@ -152,19 +152,19 @@ class TaskTO
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getProject(): ?string
+    public function getProjects(): array
     {
-        return $this->project;
+        return $this->projects;
     }
 
     /**
-     * @param string $project
+     * @param array $projects
      */
-    public function setProject(string $project): void
+    public function setProjects(array $projects): void
     {
-        $this->project = $project;
+        $this->projects = $projects;
     }
 
 }
