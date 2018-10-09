@@ -41,7 +41,8 @@ class ImportModel {
     }
 
     /**
-     * @param array $arLine
+     * Get completion from string and set it to TaskTO object
+     * @param array $outArLine
      * @param TaskTO $task
      */
     private function getCompletion(&$outArLine, $task) {
@@ -54,18 +55,18 @@ class ImportModel {
     }
 
     /**
+     * get Priority from string and set it to TaskTO object
      * @param array $outArLine
      * @param TaskTO $task
      */
     private function getPriority(&$outArLine, $task) {
         if (preg_match("/^\([A-Z]\)$/", $outArLine[0])) {
-            var_dump($outArLine[0]);
             $task->setPriority($outArLine[0][1]);
             array_shift($outArLine);
         }
     }
 
-    private function saveToDatabse() {
+    private function saveToDatabse($task) {
 
     }
 

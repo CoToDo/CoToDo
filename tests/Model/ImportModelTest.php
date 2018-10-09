@@ -1,6 +1,5 @@
 <?php
 
-use App\Model\TaskTO;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 use App\Model\ImportModel;
 
@@ -18,12 +17,19 @@ class ImportModelTest extends TestCase {
 
         $resPriority = array("A", "B", "", "");
         $resCompletion = array(false, false, false, false);
+        $resMessage = array(
+            "Thank Mom for the meatballs",
+            "Schedule Goodwill pickup",
+            "Post signs around the neighborhood",
+            "Eskimo pies"
+        );
+        $resProject = array(array(), array("GarageSale"), array("GarageSale"), array());
+        $resTags = array(array("phone"), array("phone"), array(), array("GroceryStore"));
 
         $counter = 0;
         foreach ($arLines as $line) {
             $task = $m->parse($line);
             $this->assertEquals($resCompletion[$counter], $task->isCompletion());
-            echo "priority ". $task->getPriority() . PHP_EOL;
             $this->assertEquals($resPriority[$counter], $task->getPriority());
             $counter++;
         }

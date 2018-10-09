@@ -30,6 +30,15 @@ class TaskTO
     /** @var string */
     private $project;
 
+    public function isPrioritySet()
+    {
+        if (isset($this->priority)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * @return bool
      */
