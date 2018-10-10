@@ -3,6 +3,8 @@
 namespace App\Model;
 
 
+use App\Exception\WrongLineFormatException;
+
 class ToDoParser {
 
     /** @var string regular expression for date in format YYYY-MM-DD */
@@ -12,6 +14,7 @@ class ToDoParser {
      * Parse line and set data to TaskTO object
      * @param string $line
      * @return TaskTO
+     * @throws WrongLineFormatException
      */
     public function parse(string $line) {
         $task = new TaskTO();
@@ -34,6 +37,7 @@ class ToDoParser {
      * Get completion from string and set it to TaskTO object
      * @param array $outArLine
      * @param TaskTO $task
+     * @throws WrongLineFormatException
      */
     private function getCompletion(&$outArLine, $task) {
         if (isset($outArLine[0])) {
@@ -44,7 +48,7 @@ class ToDoParser {
                 $task->setCompletion(false);
             }
         } else {
-            // TODO wrong line
+            throw new WrongLineFormatException();
         }
     }
 
@@ -52,6 +56,7 @@ class ToDoParser {
      * get Priority from string and set it to TaskTO object
      * @param array $outArLine
      * @param TaskTO $task
+     * @throws WrongLineFormatException
      */
     private function getPriority(&$outArLine, $task) {
         if (isset($outArLine[0])) {
@@ -60,7 +65,7 @@ class ToDoParser {
                 array_shift($outArLine);
             }
         } else {
-            // TODO wrong line
+            throw new WrongLineFormatException();
         }
     }
 
@@ -68,6 +73,7 @@ class ToDoParser {
      * Get Dates from string and set it to TaskTO object
      * @param array $outArLine
      * @param TaskTO $task
+     * @throws WrongLineFormatException
      */
     private function getDates(&$outArLine, $task) {
         if (isset($outArLine[0])) {
@@ -84,11 +90,11 @@ class ToDoParser {
                         array_shift($outArLine);
                     }
                 } else {
-                    // TODO wrong line
+                    throw new WrongLineFormatException();
                 }
             }
         } else {
-            // TODO wrong line
+            throw new WrongLineFormatException();
         }
     }
 
@@ -171,6 +177,7 @@ class ToDoParser {
      * Get deadline as special value (due:value)
      * @param array $outArLine
      * @param TaskTO $task
+     * @throws WrongLineFormatException
      */
     private function getDeadline(&$outArLine, $task) {
         $counter = 0;
@@ -178,7 +185,7 @@ class ToDoParser {
             if ($this->isSpecialDeadline($item)) {
                 $deadline = substr($item, 4);
                 if (!preg_match(self::REG_DATE_TIME, $deadline)) {
-                    // TODO wrong date time format
+                    throw new WrongLineFormatException();
                 }
                 $task->setDeadline(new \DateTime($deadline));
                 array_splice($outArLine, $counter, 1);

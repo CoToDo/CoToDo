@@ -39,6 +39,11 @@ class TaskTO
         }
     }
 
+    public function getProject()
+    {
+        return $this->projects[0];
+    }
+
     /**
      * @return bool
      */

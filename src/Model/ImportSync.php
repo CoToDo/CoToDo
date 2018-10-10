@@ -2,14 +2,24 @@
 
 namespace App\Model;
 
+use App\Entity\Task;
+use App\Repository\ProjectRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
+
 class ImportSync {
 
     private $defProject;
+    private $em;
+    private $doctrine;
+    private $projectRepository;
 
     /**
      * ImportSync constructor.
      */
-    public function __construct($defProject) {
+    public function __construct(ManagerRegistry $doctrine, ProjectRepository $projectRepository, $defProject) {
+        $this->doctrine = $doctrine;
+        $this->em = $this->em = $this->doctrine->getManager();
+        $this->projectRepository = $projectRepository;
         $this->defProject = $defProject;
     }
 
@@ -18,8 +28,17 @@ class ImportSync {
      * @param TaskTO $task
      */
     public function saveTask($task) {
+        // TODO  is this right?
+        $project = $this->projectRepository->findProjectByName($task->getProject());
 
+        $taskToSave = new Task();
+        $taskToSave->setName($task->getName());
+        $taskToSave->setPriority($task->getPriority());
+        $taskToSave->setCreateDate($task->getCreateDate());
+        $taskToSave->setCompletionDate($task->getCompletionDate());
+        $taskToSave->setDeadline($task->getDeadline());
 
+        // TODO save to databse
 
     }
 
