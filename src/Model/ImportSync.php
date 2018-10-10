@@ -28,18 +28,16 @@ class ImportSync {
      * @param TaskTO $task
      */
     public function saveTask($task) {
-        // TODO  is this right?
         $project = $this->projectRepository->findProjectByName($task->getProject());
-
         $taskToSave = new Task();
         $taskToSave->setName($task->getName());
         $taskToSave->setPriority($task->getPriority());
         $taskToSave->setCreateDate($task->getCreateDate());
         $taskToSave->setCompletionDate($task->getCompletionDate());
         $taskToSave->setDeadline($task->getDeadline());
-
-        // TODO save to databse
-
+        $taskToSave->setProject($project);
+        $this->em->persist($taskToSave);
+        $this->em->flush();
     }
 
 }
