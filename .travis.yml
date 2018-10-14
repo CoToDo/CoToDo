@@ -1,0 +1,13 @@
+language: php
+php:
+  - '7.1'
+
+install:
+  - composer install
+
+addons:
+  sonarcloud:
+    organization: "cotodo"
+
+script:
+  - sonar-scanner
