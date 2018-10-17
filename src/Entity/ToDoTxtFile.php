@@ -1,14 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Kiki
- * Date: 17. 10. 2018
- * Time: 13:30
- */
 
 namespace App\Entity;
 
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 class ToDoTxtFile
 {

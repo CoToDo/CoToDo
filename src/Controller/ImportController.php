@@ -6,6 +6,7 @@ use App\Entity\ToDoTxtFile;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -28,14 +29,20 @@ class ImportController extends Controller
             $fileName = md5(uniqid()) . '.' . $file->guessExtension();
             $file->move($this->getParameter('file_directory'), $fileName);
             $ToDoTxtFile->setFile($fileName);
-            return new Response("User file is successfully uploaded.");
+
+            $file = new File($this->getParameter('file_directory').'/' . $ToDoTxtFile->getFile());
+//            echo $file->getPath() . "/" . $ToDoTxtFile->getFile();
+
+            return $this->render('import/index.html.twig', [
+                'controller_name' => 'ImportController',
+                'form' => $form->createView(),
+            ]);
         } else {
             return $this->render('import/index.html.twig', [
                 'controller_name' => 'ImportController',
                 'form' => $form->createView(),
             ]);
         }
-
 
     }
 }
