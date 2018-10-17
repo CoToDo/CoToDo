@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ controller_name }}!{% endblock %}
+
+          {% block javascripts %}
+        <script language = "javascript" src = "https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    {% endblock %}
+
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Import todo.txt file</h1>
+
+    <input type="file" name="txt" >
+    <button class="btn btn-large btn-primary" type="submit">Upload</button>
+
+        <h3>File upload</h3>
+        <div id="simpleform">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+
+    <ul>
+        <li>Your controller at <code>src/Controller/ImportController.php</code></li>
+        <li>Your template at <code>templates/import/index.html.twig</code></li>
+    </ul>
+</div>
+{% endblock %}
