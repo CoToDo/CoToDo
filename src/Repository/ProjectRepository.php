@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,8 +39,7 @@ class ProjectRepository extends ServiceEntityRepository
             ->setParameter('id', $id)
             ->orderBy('p.id', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
 
@@ -47,8 +48,7 @@ class ProjectRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->select('p.name')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
 
@@ -56,10 +56,22 @@ class ProjectRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.name LIKE :param')
-            ->setParameter('param', '%' . $param . '%' )
+            ->setParameter('param', '%' . $param . '%')
             ->orderBy('p.name', 'ASC')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
+    }
+
+    /**
+     * @param $name
+     * @return Project
+     */
+    public function findProjectByName($name)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.name = :param')
+            ->setParameter("param", $name)
+            ->getQuery()
+            ->getResult();
     }
 }
