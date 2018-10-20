@@ -5,23 +5,15 @@ body {
     height: 100%;
 }
 
-
-.main-div-crud {
-    margin: 0 22vw;
-}
-.main-div-crud-big {
-    margin: 0 15vw;
-}
-.main-div-crud-list {
-    margin: 0 8vw;
+table{
+    white-space: nowrap;
 }
 
-.tablecenter {
-    border-radius: 5px;
-    width: 0%;
-    margin: 0px auto;
-    float: none;
+table th:last-child,
+table td:last-child{
+    text-align: right;
 }
+
 .clickable-row{
     cursor: pointer;
 }

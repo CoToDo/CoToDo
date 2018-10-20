@@ -3,46 +3,44 @@
 {% block title %}Task{% endblock %}
 
 {% block body %}
-    <div class="main-div-crud">
-
-        {% for message in app.flashes('notice') %}
-            <div class="flash-notice">
-                {{ message }}
-            </div>
-        {% endfor %}
-        <div class="m-5">
+    {% for message in app.flashes('notice') %}
+        <div class="flash-notice">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <div class="row mb-5">
+        <div class="col">
             <h1>{{ task.name }}</h1>
-
-            <table class="table">
-                <tbody>
-                <tr>
-                    <th>Priority</th>
-                    <td>{{ task.priority }}</td>
-                </tr>
-                <tr>
-                    <th>Create date</th>
-                    <td>{{ task.createDate ? task.createDate|date('Y-m-d H:i:s') : '' }}</td>
-                </tr>
-                <tr>
-                    <th>Completion date</th>
-                    <td>{{ task.completionDate ? task.completionDate|date('Y-m-d H:i:s') : '' }}</td>
-                </tr>
-                <tr>
-                    <th>Deadline</th>
-                    <td>{{ task.deadline ? task.deadline|date('Y-m-d') : '' }}</td>
-                </tr>
-                <tr>
-                    <th>Tags</th>
-                    <td>
-                        {% for tag in task.tags %}
-                            {{ tag.name }}
-                        {% endfor %}
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <th>Priority</th>
+                        <td>{{ task.priority }}</td>
+                    </tr>
+                    <tr>
+                        <th>Create date</th>
+                        <td>{{ task.createDate ? task.createDate|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Completion date</th>
+                        <td>{{ task.completionDate ? task.completionDate|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Deadline</th>
+                        <td>{{ task.deadline ? task.deadline|date('Y-m-d') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Tags</th>
+                        <td>
+                            {% for tag in task.tags %}
+                                {{ tag.name }}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
             <a class="btn btn-outline-secondary" href="{{ path('project_task_index', {'id': project.id}) }}">Back to
                 list</a>
             <a class="btn btn-outline-secondary" href="{{ path('project_show', {'id': project.id}) }}">Back to project</a>
@@ -54,66 +52,64 @@
                    href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
                 {{ include('task/_delete_form.html.twig') }}
             {% endif %}
-
             <a class="btn btn-outline-dark" href="{{ path('project_task_history', {'idp': project.id , 'id': task.id}) }}">History</a>
-
         </div>
+    </div>
 
-        <div class="m-5">
+    <div class="row mb-5">
+        <div class="col">
             <h3>Asignees</h3>
-
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>Worker</th>
-                    <th>Description</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for work in works %}
-                    <tr class='clickable-row' data-href="{{ path('work_show', {'id': work.id}) }}">
-                        <td>{{ work.user }}</td>
-                        <td>{{ work.description }}</td>
-                        <td>
-                            {% if team.admin(userRole) %}
-                                {{ include('work/_delete_form.html.twig') }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% else %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
                     <tr>
-                        <td colspan="5">No records found</td>
+                        <th>Worker</th>
+                        <th>Description</th>
+                        <th>Actions</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for work in works %}
+                        <tr class='clickable-row' data-href="{{ path('work_show', {'id': work.id}) }}">
+                            <td>{{ work.user }}</td>
+                            <td>{{ work.description }}</td>
+                            <td>
+                                {% if team.admin(userRole) %}
+                                    {{ include('work/_delete_form.html.twig') }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">No records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% if team.admin(userRole) %}
+            <a class="btn btn-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
+        {% endif %}
 
-
-            {% if team.admin(userRole) %}
-                <a class="btn btn-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
-            {% endif %}
-
-            {% if not task.userSet(userRole)%}
-                <a class="btn btn-outline-warning" href="{{ path('work_assign_yourself', {'id': task.id}) }}">Assign yourself</a>
-            {% endif %}
-
-
+        {% if not task.userSet(userRole)%}
+            <a class="btn btn-outline-warning" href="{{ path('work_assign_yourself', {'id': task.id}) }}">Assign yourself</a>
+        {% endif %}
         </div>
+    </div>
 
-        {# Graphs in next release #}
-        {#<canvas id="myChart"></canvas>#}
-        {#<script>#}
-            {#var data = {{ works|json_encode|raw }};#}
-            {#data = [0, 10, 5, 2, 20, 30, 45];#}
-            {#graphTask(data);#}
-        {#</script>#}
+    {# Graphs in next release #}
+    {#<canvas id="myChart"></canvas>#}
+    {#<script>#}
+        {#var data = {{ works|json_encode|raw }};#}
+        {#data = [0, 10, 5, 2, 20, 30, 45];#}
+        {#graphTask(data);#}
+    {#</script>#}
 
-        <div class="m-5">
+    <div class="row">
+        <div class="col">
             <h3>Comments</h3>
-            {#List of comments#}
             {% for comment in task.comments %}
-                <div class="mb-4">
+                <div class="mb-2">
                     <p class="pright"> {{ comment.user }} {{ comment.date ? comment.date|date('Y-m-d H:i:s') : '' }} </p>
                     <textarea readonly class="form-control auto-expand" rows="1">{{ comment.text }}</textarea>
                     {#Only the author can delete his own comment#}
@@ -124,10 +120,7 @@
                     {% endif %}
                 </div>
             {% endfor %}
-        </div>
-
-        <div class="m-5">
-            {{ include('task/_form_comment.html.twig') }}
+        {{ include('task/_form_comment.html.twig') }}
         </div>
     </div>
 

@@ -29,8 +29,9 @@
     </div>
     <div class="form-row form-group">
         <div class="col">
-            {{ form_label(form.tags, null, {'label_attr': {'class': 'col-form-label'}} )}}
+            {{ form_label(form.tags, null, {'label_attr': {'class': 'col-form-label pica'}} )}}
             {{ form_errors(form.tags) }}
+            {% do form.tags.setRendered() %}
             {#Collection of text fields for adding multiple tags at once#}
             <div class="tags" data-prototype="{{ formMacros.getTagPrototype(form.tags.vars.prototype)|e('html_attr') }}">
                 {% for tag in form.tags %}

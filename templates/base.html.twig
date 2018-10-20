@@ -15,8 +15,6 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-
-
         <nav class="navbar navbar-expand-xl navbar-light shadow-lg py-3 px-3 mb-5 rounded-bottom sticky-top navbar-background">
             <a class="navbar-brand p-0 " href="{{ path('dashboard') }}">
                 <img src="{{ asset('icon.svg') }}" width="60" height="50" class="d-inline-block align-top navicon" alt="">
@@ -32,10 +30,10 @@
                             <a class="nav-link button-navbar" href="{{ path('project_new') }}"><i class="far fa-plus-square"></i> Create Project</a>
                         </li>
                         <li class="nav-item active">
-                            <a class="nav-link button-navbar" href="{{ path('team_new') }}"><i class="fas fa-user"></i> Create Team</a>
+                            <a class="nav-link button-navbar" href="{{ path('project_index') }}"><i class="fas fa-tasks"></i> My Projects</a>
                         </li>
                         <li class="nav-item active">
-                            <a class="nav-link button-navbar" href="{{ path('project_index') }}"><i class="fas fa-tasks"></i> My Projects</a>
+                            <a class="nav-link button-navbar" href="{{ path('team_new') }}"><i class="fas fa-user"></i> Create Team</a>
                         </li>
                         <li class="nav-item active">
                             <a class="nav-link button-navbar" href="{{ path('team_index') }}"> <i class="fas fa-users"></i> My Teams</a>
@@ -78,6 +76,14 @@
                 </div>
             </div>
         </nav>
+        <div class="container-fluid mb-5">
+            <div class="row justify-content-center">
+                <div class="col-xl-10">
+                        {% block body %}{% endblock %}
+                </div>
+            </div>
+        </div>
+
     {% block javascripts %}
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
                 integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -96,6 +102,5 @@
 
     {% endblock %}
 
-    {% block body %}{% endblock %}
     </body>
 </html>

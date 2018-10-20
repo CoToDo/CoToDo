@@ -3,37 +3,38 @@
 {% block title %}Tasks{% endblock %}
 
 {% block body %}
-    <div class="main-div-crud-list">
-
-        <h1>{{ task.name }} history</h1>
-
-        <br>
-
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Worker</th>
-                    <th>Description</th>
-                    <th>StartDate</th>
-                    <th>EndDate</th>
-                    <th>WorkTime</th>
-                </tr>
-            </thead>
-            <tbody id="myTable">
-            {% for work in works %}
-                <tr>
-                    <td>{{ work.user }}</td>
-                    <td>{{ work.description }}</td>
-                    <td>{{ work.startDate ? work.startDate|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>{{ work.endDate ? work.endDate|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>{{ work.workTime ? work.workTime| date('%h:%i:%s')}}</td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="6">No records found</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1>{{ task.name }} history</h1>
+            <br>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Worker</th>
+                            <th>Description</th>
+                            <th>StartDate</th>
+                            <th>EndDate</th>
+                            <th>WorkTime</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                    {% for work in works %}
+                        <tr>
+                            <td>{{ work.user }}</td>
+                            <td>{{ work.description }}</td>
+                            <td>{{ work.startDate ? work.startDate|date('Y-m-d H:i:s') : '' }}</td>
+                            <td>{{ work.endDate ? work.endDate|date('Y-m-d H:i:s') : '' }}</td>
+                            <td>{{ work.workTime ? work.workTime| date('%h:%i:%s')}}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6">No records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 {% endblock %}
