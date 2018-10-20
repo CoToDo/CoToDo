@@ -38,9 +38,10 @@ table td:last-child{
     color: #2C6F94 !important;
 }
 
-.navbar-brand img{
-}
 
+.navbar-light .nav-link{
+    color: rgba(0,0,0,.5) !important;
+}
 .dropdown-menu{
     min-width: 20rem;
 }
