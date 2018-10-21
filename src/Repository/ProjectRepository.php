@@ -3,10 +3,13 @@
 namespace App\Repository;
 
 use App\Entity\Project;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NativeQuery;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -64,14 +67,26 @@ class ProjectRepository extends ServiceEntityRepository
 
     /**
      * @param $name
-     * @return Project
+     * @param User $user
+     * @return int
      */
-    public function findProjectByName($name)
+    public function findIdProjectByName(string $name, User $user)
     {
-        return $this->createQueryBuilder('p')
+       /** select p.id from project p join team t on(t.id=p.team_id) join role r on (r.team_id=t.id) join app_users u on (r.user_id = u.id) where p.name = 'new_project'; */
+       /** SELECT p.id FROM project p LEFT JOIN team t LEFT JOIN role r LEFT JOIN app_users u WHERE t.id = p.team_id AND t.id = r.team_id AND u.id = r.user_id AND u.id = '4' AND p.name = 'new_project'; */
+         $q = $this->createQueryBuilder('p')
+             ->select('p.id')
+            ->leftJoin('p.team', 't')
+            ->leftJoin('t.roles', 'r')
+            ->leftJoin('r.user', 'u')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $user->getId())
             ->andWhere('p.name = :param')
             ->setParameter("param", $name)
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
+//         var_dump($q->getDQL());
+        $res = $q->getResult();
+         return isset($res[0]['id']) ? $res[0]['id'] : null;
     }
+
 }

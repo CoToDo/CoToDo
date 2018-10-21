@@ -41,7 +41,7 @@ class TaskTO
 
     public function getProject()
     {
-        return $this->projects[0];
+        return isset($this->projects[0]) ? $this->projects[0] : "";
     }
 
     /**
