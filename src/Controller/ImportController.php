@@ -20,7 +20,7 @@ class ImportController extends Controller
         $ToDoTxtFile=new ToDoTxtFile();
         $form = $this->createFormBuilder($ToDoTxtFile)
             ->add('file', FileType::class, array('label' => 'Plain text file (txt)'))
-            ->add('save', SubmitType::class, array('label' => 'Submit', 'attr'=> array('class'=>'btn btn-large btn-primary')))
+            ->add('save', SubmitType::class, array('label' => 'Upload', 'attr'=> array('class'=>'btn btn-large btn-primary')))
             ->getForm();
 
         $form->handleRequest($request);

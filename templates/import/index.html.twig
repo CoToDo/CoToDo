@@ -3,7 +3,21 @@
 {% block title %} {{ controller_name }}!{% endblock %}
 
           {% block javascripts %}
-        <script language = "javascript" src = "https://code.jquery.com/jquery-2.2.4.min.js"></script>
+              <script language = "javascript" src = "https://code.jquery.com/jquery-2.2.4.min.js"></script>
+              <script>
+                  var openFile = function(event) {
+                      var input = event.target;
+
+                      var reader = new FileReader();
+                      reader.onload = function(){
+                          var text = reader.result;
+                          var node = document.getElementById('myTextArea');
+                          node.innerText = text;
+                          console.log(reader.result.substring(0, 200));
+                      };
+                      reader.readAsText(input.files[0]);
+                  };
+              </script>
     {% endblock %}
 
 
@@ -16,9 +30,6 @@
 <div class="example-wrapper">
     <h1>Import todo.txt file</h1>
 
-    <input type="file" name="txt" >
-    <button class="btn btn-large btn-primary" type="submit">Upload</button>
-
         <h3>File upload</h3>
         <div id="simpleform">
             {{ form_start(form) }}
@@ -26,9 +37,14 @@
             {{ form_end(form) }}
         </div>
 
-    <ul>
-        <li>Your controller at <code>src/Controller/ImportController.php</code></li>
-        <li>Your template at <code>templates/import/index.html.twig</code></li>
-    </ul>
+    <h3>Upload and Edit TXT File</h3>
+
+    <input type='file' accept='text/plain' onchange='openFile(event)'><br>
+    {#<div id='output'>#}
+    <textarea id="myTextArea" rows="10" columns="10"></textArea>
+
+
+
+
 </div>
 {% endblock %}
