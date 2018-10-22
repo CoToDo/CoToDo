@@ -13,6 +13,7 @@ use App\Entity\Work;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
 use App\Repository\TeamRepository;
+use App\Repository\WorkRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 class ImportSync {
@@ -23,18 +24,20 @@ class ImportSync {
     private $projectRepository;
     private $taskRepository;
     private $teamRepository;
+    private $workRepository;
     private $user;
     private $dateTime;
 
     /**
      * ImportSync constructor.
      */
-    public function __construct(ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository, $defProject, User $user) {
+    public function __construct(ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository, WorkRepository $workRepository, $defProject, User $user) {
         $this->doctrine = $doctrine;
         $this->em = $this->em = $this->doctrine->getManager();
         $this->projectRepository = $projectRepository;
         $this->taskRepository = $taskRepository;
         $this->teamRepository = $teamRepository;
+        $this->workRepository = $workRepository;
         $this->defProject = $defProject;
         $this->user = $user;
         /* date time inicialization */
@@ -54,9 +57,9 @@ class ImportSync {
         if (isset($projectId)) {
             $project = $this->projectRepository->find($projectId);
             // find task in this project
-            $taskId = $this->taskRepository->findTaskInProject($projectId);
+
+            $taskId = $this->taskRepository->findTaskInProject($projectId, $task->getName());
             // exist team?
-//            var_dump($taskId);
             if (isset($taskId)) {
                 $memberRole = $project->getTeam()->getMemberRole($this->user);
                 if (isset($memberRole)) {
@@ -66,6 +69,16 @@ class ImportSync {
                 if (isset($teamId)) {
                     /* exist task, team, project */
                     /* work? */
+                    $workId = $this->workRepository->findWorkWithTaskAndUser($taskId, $this->user->getId());
+                    if (isset($workId)) {
+                        // TODO nothing todo?
+                    } else {
+                        $taskInDb = $this->taskRepository->find($taskId);
+                        $work = $this->setWorkData();
+                        $work->setUser($this->user);
+                        $work->setTask($taskInDb);
+                        $this->em->persist($work);
+                    }
                 } else {
                     /* save team, exist project, task => work not exist*/
                     /** TODO nastava tahle situace vubec? na projektu musi byt prirazeny team ne? */

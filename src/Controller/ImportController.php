@@ -8,6 +8,7 @@ use App\Model\ImportModel;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
 use App\Repository\TeamRepository;
+use App\Repository\WorkRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -59,9 +60,9 @@ class ImportController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function importText(Request $request, ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository) {
+    public function importText(Request $request, ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository, WorkRepository $workRepository) {
         $txtFileData = $request->get('txtFileData');
-        $import = new ImportModel($doctrine, $projectRepository, $taskRepository, $teamRepository, $this->getUser(), "main_project");
+        $import = new ImportModel($doctrine, $projectRepository, $taskRepository, $teamRepository, $workRepository, $this->getUser(), "main_project");
         $txtWrongLines = $import->import($txtFileData);
 
         return $this->render('import/import.html.twig', [

@@ -7,6 +7,7 @@ use App\Exception\WrongLineFormatException;
 use App\Repository\ProjectRepository;
 use App\Repository\TaskRepository;
 use App\Repository\TeamRepository;
+use App\Repository\WorkRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 class ImportModel {
@@ -30,9 +31,9 @@ class ImportModel {
      * @param User $user
      * @param string $defProject
      */
-    public function __construct(ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository, User $user, string $defProject = null) {
+    public function __construct(ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository,WorkRepository $workRepository, User $user, string $defProject = null) {
         $this->parser = new ToDoParser();
-        $this->sync = new ImportSync($doctrine, $projectRepository, $taskRepository, $teamRepository, $this->defProject, $user);
+        $this->sync = new ImportSync($doctrine, $projectRepository, $taskRepository, $teamRepository, $workRepository, $this->defProject, $user);
         $this->defProject = $defProject;
     }
 
