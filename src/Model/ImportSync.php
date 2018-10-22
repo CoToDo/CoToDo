@@ -11,6 +11,8 @@ use App\Entity\Team;
 use App\Entity\User;
 use App\Entity\Work;
 use App\Repository\ProjectRepository;
+use App\Repository\TaskRepository;
+use App\Repository\TeamRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 class ImportSync {
@@ -19,17 +21,26 @@ class ImportSync {
     private $em;
     private $doctrine;
     private $projectRepository;
+    private $taskRepository;
+    private $teamRepository;
     private $user;
+    private $dateTime;
 
     /**
      * ImportSync constructor.
      */
-    public function __construct(ManagerRegistry $doctrine, ProjectRepository $projectRepository, $defProject, User $user) {
+    public function __construct(ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository, $defProject, User $user) {
         $this->doctrine = $doctrine;
         $this->em = $this->em = $this->doctrine->getManager();
         $this->projectRepository = $projectRepository;
+        $this->taskRepository = $taskRepository;
+        $this->teamRepository = $teamRepository;
         $this->defProject = $defProject;
         $this->user = $user;
+        /* date time inicialization */
+        $this->dateTime = new \DateTime('now');
+        $this->dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+
     }
 
     /**
@@ -37,40 +48,77 @@ class ImportSync {
      * @param TaskTO $task
      */
     public function saveTask($task) {
-        // TODO check if task hasn't already exists
-        $id = $this->projectRepository->findIdProjectByName($task->getProject(), $this->user);
-        if (isset($id)) {
-            $project = $this->projectRepository->find($id);
+        // check if project hasn't already exists
+        $projectId = $this->projectRepository->findIdProjectByName($task->getProject(), $this->user);
+        if (isset($projectId)) {
+            $project = $this->projectRepository->find($projectId);
+            // find task in this project
+            $taskId = $this->taskRepository->findTaskInProject($projectId);
+            // exist team?
+            if (isset($taskId)) {
+                $teamId = $this->teamRepository->findTeamOnTaskAndProject($projectId, $this->user->getId());
+                if (isset($teamId)) {
+                    /* exist task, team, project */
+                    /* work? */
+                } else {
+                    /* save team, exist project, task => work not exist*/
+                    /** TODO nastava tahle situace vubec? na projektu musi byt prirazeny team ne? */
+                }
+            } else {
+                /* exist team on this project where this user is? */
+                $teamId = $this->teamRepository->findTeamOnTaskAndProject($projectId, $this->user->getId());
+                if (isset($teamId)) {
+                    /* save task, exist team, project => work not exist */
+                } else {
+                    /* save task, team, exist project => work not exist */
+                }
+            }
         } else {
-            $team = new Team();
-            $team->setName($task->getProject() . "team");
+            /* save team, role, project, task, work */
+            /** set team */
+            $team = $this->setTeamData($task->getProject() . "team");
             $this->em->persist($team);
-            $role = new Role();
+            /** set role */
+            $role = $this->setRoleData(Constants::LEADER);
             $role->setTeam($team);
             $role->setUser($this->user);
-            $role->setType(Constants::LEADER);
             $this->em->persist($role);
-            $project = new Project();
-            $project->setName($task->getProject());
-            $project->setDescription($task->getProject());
-            $dateTime = new \DateTime('now');
-            $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-            $project->setCreateDate($dateTime);
+
+            /** set project */
+            $project = $this->setProjectData($task->getProject());
             $project->setTeam($team);
             $this->em->persist($project);
-        }
 
-        /** set task */
+            /** set task */
+            $taskToSave = $this->setTaskData($task);
+            $taskToSave->setProject($project);
+            $this->em->persist($taskToSave);
+
+            /** set work */
+            $work = new Work();
+            $work->setTask($taskToSave);
+            $work->setUser($this->user);
+            $work->setDescription(WorkController::ASSIGNED_BY . $this->user->getUserName());
+            $this->em->persist($work);
+            $this->em->flush();
+        }
+    }
+
+    private function setTaskData(TaskTO $task) {
         $taskToSave = new Task();
         $taskToSave->setName($task->getName());
         $tmp = $task->getPriority();
         if (isset($tmp)) {
             $taskToSave->setPriority($task->getPriority());
+        } else {
+            $taskToSave->setPriority('F');
         }
 
         $tmp = $task->getCreateDate();
         if (isset($tmp)) {
             $taskToSave->setCreateDate($task->getCreateDate());
+        } else {
+            $taskToSave->setCreateDate($this->dateTime);
         }
 
         $tmp = $task->getCompletionDate();
@@ -81,20 +129,30 @@ class ImportSync {
         $tmp = $task->getDeadline();
         if (isset($tmp)) {
             $taskToSave->setDeadline($task->getDeadline());
+        } else {
+            /** TODO copy datetime there */
+            $taskToSave->setDeadline($this->dateTime->add(\DateInterval::createFromDateString('3600')));
         }
-
-        $taskToSave->setProject($project);
-        $this->em->persist($taskToSave);
-
-        /** set work */
-        $work = new Work();
-        $work->setTask($taskToSave);
-        $work->setUser($this->user);
-        $work->setDescription(WorkController::ASSIGNED_BY . $this->user->getUserName());
-
-        $this->em->persist($work);
-
-        $this->em->flush();
+        return $taskToSave;
     }
 
+    private function setTeamData(string $teamName) {
+        $team = new Team();
+        $team->setName($teamName);
+        return $team;
+    }
+
+    private function setRoleData(string $roleType) {
+        $role = new Role();
+        $role->setType($roleType);
+        return $role;
+    }
+
+    private function setProjectData($projectName) {
+        $project = new Project();
+        $project->setName($projectName);
+        $project->setDescription($projectName);
+        $project->setCreateDate($this->dateTime);
+        return $project;
+    }
 }
