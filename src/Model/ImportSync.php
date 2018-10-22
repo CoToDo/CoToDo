@@ -3,11 +3,13 @@
 namespace App\Model;
 
 use App\Constants;
+use App\Controller\WorkController;
 use App\Entity\Project;
 use App\Entity\Role;
 use App\Entity\Task;
 use App\Entity\Team;
 use App\Entity\User;
+use App\Entity\Work;
 use App\Repository\ProjectRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -36,7 +38,6 @@ class ImportSync {
      */
     public function saveTask($task) {
         // TODO check if task hasn't already exists
-        // TODO need to create work
         $id = $this->projectRepository->findIdProjectByName($task->getProject(), $this->user);
         if (isset($id)) {
             $project = $this->projectRepository->find($id);
@@ -58,6 +59,8 @@ class ImportSync {
             $project->setTeam($team);
             $this->em->persist($project);
         }
+
+        /** set task */
         $taskToSave = new Task();
         $taskToSave->setName($task->getName());
         $tmp = $task->getPriority();
@@ -82,6 +85,15 @@ class ImportSync {
 
         $taskToSave->setProject($project);
         $this->em->persist($taskToSave);
+
+        /** set work */
+        $work = new Work();
+        $work->setTask($taskToSave);
+        $work->setUser($this->user);
+        $work->setDescription(WorkController::ASSIGNED_BY . $this->user->getUserName());
+
+        $this->em->persist($work);
+
         $this->em->flush();
     }
 
