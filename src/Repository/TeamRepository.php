@@ -56,19 +56,4 @@ class TeamRepository extends ServiceEntityRepository
             ;
     }
 
-
-    public function findTeamOnTaskAndProject($projectId, $userId) {
-        return $this->createQueryBuilder('t')
-            ->select('t.id')
-            ->leftJoin('t.projects', 'p')
-            ->leftJoin('t.roles', 'r')
-            ->leftJoin('r.user', 'u')
-            ->andWhere('p.id = :projectId')
-            ->setParameter('projectId', $projectId)
-            ->setParameter('userId', $userId)
-            ->andWhere('u.id = :userId')
-            ->getQuery()
-            ->getFirstResult();
-    }
-
 }

@@ -50,13 +50,19 @@ class ImportSync {
     public function saveTask($task) {
         // check if project hasn't already exists
         $projectId = $this->projectRepository->findIdProjectByName($task->getProject(), $this->user);
+//        var_dump($projectId);
         if (isset($projectId)) {
             $project = $this->projectRepository->find($projectId);
             // find task in this project
             $taskId = $this->taskRepository->findTaskInProject($projectId);
             // exist team?
+//            var_dump($taskId);
             if (isset($taskId)) {
-                $teamId = $this->teamRepository->findTeamOnTaskAndProject($projectId, $this->user->getId());
+                $memberRole = $project->getTeam()->getMemberRole($this->user);
+                if (isset($memberRole)) {
+                    $teamId = $project->getTeam()->getId();
+                }
+
                 if (isset($teamId)) {
                     /* exist task, team, project */
                     /* work? */
@@ -66,11 +72,24 @@ class ImportSync {
                 }
             } else {
                 /* exist team on this project where this user is? */
-                $teamId = $this->teamRepository->findTeamOnTaskAndProject($projectId, $this->user->getId());
+                $memberRole = $project->getTeam()->getMemberRole($this->user);
+                if (isset($memberRole)) {
+                    $teamId = $project->getTeam()->getId();
+                }
+
                 if (isset($teamId)) {
                     /* save task, exist team, project => work not exist */
+                    $taskToSave = $this->setTaskData($task);
+                    $taskToSave->setProject($project);
+                    $this->em->persist($taskToSave);
+
+                    $work = $this->setWorkData();
+                    $work->setTask($taskToSave);
+                    $work->setUser($this->user);
+                    $this->em->persist($work);
                 } else {
                     /* save task, team, exist project => work not exist */
+                    /** TODO nastava tahle situace vubec? na projektu musi byt prirazeny team ne? */
                 }
             }
         } else {
@@ -95,13 +114,18 @@ class ImportSync {
             $this->em->persist($taskToSave);
 
             /** set work */
-            $work = new Work();
+            $work = $this->setWorkData();
             $work->setTask($taskToSave);
             $work->setUser($this->user);
-            $work->setDescription(WorkController::ASSIGNED_BY . $this->user->getUserName());
             $this->em->persist($work);
-            $this->em->flush();
         }
+        $this->em->flush();
+    }
+
+    private function setWorkData() {
+        $work = new Work();
+        $work->setDescription(WorkController::ASSIGNED_BY . $this->user->getUserName());
+        return $work;
     }
 
     private function setTaskData(TaskTO $task) {
