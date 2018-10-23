@@ -372,4 +372,21 @@ class Task
         }
         return false;
     }
+
+
+
+    public function getUsersTimes(&$users, &$times)
+    {
+        foreach($this->getWorks() as $work) {
+            if(isset($users[$work->getUser()->getMail()])) $times[$work->getUser()->getMail()]+=$work->getWorkTimeStamp();
+            else{
+                $users[$work->getUser()->getMail()]=$work->getUser()->getMail();
+                $times[$work->getUser()->getMail()]=$work->getWorkTimeStamp();
+
+            }
+        }
+
+        $users = array_values($users);
+        $times = array_values($times);
+    }
 }
