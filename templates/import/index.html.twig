@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ controller_name }}!{% endblock %}
+
+          {% block javascripts %}
+              <script>
+                  var openFile = function(event) {
+                      var input = event.target;
+
+                      var reader = new FileReader();
+                      reader.onload = function(){
+                          var text = reader.result;
+                          var node = document.getElementById('myTextArea');
+                          node.innerText = text;
+                      };
+                      reader.readAsText(input.files[0]);
+                  };
+              </script>
+    {% endblock %}
+
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Import todo.txt file</h1>
+
+        <h3>File upload</h3>
+        <div id="simpleform">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+
+    <h3>Upload and Edit TXT File</h3>
+
+    <form action="{{ path('import_text') }}" method="post">
+        <input type='file' accept='text/plain' onchange='openFile(event)'><br/>
+        <textarea id="myTextArea" rows="10" columns="10" name="txtFileData"></textArea>
+        <input type="submit" value="Import" class="btn btn-large btn-primary"/>
+    </form>
+
+</div>
+{% endblock %}

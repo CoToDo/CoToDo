@@ -63,7 +63,8 @@
                 <div class="dropdown-item pointer-events-none"><i class="fas fa-user-circle"></i> Signed in as
                     <b>{{ app.user.name }} {{ app.user.lastname }}</b></div>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{{ path('file_export') }}"> <i class="fas fa-download"></i> Export todo.txt</a>
+                <a class="dropdown-item" href="{{ path('import') }}"> <i class="fas fa-download"></i> Import todo.txt</a>
+                <a class="dropdown-item" href="{{ path('file_export') }}"> <i class="fas fa-upload"></i> Export todo.txt</a>
                 <a class="dropdown-item" href="{{ path('user_show', {'id': app.user.id}) }}"><i class="fas fa-cog"></i>
                     Settings</a>
                 <div class="dropdown-divider"></div>
