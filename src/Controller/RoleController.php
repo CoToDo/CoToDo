@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Constants;
+use App\FlashMessages;
 use App\Entity\Role;
 use App\Form\RoleType;
 use App\Model\NotificationModel;
@@ -30,6 +31,7 @@ class RoleController extends Controller
      */
     public function edit(Request $request, Role $role, \Swift_Mailer $mailer, TeamRepository $teamRepository): Response
     {
+        $wrong = false;
         $userRole = $role->getTeam()->getMemberRole($this->getUser());
         $lastUserId = $role->getUser()->getId();
         $form = $this->createForm(RoleType::class, $role);
@@ -39,25 +41,29 @@ class RoleController extends Controller
 
             if($userRole == Constants::ADMIN && $role->getType() == Constants::LEADER) {
                 $this->addFlash(
-                    'warning',
+                    FlashMessages::WARNING,
                     'You cannot change to leader!'
                 );
-                return $this->returnWrong($role, $form);
+                $wrong = true;
             }
 
             if($role->getTeam()->isMember($role->getUser()) && $lastUserId != $role->getUser()->getId()) {
                 $this->addFlash(
-                    'warning',
+                    FlashMessages::WARNING,
                     'User is already in this team!'
                 );
-                return $this->returnWrong($role, $form);
+                $wrong = true;
             }
 
             if($userRole == Constants::LEADER && $role->getType() != Constants::LEADER && ($teamRepository->numberOfLeaders($role->getTeam()->getId()) <=1 )) {
                 $this->addFlash(
-                    'warning',
+                    FlashMessages::WARNING,
                     'You are the last leader!'
                 );
+                $wrong=true;
+            }
+
+            if($wrong){
                 return $this->returnWrong($role, $form);
             }
 
@@ -128,6 +134,11 @@ class RoleController extends Controller
                 $em->flush();
             }
 
+        } else {
+            $this->addFlash(
+                FlashMessages::DELETE_LEADER,
+                'Cannot delete this user, it is the last leader of team!'
+            );
         }
 
         return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);

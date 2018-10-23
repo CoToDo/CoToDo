@@ -21,8 +21,12 @@
                 </tr>
                 </thead>
                 <tbody>
+                {% for message in app.flashes('leader') %}
+                    <div class="flash-notice alert alert-warning">
+                        {{ message }}
+                    </div>
+                {% endfor %}
 
-                {{ test }}
                 {% for role in roles %}
                     <tr>
                         <td>{{ role.user }}</td>
