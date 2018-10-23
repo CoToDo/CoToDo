@@ -24,6 +24,8 @@ class ImportModel {
     /** @var ImportSync */
     private $sync;
 
+    private $user;
+
     /**
      * ImportModel constructor. Setup default project name
      * @param ManagerRegistry $doctrine
@@ -31,9 +33,10 @@ class ImportModel {
      * @param User $user
      * @param string $defProject
      */
-    public function __construct(ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository,WorkRepository $workRepository, User $user, string $defProject = null) {
+    public function __construct(ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository, WorkRepository $workRepository, User $user, string $defProject = null) {
         $this->parser = new ToDoParser();
         $this->sync = new ImportSync($doctrine, $projectRepository, $taskRepository, $teamRepository, $workRepository, $this->defProject, $user);
+        $this->user = $user;
         $this->defProject = $defProject;
     }
 
@@ -46,10 +49,13 @@ class ImportModel {
             } catch (WrongLineFormatException $e) {
                 $this->wrongLine($line);
                 $line = strtok($separator);
+                continue;
             }
-            if (empty($task->getProjects()) || isset($task->getProjects()[1])) {
-                $this->wrongLine($line);
+
+            if(empty($task->getProject())) {
+                $task->setProjects(array($this->user->getName(). "-project"));
             }
+
             $this->sync->saveTask($task);
             $line = strtok($separator);
         }

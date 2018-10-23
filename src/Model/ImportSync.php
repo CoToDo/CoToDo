@@ -53,13 +53,11 @@ class ImportSync {
     public function saveTask($task) {
         // check if project hasn't already exists
         $projectId = $this->projectRepository->findIdProjectByName($task->getProject(), $this->user);
-//        var_dump($projectId);
         if (isset($projectId)) {
             $project = $this->projectRepository->find($projectId);
             // find task in this project
 
             $taskId = $this->taskRepository->findTaskInProject($projectId, $task->getName());
-            // exist team?
             if (isset($taskId)) {
                 $memberRole = $project->getTeam()->getMemberRole($this->user);
                 if (isset($memberRole)) {
@@ -70,18 +68,13 @@ class ImportSync {
                     /* exist task, team, project */
                     /* work? */
                     $workId = $this->workRepository->findWorkWithTaskAndUser($taskId, $this->user->getId());
-                    if (isset($workId)) {
-                        // TODO nothing todo?
-                    } else {
+                    if (!isset($workId)) {
                         $taskInDb = $this->taskRepository->find($taskId);
                         $work = $this->setWorkData();
                         $work->setUser($this->user);
                         $work->setTask($taskInDb);
                         $this->em->persist($work);
                     }
-                } else {
-                    /* save team, exist project, task => work not exist*/
-                    /** TODO nastava tahle situace vubec? na projektu musi byt prirazeny team ne? */
                 }
             } else {
                 /* exist team on this project where this user is? */
@@ -100,15 +93,12 @@ class ImportSync {
                     $work->setTask($taskToSave);
                     $work->setUser($this->user);
                     $this->em->persist($work);
-                } else {
-                    /* save task, team, exist project => work not exist */
-                    /** TODO nastava tahle situace vubec? na projektu musi byt prirazeny team ne? */
                 }
             }
         } else {
             /* save team, role, project, task, work */
             /** set team */
-            $team = $this->setTeamData($task->getProject() . "team");
+            $team = $this->setTeamData($task->getProject() . "-team");
             $this->em->persist($team);
             /** set role */
             $role = $this->setRoleData(Constants::LEADER);

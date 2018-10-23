@@ -4,6 +4,7 @@ namespace App\Model;
 
 
 use App\Exception\WrongLineFormatException;
+use Symfony\Component\Dotenv\Exception\FormatException;
 
 class ToDoParser {
 
@@ -140,6 +141,7 @@ class ToDoParser {
      * Get message from string and set it to TaskTo object as name
      * @param array $outArLine
      * @param TaskTO $task
+     * @throws WrongLineFormatException
      */
     private function getMessage(&$outArLine, $task) {
         $strMessage = "";
@@ -151,6 +153,10 @@ class ToDoParser {
                 break;
             }
             $counter++;
+        }
+
+        if (empty($strMessage)) {
+            throw new WrongLineFormatException();
         }
         $strMessage = substr($strMessage, 0, -1);
         array_slice($outArLine, $counter);
