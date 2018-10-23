@@ -1,4 +1,10 @@
 # CoToDo
+[![GitHub issues](https://img.shields.io/github/issues/CoToDo/CoToDo.svg)](https://github.com/CoToDo/CoToDo/issues)
+[![Build Status](https://travis-ci.org/CoToDo/CoToDo.svg?branch=master)](https://travis-ci.org/CoToDo/CoToDo)
+[![SonarCloud QualityGate](https://sonarcloud.io/api/project_badges/measure?project=cotodo%3Acotodo&metric=alert_status)](https://sonarcloud.io/dashboard?id=cotodo%3Acotodo)
+[![SonarCloud Dulpicated Lines](https://sonarcloud.io/api/project_badges/measure?project=cotodo%3Acotodo&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=cotodo%3Acotodo)
+
+
 Projekt založený v Symfony pro webovou stránku.
 
 ## Installation
