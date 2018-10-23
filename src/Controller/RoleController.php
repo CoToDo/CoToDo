@@ -7,6 +7,7 @@ use App\Entity\Role;
 use App\Form\RoleType;
 use App\Model\NotificationModel;
 use App\Repository\RoleRepository;
+use App\Repository\TeamRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,26 +28,36 @@ class RoleController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("(role.getTeam().isOnlyAdmin(user) and (role.isRoleUser() or role.isRoleAdmin())) or role.getTeam().isLeader(user)")
      */
-    public function edit(Request $request, Role $role, \Swift_Mailer $mailer): Response
+    public function edit(Request $request, Role $role, \Swift_Mailer $mailer, TeamRepository $teamRepository): Response
     {
         $userRole = $role->getTeam()->getMemberRole($this->getUser());
         $lastUserId = $role->getUser()->getId();
-        $roleBefore = $role->getType();
         $form = $this->createForm(RoleType::class, $role);
         $form->handleRequest($request);
-
-        if($userRole == Constants::ADMIN && $roleBefore == Constants::LEADER) {
-            return $this->returnWrong($role, $form);
-        }
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             if($userRole == Constants::ADMIN && $role->getType() == Constants::LEADER) {
+                $this->addFlash(
+                    'warning',
+                    'You cannot change to leader!'
+                );
                 return $this->returnWrong($role, $form);
             }
 
             if($role->getTeam()->isMember($role->getUser()) && $lastUserId != $role->getUser()->getId()) {
-                //user has already in team
+                $this->addFlash(
+                    'warning',
+                    'User is already in this team!'
+                );
+                return $this->returnWrong($role, $form);
+            }
+
+            if($userRole == Constants::LEADER && $role->getType() != Constants::LEADER && ($teamRepository->numberOfLeaders($role->getTeam()->getId()) <=1 )) {
+                $this->addFlash(
+                    'warning',
+                    'You are the last leader!'
+                );
                 return $this->returnWrong($role, $form);
             }
 
@@ -101,7 +112,7 @@ class RoleController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("role.getTeam().isAdmin(user)")
      */
-    public function delete(Request $request, Role $role): Response
+    public function delete(Request $request, Role $role, TeamRepository $teamRepository): Response
     {
         $userRole = $role->getTeam()->getMemberRole($this->getUser());
         $roleBefore = $role->getType();
@@ -110,13 +121,18 @@ class RoleController extends Controller
             return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
         }
 
-        if ($this->isCsrfTokenValid('delete' . $role->getId(), $request->request->get('_token'))) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($role, $role->getType());
-            $em->flush();
+        if($teamRepository->numberOfLeaders($role->getTeam()->getId()) > 1){
+            if ($this->isCsrfTokenValid('delete' . $role->getId(), $request->request->get('_token'))) {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($role, $role->getType());
+                $em->flush();
+            }
+
         }
 
         return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
+
+
     }
 
 }
