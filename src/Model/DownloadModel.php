@@ -22,7 +22,9 @@ class DownloadModel
             'description' => "priority " . $task->getPriority(),
             'dtstart' => $task->getCreateDate()->format(('Y-m-d H:i:s')),
             'dtend' => $task->getDeadline()->format(('Y-m-d H:i:s')),
-            'summary' => $task->getName(),
+            'summary' => "Team: " . $task->getProject()->getTeam()->getName() . '\n'
+                        . "Project: " . $task->getProject()->getName() . '\n'
+                        . "Task: " . $task->getName(),
             'url' => $url
         ));
 
