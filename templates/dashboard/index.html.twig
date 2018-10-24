@@ -37,6 +37,8 @@
                             {% endif %}
                         {% endif %}
 
+                        <a class="btn btn-outline-danger" href="{{ path('project_task_download', {'idp' : task.project.id, 'id': task.id}) }}"><i class="fas fa-calendar"></i> Add to calendar</a>
+
                     </td>
                 </tr>
             {% else %}
