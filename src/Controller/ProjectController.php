@@ -502,10 +502,6 @@ class ProjectController extends Controller
         $downloadCal = new DownloadModel();
         $downloadCal->downloadIcs($task, $actual_link);
 
-        return $this->render('file/index.html.twig', [
-            'controller_name' => 'ProjectController',
-        ]);
-
     }
 
     private function getPercent($allTasks, $closed) {
