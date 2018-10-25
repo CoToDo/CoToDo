@@ -9,7 +9,7 @@
             <tbody>
             {% for team in teams %}
                 <tr class='clickable-row' data-href="{{ path('team_show', {'id': team.id}) }}">
-                    <td><h4 class="text-secondary m-0 mr-5">{{ team.name }}</h4></td>
+                    <td><h4 class="text-secondary m-0">{{ team.name }}</h4></td>
                     <td>
                         {% if team.leader(userRole) %}
                             <a class="btn btn-outline-primary" href="{{ path('team_edit', {'id': team.id}) }}">Edit</a>
