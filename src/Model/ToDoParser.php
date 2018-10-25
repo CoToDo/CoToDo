@@ -155,6 +155,7 @@ class ToDoParser {
             $counter++;
         }
 
+        $strMessage = trim($strMessage);
         if (empty($strMessage)) {
             throw new WrongLineFormatException();
         }

@@ -24,6 +24,7 @@ class ImportModel {
     /** @var ImportSync */
     private $sync;
 
+    /** @var User user */
     private $user;
 
     /**
@@ -40,7 +41,7 @@ class ImportModel {
         $this->defProject = $defProject;
     }
 
-    public function import(string $txtAreaData) {
+    public function importFromString(string $txtAreaData) {
         $separator = PHP_EOL;
         $line = strtok($txtAreaData, $separator);
         while ($line !== false) {
@@ -64,7 +65,24 @@ class ImportModel {
     }
 
     public function importFromFile(string $filePath) {
-
+        $handle = fopen("$filePath", "r");
+        if ($handle) {
+            while (($line = fgets($handle)) !== false) {
+                try {
+                    $task = $this->parser->parse($line);
+                } catch (WrongLineFormatException $e) {
+                    $this->wrongLine($line);
+                    continue;
+                }
+                if (empty($task->getProject())) {
+                    $task->setProjects(array($this->user->getName() . "-project"));
+                }
+                $this->sync->saveTask($task);
+            }
+            fclose($handle);
+            // TODO delete file
+        }
+        return $this->wrongLines;
     }
 
     private function wrongLine($line) {
