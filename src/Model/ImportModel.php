@@ -24,6 +24,9 @@ class ImportModel {
     /** @var ImportSync */
     private $sync;
 
+    /** @var User user */
+    private $user;
+
     /**
      * ImportModel constructor. Setup default project name
      * @param ManagerRegistry $doctrine
@@ -31,13 +34,14 @@ class ImportModel {
      * @param User $user
      * @param string $defProject
      */
-    public function __construct(ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository,WorkRepository $workRepository, User $user, string $defProject = null) {
+    public function __construct(ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository, WorkRepository $workRepository, User $user, string $defProject = null) {
         $this->parser = new ToDoParser();
         $this->sync = new ImportSync($doctrine, $projectRepository, $taskRepository, $teamRepository, $workRepository, $this->defProject, $user);
+        $this->user = $user;
         $this->defProject = $defProject;
     }
 
-    public function import(string $txtAreaData) {
+    public function importFromString(string $txtAreaData) {
         $separator = PHP_EOL;
         $line = strtok($txtAreaData, $separator);
         while ($line !== false) {
@@ -46,10 +50,13 @@ class ImportModel {
             } catch (WrongLineFormatException $e) {
                 $this->wrongLine($line);
                 $line = strtok($separator);
+                continue;
             }
-            if (empty($task->getProjects()) || isset($task->getProjects()[1])) {
-                $this->wrongLine($line);
+
+            if(empty($task->getProject())) {
+                $task->setProjects(array($this->user->getName(). "-project"));
             }
+
             $this->sync->saveTask($task);
             $line = strtok($separator);
         }
@@ -58,7 +65,24 @@ class ImportModel {
     }
 
     public function importFromFile(string $filePath) {
-
+        $handle = fopen("$filePath", "r");
+        if ($handle) {
+            while (($line = fgets($handle)) !== false) {
+                try {
+                    $task = $this->parser->parse($line);
+                } catch (WrongLineFormatException $e) {
+                    $this->wrongLine($line);
+                    continue;
+                }
+                if (empty($task->getProject())) {
+                    $task->setProjects(array($this->user->getName() . "-project"));
+                }
+                $this->sync->saveTask($task);
+            }
+            fclose($handle);
+            // TODO delete file
+        }
+        return $this->wrongLines;
     }
 
     private function wrongLine($line) {

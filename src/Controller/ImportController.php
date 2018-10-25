@@ -25,7 +25,7 @@ class ImportController extends Controller
      * @Route("/import", name="import")
      * @Security("has_role('ROLE_USER')")
      */
-    public function index(Request $request)
+    public function index(Request $request, ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository, WorkRepository $workRepository)
     {
         $ToDoTxtFile=new ToDoTxtFile();
         $form = $this->createFormBuilder($ToDoTxtFile)
@@ -40,11 +40,12 @@ class ImportController extends Controller
             $file->move($this->getParameter('file_directory'), $fileName);
             $ToDoTxtFile->setFile($fileName);
             $file = new File($this->getParameter('file_directory').'/' . $ToDoTxtFile->getFile());
-//            echo $file->getPath() . "/" . $ToDoTxtFile->getFile();
+            $import = new ImportModel($doctrine, $projectRepository, $taskRepository, $teamRepository, $workRepository, $this->getUser());
+            $txtWrongLines = $import->importFromFile($file->getPath() . "/" . $ToDoTxtFile->getFile());
 
-            return $this->render('import/index.html.twig', [
+            return $this->render('import/import.html.twig', [
                 'controller_name' => 'ImportController',
-                'form' => $form->createView(),
+                'wrong' => implode("\n", $txtWrongLines)
             ]);
         } else {
             return $this->render('import/index.html.twig', [
@@ -63,7 +64,7 @@ class ImportController extends Controller
     public function importText(Request $request, ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository, WorkRepository $workRepository) {
         $txtFileData = $request->get('txtFileData');
         $import = new ImportModel($doctrine, $projectRepository, $taskRepository, $teamRepository, $workRepository, $this->getUser(), "main_project");
-        $txtWrongLines = $import->import($txtFileData);
+        $txtWrongLines = $import->importFromString($txtFileData);
 
         return $this->render('import/import.html.twig', [
             'controller_name' => 'ImportController',
