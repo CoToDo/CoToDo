@@ -192,6 +192,14 @@ fieldset[disabled] .btn-dark.active {
     overflow-x: hidden;
 }
 
+@media (max-width: 576px){
+    .search-div {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 0;
+    }
+}
+
 .fit-content-width{
     min-width: fit-content;
 }
