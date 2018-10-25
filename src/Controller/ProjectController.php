@@ -317,6 +317,8 @@ class ProjectController extends Controller
             return $this->redirectToRoute('project_task_show', ['id' => $task->getId(), 'idp' => $project->getId()]);
         }
 
+        $task->getUsersTimes($users,$times);
+
         return $this->render('task/show.html.twig', [
             'user' => $this->getUser(),
             'task' => $task,
@@ -325,7 +327,9 @@ class ProjectController extends Controller
             'team' => $project->getTeam(),
             'userRole' => $this->getUser(),
             'comments' => $task->getComments(),
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'users' =>$users,
+            'times' => $times
         ]);
     }
 

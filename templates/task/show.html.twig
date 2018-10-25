@@ -56,6 +56,7 @@
         </div>
     </div>
 
+
     <div class="row mb-5">
         <div class="col">
             <h3>Asignees</h3>
@@ -87,23 +88,27 @@
                     </tbody>
                 </table>
             </div>
-        {% if team.admin(userRole) %}
-            <a class="btn btn-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
-        {% endif %}
 
-        {% if not task.userSet(userRole)%}
-            <a class="btn btn-outline-warning" href="{{ path('work_assign_yourself', {'id': task.id}) }}">Assign yourself</a>
-        {% endif %}
+            {% if team.admin(userRole) %}
+                <a class="btn btn-warning" href="{{ path('work_new', {'id': task.id}) }}">Assign</a>
+            {% endif %}
+
+            {% if not task.userSet(userRole)%}
+                <a class="btn btn-outline-warning" href="{{ path('work_assign_yourself', {'id': task.id}) }}">Assign yourself</a>
+            {% endif %}
         </div>
     </div>
 
-    {# Graphs in next release #}
-    {#<canvas id="myChart"></canvas>#}
-    {#<script>#}
-        {#var data = {{ works|json_encode|raw }};#}
-        {#data = [0, 10, 5, 2, 20, 30, 45];#}
-        {#graphTask(data);#}
-    {#</script>#}
+    <div class="row">
+        <div class="col">
+            <canvas id="myChart"></canvas>
+            <script>
+                var data = {{ times|json_encode | raw }};
+                var datas = {{ users|json_encode | raw }};
+                graphTask(data,datas);
+            </script>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col">
