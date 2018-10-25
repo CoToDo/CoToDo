@@ -10,4 +10,4 @@ addons:
     organization: "cotodo"
 
 script:
-  - sonar-scanner
+  - sonar-scanner -X
