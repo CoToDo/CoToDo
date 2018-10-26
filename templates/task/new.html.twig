@@ -3,12 +3,13 @@
 {% block title %}New Task{% endblock %}
 
 {% block body %}
-    <div class="main-div-crud">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1>Create new task</h1>
 
-        <h1>Create new task</h1>
+            {{ include('task/_form.html.twig') }}
 
-        {{ include('task/_form.html.twig') }}
-
-        <a class="btn btn-outline-primary" href="{{ path('project_task_index', {'id': project.id}) }}">Back to list</a>
+            <a class="btn btn-outline-primary" href="{{ path('project_task_index', {'id': project.id}) }}">Back to list</a>
+        </div>
     </div>
 {% endblock %}

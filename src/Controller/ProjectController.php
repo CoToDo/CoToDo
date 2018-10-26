@@ -320,6 +320,8 @@ class ProjectController extends Controller
 
         $task->getUsersTimes($users,$times);
 
+        var_dump($task->getDeadline()->format(('Y-m-d H:i:s')));
+
         return $this->render('task/show.html.twig', [
             'user' => $this->getUser(),
             'task' => $task,
