@@ -15,13 +15,13 @@ class ToDoParserTest extends TestCase {
             "@GroceryStore Eskimo pies",
             "(A) Test tags and projects +projectX @phone @space +heavy @earth",
             "x 2018-12-12 2018-10-01 TEsting complete task @completed +X +Y +Z @cpl +x @dates",
-            "x 2018-12-13 Testing priority pri:B due:2018-12-24"
+            "x 2018-12-13 Testing priority pri:B due:2018-12-24",
         );
 
         $resPriority = array("A", "B", null, null, "A", null, "B");
-        $resCompletion = array(false, false, false, false, false, true, true);
-        $resCreationDate = array(null, null, null, null, null, new DateTime("2018-10-01"), null);
-        $resCompletionDate = array(null, null, null, null, null, new DateTime("2018-12-12"), new DateTime("2018-12-13"));
+        $resCompletion = array(false, false, false, false, false, true, true, false);
+        $resCreationDate = array(null, null, null, null, null, new DateTime("2018-10-01"), null, null);
+        $resCompletionDate = array(null, null, null, null, null, new DateTime("2018-12-12"), new DateTime("2018-12-13"), null);
         $resMessage = array(
             "Thank Mom for the meatballs",
             "Schedule Goodwill pickup",
@@ -48,6 +48,10 @@ class ToDoParserTest extends TestCase {
             $this->assertEquals($resDeadline[$counter], $task->getDeadline());
             $counter++;
         }
+        $this->assertEquals($counter, sizeof($arLines));
+
+        $this->expectException(\App\Exception\WrongLineFormatException::class);
+        $parser->parse("+project");
     }
 
 }

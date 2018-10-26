@@ -15,12 +15,12 @@ use App\Repository\TaskRepository;
 use App\Repository\TeamRepository;
 use App\Repository\WorkRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class ImportSync {
 
     private $defProject;
     private $em;
-    private $doctrine;
     private $projectRepository;
     private $taskRepository;
     private $teamRepository;
@@ -31,13 +31,12 @@ class ImportSync {
     /**
      * ImportSync constructor.
      */
-    public function __construct(ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository, WorkRepository $workRepository, $defProject, User $user) {
-        $this->doctrine = $doctrine;
-        $this->em = $this->em = $this->doctrine->getManager();
-        $this->projectRepository = $projectRepository;
-        $this->taskRepository = $taskRepository;
-        $this->teamRepository = $teamRepository;
-        $this->workRepository = $workRepository;
+    public function __construct(ObjectManager $em, $defProject, User $user) {
+        $this->em = $em;
+        $this->projectRepository = $em->getRepository(Project::class);
+        $this->taskRepository = $em->getRepository(Task::class);
+        $this->teamRepository = $em->getRepository(Team::class);
+        $this->workRepository = $em->getRepository(Work::class);
         $this->defProject = $defProject;
         $this->user = $user;
         /* date time inicialization */
