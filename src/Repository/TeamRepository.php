@@ -41,22 +41,19 @@ class TeamRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Int Returns number of Team leaders
+     * @return Team[] Returns an array of Team objects
      */
-    public function numberOfLeaders($id)
+    public function findLeaderTeams($id)
     {
-        $q = $this->createQueryBuilder('t')
+        return $this->createQueryBuilder('t')
             ->join('t.roles', 'r')
-            ->andWhere('t.id = :id and r.type = :leader')
+            ->andWhere('r.user = :id and r.type = :leader')
             ->setParameter('id', $id)
             ->setParameter('leader', Constants::LEADER)
-            ->select('COUNT(t)')
+            ->orderBy('t.name', 'ASC')
             ->getQuery()
             ->getResult()
             ;
-
-        return isset($q[0][1]) ? $q[0][1] : null;
-
     }
 
     /**

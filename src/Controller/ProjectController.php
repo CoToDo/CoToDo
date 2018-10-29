@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\FlashMessages;
 use App\Model\DownloadModel;
 use App\Entity\Project;
 use App\Entity\Task;
@@ -66,6 +67,18 @@ class ProjectController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            if($project->getTeam() == null) {
+                $this->addFlash(
+                    FlashMessages::WARNING,
+                    'Project must have a team!'
+                );
+
+                return $this->render('project/new.html.twig', [
+                    'project' => $project,
+                    'form' => $form->createView(),
+                ]);
+
+            }
             $string = $project->getName();
             $length = strlen($string);
             for ($i = 0; $i < $length; $i++) {
@@ -281,6 +294,8 @@ class ProjectController extends Controller
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+
             $comment->setTask($task);
             $comment->setUser($this->getUser());
             $dateTime = new \DateTime('now');
@@ -319,8 +334,6 @@ class ProjectController extends Controller
         }
 
         $task->getUsersTimes($users,$times);
-
-        var_dump($task->getDeadline()->format(('Y-m-d H:i:s')));
 
         return $this->render('task/show.html.twig', [
             'user' => $this->getUser(),
