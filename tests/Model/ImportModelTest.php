@@ -3,6 +3,7 @@
 namespace App\Tests\Model;
 
 use App\Entity\Project;
+use App\Entity\Tag;
 use App\Entity\Task;
 use App\Entity\Team;
 use App\Entity\User;
@@ -29,10 +30,11 @@ class ImportModelTest extends TestCase {
         $taskRepository = $this->createMock(TaskRepository::class);
         $teamRepository = $this->createMock(TeamRepository::class);
         $workRepository = $this->createMock(WorkRepository::class);
+        $tagRepository = $this->createMock(Tag::class);
 
         $em->expects($this->any())
             ->method('getRepository')
-            ->willReturnOnConsecutiveCalls($projectRepository, $taskRepository, $teamRepository, $workRepository);
+            ->willReturnOnConsecutiveCalls($projectRepository, $taskRepository, $teamRepository, $workRepository, $tagRepository);
 
         $user = new User();
         $user->setMail("kokos1@gmai.com");

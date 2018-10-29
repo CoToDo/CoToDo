@@ -6,6 +6,7 @@ use App\Constants;
 use App\Controller\WorkController;
 use App\Entity\Project;
 use App\Entity\Role;
+use App\Entity\Tag;
 use App\Entity\Task;
 use App\Entity\Team;
 use App\Entity\User;
@@ -25,6 +26,7 @@ class ImportSync {
     private $taskRepository;
     private $teamRepository;
     private $workRepository;
+    private $tagRepository;
     private $user;
     private $dateTime;
 
@@ -37,12 +39,11 @@ class ImportSync {
         $this->taskRepository = $em->getRepository(Task::class);
         $this->teamRepository = $em->getRepository(Team::class);
         $this->workRepository = $em->getRepository(Work::class);
+        $this->tagRepository = $em->getRepository(Tag::class);
         $this->defProject = $defProject;
         $this->user = $user;
-        /* date time inicialization */
         $this->dateTime = new \DateTime('now');
         $this->dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-
     }
 
     /**
@@ -67,13 +68,14 @@ class ImportSync {
                     /* exist task, team, project */
                     /* work? */
                     $workId = $this->workRepository->findWorkWithTaskAndUser($taskId, $this->user->getId());
+                    $taskInDb = $this->taskRepository->find($taskId);
                     if (!isset($workId)) {
-                        $taskInDb = $this->taskRepository->find($taskId);
                         $work = $this->setWorkData();
                         $work->setUser($this->user);
                         $work->setTask($taskInDb);
                         $this->em->persist($work);
                     }
+                    $this->saveTags($task, $taskInDb);
                 }
             } else {
                 /* exist team on this project where this user is? */
@@ -92,6 +94,8 @@ class ImportSync {
                     $work->setTask($taskToSave);
                     $work->setUser($this->user);
                     $this->em->persist($work);
+
+                    $this->saveTags($task, $taskToSave);
                 }
             }
         } else {
@@ -120,8 +124,22 @@ class ImportSync {
             $work->setTask($taskToSave);
             $work->setUser($this->user);
             $this->em->persist($work);
+
+            $this->saveTags($task, $taskToSave);
         }
         $this->em->flush();
+    }
+
+    private function saveTags(TaskTO $taskTO, Task $task) {
+        foreach ($taskTO->getTags() as $tagName) {
+            $tag = $this->tagRepository->findOneBy(['name' => $tagName]);
+            if (!isset($tag)) {
+                $tag = new Tag();
+                $tag->setName($tagName);
+            }
+            $tag->addTask($task);
+            $this->em->persist($tag);
+        }
     }
 
     private function setWorkData() {
@@ -156,7 +174,6 @@ class ImportSync {
         if (isset($tmp)) {
             $taskToSave->setDeadline($task->getDeadline());
         } else {
-            /** TODO copy datetime there */
             $taskToSave->setDeadline($this->dateTime->add(\DateInterval::createFromDateString('3600')));
         }
         return $taskToSave;
