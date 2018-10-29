@@ -24,7 +24,7 @@ class ProjectType extends AbstractType
             ->add('team', EntityType::class, [
                 'class' => Team::class,
                 //display only those teams in which I participate
-                'choices' => $options['teamRepository']->findLeaderTeams($options['userId']),
+                'choices' => $options['teamRepository']->findMyTeams($options['userId']),
             ])
         ;
     }
