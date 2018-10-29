@@ -11,6 +11,7 @@ use App\Entity\Work;
 use App\Model\ImportModel;
 use App\Model\ImportSync;
 use App\Repository\ProjectRepository;
+use App\Repository\TagRepository;
 use App\Repository\TaskRepository;
 use App\Repository\TeamRepository;
 use App\Repository\WorkRepository;
@@ -30,7 +31,11 @@ class ImportModelTest extends TestCase {
         $taskRepository = $this->createMock(TaskRepository::class);
         $teamRepository = $this->createMock(TeamRepository::class);
         $workRepository = $this->createMock(WorkRepository::class);
-        $tagRepository = $this->createMock(Tag::class);
+        $tagRepository = $this->createMock(TagRepository::class);
+
+        $tagRepository->expects($this->any())
+            ->method('findOneBy')
+            ->willReturn(null);
 
         $em->expects($this->any())
             ->method('getRepository')
