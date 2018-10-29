@@ -44,41 +44,6 @@
                                     <td></td>
                                 {% endif %}
 
-<<<<<<< HEAD
-                <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Role</th>
-                    {% if team.admin(userRole) %}
-                        <th>Actions</th>
-                    {% endif %}
-                </tr>
-                </thead>
-                <tbody>
-                {% for message in app.flashes('leader') %}
-                    <div class="flash-notice alert alert-warning">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-
-                {% for role in roles %}
-                    <tr>
-                        <td>{{ role.user }}</td>
-                        <td>{{ role.type }}</td>
-
-                        {% if team.leader(userRole) %}
-                            <td>
-                                <a class="btn btn-outline-primary" href="{{ path('role_edit', {'id': role.id}) }}">Edit</a>
-                                {{ include('role/_delete_form.html.twig') }}
-                            </td>
-                        {% elseif team.onlyAdmin(userRole) and (role.roleUser() or role.roleAdmin()) %}
-                            <td>
-                                <a class="btn btn-outline-primary" href="{{ path('role_edit', {'id': role.id}) }}">Edit</a>
-                                {{ include('role/_delete_form.html.twig') }}
-                            </td>
-=======
-                            </tr>
->>>>>>> 03cbd3f5db4aa0437737aae6b2f29069988a0d38
                         {% else %}
                             <tr>
                                 <td colspan="2">No records found</td>

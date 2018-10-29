@@ -2,96 +2,115 @@
 
 namespace App\Model;
 
-
-use DateTime;
-
 class ICS
 {
-    const DT_FORMAT = 'Ymd\THis\Z';
 
-    protected $properties = array();
-    private $available_properties = array(
-        'description',
-        'dtend',
-        'dtstart',
-        'location',
-        'summary',
-        'url'
+    /**
+     * @var \DateTimeInterface
+     */
+    private $dueDate;
+
+    /**
+     * @var string
+     */
+    private $summary;
+
+    /**
+     * @var string
+     */
+    private $priority;
+
+    /**
+     * @var string
+     */
+    private $description;
+
+    /**
+     * @var array
+     */
+    private $startIcs = array(
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//CoToDo',
+        'CALSCALE:GREGORIAN',
+        'BEGIN:VTODO'
     );
 
-    public function __construct($props) {
-        $this->set($props);
+
+    /**
+     * @var array
+     */
+    private $endIcs = array(
+        'BEGIN:VALARM',
+        'TRIGGER:-PT30M',
+        'REPEAT:2',
+        'DURATION:PT15M',
+        'ACTION:DISPLAY',
+        'END:VALARM',
+        'END:VTODO',
+        'END:VCALENDAR'
+    );
+
+    /**
+     * ICS constructor.
+     * @param \DateTimeInterface $dueDate
+     * @param string $summary
+     * @param string $priority
+     * @param string $description
+     */
+    public function __construct(\DateTimeInterface $dueDate,string $summary,string $priority,string $description)
+    {
+        $this->dueDate=$dueDate;
+        $this->summary=$summary;
+        $this->priority=$priority;
+        $this->description=$description;
     }
 
-    public function set($key, $val = false) {
-        if (is_array($key)) {
-            foreach ($key as $k => $v) {
-                $this->set($k, $v);
-            }
-        } else {
-            if (in_array($key, $this->available_properties)) {
-                $this->properties[$key] = $this->sanitize_val($val, $key);
-            }
-        }
-    }
-
-    public function to_string() {
-        $rows = $this->build_props();
+    /**
+     * @return string
+     */
+    public function getFile() {
+        $rows = $this->buildIcs();
         return implode("\r\n", $rows);
     }
 
-    private function build_props() {
-        // Build ICS properties - add header
-        $ics_props = array(
-            'BEGIN:VCALENDAR',
-            'VERSION:2.0',
-            'PRODID:-//hacksw/handcal//NONSGML v1.0//EN',
-            'CALSCALE:GREGORIAN',
-            'BEGIN:VEVENT'
-        );
+    /**
+     * Make ics file
+     *
+     * @return array
+     */
+    private function buildIcs() {
 
-        // Build ICS properties - add header
-        $props = array();
-        foreach($this->properties as $k => $v) {
-            $props[strtoupper($k . ($k === 'url' ? ';VALUE=URI' : ''))] = $v;
+        $file=$this->startIcs;
+
+        $file[] = "DUE:" . $this->dueDate->format(('Ymd')) . "T" . $this->dueDate->format(('His'));
+        $file[] = "SUMMARY:" . $this->summary;
+        $file[] = "PRIORITY:" . $this->getIcsPriority($this->priority);
+        $file[] = "DESCRIPTION:" . $this->description;
+
+        foreach ($this->endIcs as $e) {
+            $file[] = $e;
         }
 
-        // Set some default values
-        $props['DTSTAMP'] = $this->format_timestamp('now');
-        $props['UID'] = uniqid();
+        return $file;
+    }
 
-        // Append properties
-        foreach ($props as $k => $v) {
-            $ics_props[] = "$k:$v";
+    /**
+     * Make ics priority from A-Z to 1-9
+     *
+     * @param string $priority
+     * @return int
+     */
+    private function getIcsPriority(string $priority){
+
+        $number=1;
+        $mod=0;
+        for($x=65; $x<=90; $x++){
+            if($mod != 0 && $mod % 3 == 0) $number ++;
+            $mod++;
+            if(chr($x) == $priority) return $number;
         }
 
-        // Build ICS properties - add footer
-        $ics_props[] = 'END:VEVENT';
-        $ics_props[] = 'END:VCALENDAR';
-
-        return $ics_props;
     }
 
-    private function sanitize_val($val, $key = false) {
-        switch($key) {
-            case 'dtend':
-            case 'dtstamp':
-            case 'dtstart':
-                $val = $this->format_timestamp($val);
-                break;
-            default:
-                $val = $this->escape_string($val);
-        }
-
-        return $val;
-    }
-
-    private function format_timestamp($timestamp) {
-        $dt = new DateTime($timestamp);
-        return $dt->format(self::DT_FORMAT);
-    }
-
-    private function escape_string($str) {
-        return preg_replace('/([\,;])/','\\\$1', $str);
-    }
 }
