@@ -106,10 +106,16 @@ class ICS
         $number=1;
         $mod=0;
         for($x=65; $x<=90; $x++){
-            if($mod != 0 && $mod % 3 == 0) $number ++;
+            if($mod != 0 && $mod % 3 == 0){
+                $number ++;
+            }
             $mod++;
-            if(chr($x) == $priority) return $number;
+            if(chr($x) == $priority){
+                return $number;
+            }
         }
+
+        return 0;
 
     }
 
