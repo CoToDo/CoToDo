@@ -35,7 +35,7 @@ class RestApisController extends Controller {
         $task->getUsersTimes($users,$times);
 
         return $this->render('file/rest.html.twig', [
-            'values' => json_encode($times)
+            'values' => $times
         ]);
     }
 
@@ -55,7 +55,7 @@ class RestApisController extends Controller {
         $task->getUsersTimes($users,$times);
 
         return $this->render('file/rest.html.twig', [
-            'values' => json_encode($users)
+            'values' => $users
         ]);
     }
 }
