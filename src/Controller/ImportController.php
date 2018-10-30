@@ -63,7 +63,7 @@ class ImportController extends Controller
      */
     public function importText(Request $request, ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository, WorkRepository $workRepository) {
         $txtFileData = $request->get('txtFileData');
-        $import = new ImportModel($doctrine, $projectRepository, $taskRepository, $teamRepository, $workRepository, $this->getUser(), "main_project");
+        $import = new ImportModel($doctrine->getManager(), $this->getUser(), "main_project");
         $txtWrongLines = $import->importFromString($txtFileData);
 
         return $this->render('import/import.html.twig', [

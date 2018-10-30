@@ -2,23 +2,6 @@
 
 {% block title %} {{ controller_name }}!{% endblock %}
 
-          {% block javascripts %}
-              <script>
-                  var openFile = function(event) {
-                      var input = event.target;
-
-                      var reader = new FileReader();
-                      reader.onload = function(){
-                          var text = reader.result;
-                          var node = document.getElementById('myTextArea');
-                          node.innerText = text;
-                      };
-                      reader.readAsText(input.files[0]);
-                  };
-              </script>
-    {% endblock %}
-
-
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
