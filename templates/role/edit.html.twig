@@ -13,7 +13,6 @@
                 </div>
             {% endfor %}
 
-<<<<<<< HEAD
         {% for message in app.flashes('warning') %}
             <div class="flash-notice alert alert-warning">
                 {{ message }}
@@ -21,9 +20,7 @@
         {% endfor %}
 
         {{ include('role/_form.html.twig', {'button_label': 'Update'}) }}
-=======
-            {{ include('role/_form.html.twig', {'button_label': 'Update'}) }}
->>>>>>> 03cbd3f5db4aa0437737aae6b2f29069988a0d38
+
 
             <a class="btn btn-outline-secondary" href="{{ path('team_show', {'id': role.team.id }) }}">Back to team</a>
 
