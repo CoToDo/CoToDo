@@ -16,7 +16,7 @@ class DashboardController extends Controller
      * Render DashBoard view
      * @param TaskRepository $taskRepository
      * @return Response
-     * @Route("/dashboard", name="dashboard")7
+     * @Route("/dashboard", name="dashboard")
      * @Security("has_role('ROLE_USER')")
      */
     public function index(TaskRepository $taskRepository): Response
@@ -27,6 +27,7 @@ class DashboardController extends Controller
             'tasks' => $taskRepository->findMyTasksSortedByPriority($user->getId()),
             'user' => $this->getUser()
         ]);
+
     }
 
 }
