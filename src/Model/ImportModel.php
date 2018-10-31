@@ -55,7 +55,6 @@ class ImportModel {
             $this->sync->saveTask($task);
             $line = strtok($separator);
         }
-        strtok('', '');
         return $this->wrongLines;
     }
 

@@ -77,25 +77,23 @@ class ToDoParser {
      * @throws WrongLineFormatException
      */
     private function getDates(&$outArLine, $task) {
-        if (isset($outArLine[0])) {
-            if (preg_match(self::REG_DATE_TIME, $outArLine[0])) {
-                if ($task->isCompletion()) {
-                    $task->setCompletionDate(new \DateTime($outArLine[0]));
-                } else {
-                    $task->setCreateDate(new \DateTime($outArLine[0]));
-                }
-                array_shift($outArLine);
-                if (isset($outArLine[0])) {
-                    if (preg_match(self::REG_DATE_TIME, $outArLine[0])) {
-                        $task->setCreateDate(new \DateTime($outArLine[0]));
-                        array_shift($outArLine);
-                    }
-                } else {
-                    throw new WrongLineFormatException();
-                }
-            }
-        } else {
+        if (!isset($outArLine[0])) {
             throw new WrongLineFormatException();
+        }
+        if (preg_match(self::REG_DATE_TIME, $outArLine[0])) {
+            if ($task->isCompletion()) {
+                $task->setCompletionDate(new \DateTime($outArLine[0]));
+            } else {
+                $task->setCreateDate(new \DateTime($outArLine[0]));
+            }
+            array_shift($outArLine);
+            if (!isset($outArLine[0])) {
+                throw new WrongLineFormatException();
+            }
+            if (preg_match(self::REG_DATE_TIME, $outArLine[0])) {
+                $task->setCreateDate(new \DateTime($outArLine[0]));
+                array_shift($outArLine);
+            }
         }
     }
 
@@ -267,6 +265,7 @@ class ToDoParser {
         }
         return false;
     }
+
     /**
      * Is Project | Tag | Special?
      * @param string $strItem

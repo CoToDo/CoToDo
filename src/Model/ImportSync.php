@@ -47,6 +47,52 @@ class ImportSync {
     }
 
     /**
+     * @param $projectId
+     * @param TaskTO $task
+     */
+    private function findTaskInProject($projectId, TaskTO $task) {
+        $project = $this->projectRepository->find($projectId);
+        $taskId = $this->taskRepository->findTaskInProject($projectId, $task->getName());
+        if (isset($taskId)) {
+            $memberRole = $project->getTeam()->getMemberRole($this->user);
+            if (isset($memberRole)) {
+                $teamId = $project->getTeam()->getId();
+            }
+
+            if (isset($teamId)) {
+                /* exist task, team, project */
+                /* work? */
+                $workId = $this->workRepository->findWorkWithTaskAndUser($taskId, $this->user->getId());
+                $taskInDb = $this->taskRepository->find($taskId);
+                if (!isset($workId)) {
+                    $work = $this->setWorkData();
+                    $work->setUser($this->user);
+                    $work->setTask($taskInDb);
+                    $this->em->persist($work);
+                }
+                $this->saveTags($task, $taskInDb);
+            }
+        } else {
+            /* exist team on this project where this user is? */
+            $memberRole = $project->getTeam()->getMemberRole($this->user);
+            if (isset($memberRole)) {
+                $teamId = $project->getTeam()->getId();
+            }
+
+            if (isset($teamId)) {
+                /* save task, exist team, project => work not exist */
+                $taskToSave = $this->setTaskData($task);
+                $taskToSave->setProject($project);
+                $this->em->persist($taskToSave);
+                $work = $this->setWorkData();
+                $work->setTask($taskToSave);
+                $work->setUser($this->user);
+                $this->em->persist($work);
+                $this->saveTags($task, $taskToSave);
+            }
+        }
+    }
+    /**
      * Save task to database
      * @param TaskTO $task
      */
@@ -54,50 +100,7 @@ class ImportSync {
         // check if project hasn't already exists
         $projectId = $this->projectRepository->findIdProjectByName($task->getProject(), $this->user);
         if (isset($projectId)) {
-            $project = $this->projectRepository->find($projectId);
-            // find task in this project
-
-            $taskId = $this->taskRepository->findTaskInProject($projectId, $task->getName());
-            if (isset($taskId)) {
-                $memberRole = $project->getTeam()->getMemberRole($this->user);
-                if (isset($memberRole)) {
-                    $teamId = $project->getTeam()->getId();
-                }
-
-                if (isset($teamId)) {
-                    /* exist task, team, project */
-                    /* work? */
-                    $workId = $this->workRepository->findWorkWithTaskAndUser($taskId, $this->user->getId());
-                    $taskInDb = $this->taskRepository->find($taskId);
-                    if (!isset($workId)) {
-                        $work = $this->setWorkData();
-                        $work->setUser($this->user);
-                        $work->setTask($taskInDb);
-                        $this->em->persist($work);
-                    }
-                    $this->saveTags($task, $taskInDb);
-                }
-            } else {
-                /* exist team on this project where this user is? */
-                $memberRole = $project->getTeam()->getMemberRole($this->user);
-                if (isset($memberRole)) {
-                    $teamId = $project->getTeam()->getId();
-                }
-
-                if (isset($teamId)) {
-                    /* save task, exist team, project => work not exist */
-                    $taskToSave = $this->setTaskData($task);
-                    $taskToSave->setProject($project);
-                    $this->em->persist($taskToSave);
-
-                    $work = $this->setWorkData();
-                    $work->setTask($taskToSave);
-                    $work->setUser($this->user);
-                    $this->em->persist($work);
-
-                    $this->saveTags($task, $taskToSave);
-                }
-            }
+            $this->findTaskInProject($projectId, $task);
         } else {
             /* save team, role, project, task, work */
             /** set team */
