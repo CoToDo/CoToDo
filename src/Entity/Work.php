@@ -179,9 +179,7 @@ class Work
      */
     public function getWorkTime(): ?\DateInterval
     {
-
         return $this->getStartDate()->diff($this->getEndDate());
-
     }
 
     /**
@@ -189,9 +187,11 @@ class Work
      */
     public function getWorkTimeStamp()
     {
-        if ($this->isEndSet())
+        if ($this->isEndSet()){
             return $this->getEndDate()->getTimestamp() - $this->getStartDate()->getTimestamp();
-        else return 0;
+        } else {
+            return 0;
+        }
     }
 
 }

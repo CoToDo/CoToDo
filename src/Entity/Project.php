@@ -46,6 +46,7 @@ class Project
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Team", inversedBy="projects")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", nullable=false)
      */
     private $team;
 

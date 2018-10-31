@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -70,9 +71,7 @@ class SecurityController extends Controller
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // ... do any other work - like sending them an email, etc
-            // maybe set a "flash" success message for the user
-
+            $this->authenticateUser($user);
             return $this->redirectToRoute('dashboard');
         }
 
@@ -115,4 +114,16 @@ class SecurityController extends Controller
             'form' => $form->createView(),
         ]);
     }
+
+
+    /**
+     * Authentificate user, for login after registration
+     * @param User $user
+     */
+    private function authenticateUser(User $user) {
+        $providerKey = 'main'; // your firewall name
+        $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+        $this->container->get('security.token_storage')->setToken($token);
+    }
+
 }

@@ -3,14 +3,15 @@
 {% block title %}Edit team{% endblock %}
 
 {% block body %}
-    <div class="main-div-crud">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1>Edit team</h1>
 
-        <h1>Edit team</h1>
+            {{ include('team/_form.html.twig', {'button_label': 'Update'}) }}
 
-        {{ include('team/_form.html.twig', {'button_label': 'Update'}) }}
+            <a class="btn btn-outline-secondary" href="{{ path('team_index') }}">Back to list</a>
 
-        <a class="btn btn-outline-secondary" href="{{ path('team_index') }}">Back to list</a>
-
-        {{ include('team/_delete_form.html.twig') }}
+            {{ include('team/_delete_form.html.twig') }}
+        </div>
     </div>
 {% endblock %}

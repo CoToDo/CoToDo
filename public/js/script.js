@@ -1,7 +1,7 @@
 var $collectionHolder;
 
 // setup an "add a tag" link
-var $addTagLink = $('<a href="#" class="btn btn-sm btn-outline-primary my-1">Add a tag</a>');
+var $addTagLink = $('<a href="#" class="btn btn-sm btn-outline-primary my-1"><i class="fas fa-plus"></i> Add a tag</a>');
 var $newLinkButton = $('<div class="my-1"></div>').append($addTagLink);
 
 jQuery(document).ready(function() {

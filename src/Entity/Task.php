@@ -378,8 +378,9 @@ class Task
     public function getUsersTimes(&$users, &$times)
     {
         foreach($this->getWorks() as $work) {
-            if(isset($users[$work->getUser()->getMail()])) $times[$work->getUser()->getMail()]+=$work->getWorkTimeStamp();
-            else{
+            if(isset($users[$work->getUser()->getMail()])){
+                $times[$work->getUser()->getMail()]+=$work->getWorkTimeStamp();
+            } else{
                 $users[$work->getUser()->getMail()]=$work->getUser()->getMail();
                 $times[$work->getUser()->getMail()]=$work->getWorkTimeStamp();
 
