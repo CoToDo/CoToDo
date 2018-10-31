@@ -26,36 +26,15 @@ class RestApisController extends Controller {
      * @param Task $task
      * @param WorkRepository $workRepository
      * @return Response
-     * @Route("/{idp}/tasks/{id}/times", name="project_task_times", methods="GET|POST")
+     * @Route("/{idp}/tasks/{id}/graph", name="project_task_graph", methods="GET|POST")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isMember(user)")
      */
-    public function getTimes(Request $request, Project $project, Task $task, WorkRepository $workRepository): Response {
-        $task->getUsersTimes($users,$times);
+    public function getTimes(Task $task, WorkRepository $workRepository): Response {
 
         return $this->render('file/rest.html.twig', [
-            'values' => $times
-        ]);
-    }
-
-    /**
-     * Render project's tasks details + adding comments form
-     * @param Request $request
-     * @param Project $project
-     * @param Task $task
-     * @param WorkRepository $workRepository
-     * @return Response
-     * @Route("/{idp}/tasks/{id}/users", name="project_task_users", methods="GET|POST")
-     * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
-     * @Security("has_role('ROLE_USER')")
-     * @Security("project.getTeam().isMember(user)")
-     */
-    public function getUsers(Request $request, Project $project, Task $task, WorkRepository $workRepository): Response {
-        $task->getUsersTimes($users,$times);
-
-        return $this->render('file/rest.html.twig', [
-            'values' => $users
+            'values' => $workRepository->findUserTimes($task->getId()),
         ]);
     }
 }

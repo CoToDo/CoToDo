@@ -61,4 +61,22 @@ class WorkRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findAsigneeId($userId)
+    {
+        return $this->createQueryBuilder('w')
+            ->join('w.user', 'u')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $userId)
+            ->andWhere('w.startDate IS NULL')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findUserTimes($taskId) {
+        $sql = 'select u.mail, sum from (select user_id, SUM(strftime(\'%s\', w.end_date) - strftime(\'%s\', start_date)) sum from work w where w.task_id = :id group by user_id) join app_users u on (user_id=u.id)';
+        $params = array('id' => $taskId);
+
+        return $this->getEntityManager()->getConnection()->executeQuery($sql, $params)->fetchAll();
+    }
 }
