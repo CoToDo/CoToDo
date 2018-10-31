@@ -55,7 +55,7 @@ function updateData() {
     var OptionsEnum = {"s":1, "m":60, "h":3600, "d":86400};
 
     var x = document.getElementById("sel");
-    var opt = x.options[x.selectedIndex].value;;
+    var opt = x.options[x.selectedIndex].value;
 
     help = chart.data.datasets[0].data;
 
