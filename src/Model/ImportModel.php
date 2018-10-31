@@ -4,8 +4,6 @@ namespace App\Model;
 
 use App\Entity\User;
 use App\Exception\WrongLineFormatException;
-use App\Repository\ProjectRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
 
 class ImportModel {
@@ -27,8 +25,7 @@ class ImportModel {
 
     /**
      * ImportModel constructor. Setup default project name
-     * @param ManagerRegistry $doctrine
-     * @param ProjectRepository $projectRepository
+     * @param ObjectManager $em
      * @param User $user
      * @param string $defProject
      */
@@ -78,7 +75,7 @@ class ImportModel {
                 $this->sync->saveTask($task);
             }
             fclose($handle);
-            // TODO delete file
+            unlink($filePath);
         }
         return $this->wrongLines;
     }

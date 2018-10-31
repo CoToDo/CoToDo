@@ -42,9 +42,9 @@ class ImportController extends Controller
             $file->move($this->getParameter('file_directory'), $fileName);
             $ToDoTxtFile->setFile($fileName);
             $file = new File($this->getParameter('file_directory').'/' . $ToDoTxtFile->getFile());
-            $import = new ImportModel($doctrine, $projectRepository, $taskRepository, $teamRepository, $workRepository, $this->getUser());
+            $import = new ImportModel($doctrine->getManager(), $this->getUser());
             $txtWrongLines = $import->importFromFile($file->getPath() . "/" . $ToDoTxtFile->getFile());
-
+            $this->flashMessages($txtWrongLines);
             return $this->render('import/import.html.twig', [
                 self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
                 'wrong' => implode("\n", $txtWrongLines)
@@ -65,26 +65,27 @@ class ImportController extends Controller
      */
     public function importText(Request $request, ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository, WorkRepository $workRepository) {
         $txtFileData = $request->get('txtFileData');
-        $import = new ImportModel($doctrine->getManager(), $this->getUser(), "main_project");
+        $import = new ImportModel($doctrine->getManager(), $this->getUser());
         $txtWrongLines = $import->importFromString($txtFileData);
-        if(empty($txtWrongLines))
-        {
+        $this->flashMessages($txtWrongLines);
+        return $this->render('import/import.html.twig', [
+            self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
+            'wrong' => implode("\n", $txtWrongLines)
+        ]);
+    }
+
+    private function flashMessages($txtWrongLines) {
+        if (empty($txtWrongLines)) {
             $this->addFlash(
                 'success',
                 'Your changes were saved!'
             );
-        }
-        else
-        {
+        } else {
             $this->addFlash(
                 'warning',
                 'Some lines couldn\'t be proccesed!'
             );
         }
-        return $this->render('import/import.html.twig', [
-            self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
-            'wrong' => implode("\n", $txtWrongLines)
-        ]);
     }
 
 }

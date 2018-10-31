@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css"
           integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
 
-
         <title>{% block title %}Home{% endblock %} | CoToDo</title>
         {% block stylesheets %}{% endblock %}
         {% block javascripts %}
@@ -26,9 +25,7 @@
                     crossorigin="anonymous"></script>
             <script src="{{ asset('js/script.js') }}"></script>
             <script src="{{ asset('js/chart.js') }}"></script>
-            {#<script>graphTask();</script>#}
             {{ render(controller('App\\Controller\\SearchController::index')) }}
-
         {% endblock %}
 
     </head>
@@ -76,7 +73,7 @@
                                 <div class="dropdown-item pointer-events-none"><i class="fas fa-user-circle"></i> Signed in as
                                     <b>{{ app.user.name }} {{ app.user.lastname }}</b></div>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ path('file_export') }}"> <i class="fas fa-download"></i> Export todo.txt</a>
+                                <a class="dropdown-item" href="{{ path('import') }}"> <i class="fas fa-upload"></i> Import todo.txt</a>
                                 <a class="dropdown-item" href="{{ path('file_export') }}"> <i class="fas fa-download"></i> Export todo.txt</a>
                                 <a class="dropdown-item" href="{{ path('user_show', {'id': app.user.id}) }}"><i class="fas fa-cog"></i>
                                     Settings</a>
@@ -100,7 +97,6 @@
                 </div>
             </div>
         </div>
-
 
     </body>
 </html>

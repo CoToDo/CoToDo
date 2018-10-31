@@ -159,7 +159,7 @@ class ToDoParser {
         if (empty($strMessage)) {
             throw new WrongLineFormatException();
         }
-        array_slice($outArLine, $counter);
+        $outArLine = array_slice($outArLine, $counter);
         $task->setName($strMessage);
     }
 
