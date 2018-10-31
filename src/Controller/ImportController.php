@@ -65,7 +65,20 @@ class ImportController extends Controller
         $txtFileData = $request->get('txtFileData');
         $import = new ImportModel($doctrine->getManager(), $this->getUser(), "main_project");
         $txtWrongLines = $import->importFromString($txtFileData);
-
+        if(empty($txtWrongLines))
+        {
+            $this->addFlash(
+                'success',
+                'Your changes were saved!'
+            );
+        }
+        else
+        {
+            $this->addFlash(
+                'warning',
+                'Some lines couldn\'t be proccesed!'
+            );
+        }
         return $this->render('import/import.html.twig', [
             'controller_name' => 'ImportController',
             'wrong' => implode("\n", $txtWrongLines)

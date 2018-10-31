@@ -4,7 +4,7 @@
 
 {% block body %}
 
-    <div class="table-responsive" id="div-import">
+    <div class="table-responsive div-import">
         <h1>Import todo.txt file</h1>
         <div class="div-import-part">
             <h3>File upload</h3>
@@ -17,7 +17,7 @@
             <form action="{{ path('import_text') }}" method="post">
                 <label for="file">Plain text file (txt)</label><br/>
                 <input id="file" type='file' accept='text/plain' onchange='openFile(event)'/>
-                <textarea id="importTextArea" name="txtFileData"></textArea>
+                <textarea class="importTextArea" id="importTextArea" name="txtFileData"></textArea>
                 <input type="submit" value="Import" class="btn btn-large btn-primary"/>
             </form>
         </div>

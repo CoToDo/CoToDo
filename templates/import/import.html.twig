@@ -3,14 +3,20 @@
 {% block title %} {{ controller_name }}!{% endblock %}
 
 {% block body %}
-
-<div class="example-wrapper">
-    <h1>Import todo.txt file</h1>
-
-    <form action="{{ path('import_text') }}" method="post">
-        <textarea id="importTextArea" rows="10" columns="10" name="txtFileData">{{ wrong }}</textArea>
-        <input type="submit" value="Import" class="btn btn-large btn-primary"/>
-    </form>
-
-</div>
+    <div class="table-responsive div-import">
+        <h1>Import todo.txt file</h1>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-{{ label }} alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+        <div class="div-import-part">
+            <form action="{{ path('import_text') }}" method="post">
+                <textarea class="importTextArea" name="txtFileData">{{ wrong }}</textArea>
+                <input type="submit" value="Import" class="btn btn-large btn-primary"/>
+            </form>
+        </div>
+    </div>
 {% endblock %}

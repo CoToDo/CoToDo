@@ -212,13 +212,13 @@ fieldset[disabled] .btn-dark.active {
         overflow-x: hidden;
 }
 
-#importTextArea {
+.importTextArea {
         width: 100%;
         height: 20vh;
         margin-top: 2vh;
 }
 
-#div-import {
+.div-import {
         width: 70%;
         margin: 0 auto;
 }
@@ -226,3 +226,4 @@ fieldset[disabled] .btn-dark.active {
 .div-import-part {
         padding: 5vh;
 }
+
