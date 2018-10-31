@@ -3,11 +3,11 @@
 {% block title %}New Project{% endblock %}
 
 {% block body %}
-    <div class="main-div-crud">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1>Create new project</h1>
 
-        <h1>Create new project</h1>
-
-        {{ include('project/_form.html.twig') }}
-
+            {{ include('project/_form.html.twig') }}
+        </div>
     </div>
 {% endblock %}
