@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\FlashMessages;
+use App\Model\DownloadModel;
 use App\Entity\Project;
 use App\Entity\Task;
 use App\Entity\Team;
@@ -65,6 +67,18 @@ class ProjectController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            if($project->getTeam() == null) {
+                $this->addFlash(
+                    FlashMessages::WARNING,
+                    'Project must have a team!'
+                );
+
+                return $this->render('project/new.html.twig', [
+                    'project' => $project,
+                    'form' => $form->createView(),
+                ]);
+
+            }
             $string = $project->getName();
             $length = strlen($string);
             for ($i = 0; $i < $length; $i++) {
@@ -280,6 +294,8 @@ class ProjectController extends Controller
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+
             $comment->setTask($task);
             $comment->setUser($this->getUser());
             $dateTime = new \DateTime('now');
@@ -480,6 +496,27 @@ class ProjectController extends Controller
             $em->flush();
         }
         return $this->redirectToRoute('project_task_index', ['id' => $project->getId()]);
+    }
+
+    /**
+     * Download task's ics file
+     * @param Task $task
+     * @Route("/{idp}/tasks/{id}/download", name="project_task_download")
+     * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
+     * @Security("has_role('ROLE_USER')")
+     * @Security("project.getTeam().isMember(user)")
+     */
+    public function downloadIcs(Request $request, Project $project, Task $task): Response
+    {
+        $actual_link = "http://" . $request->getHttpHost() . "/projects/" . $project->getId() . "/tasks/" . $task->getId();
+
+        $downloadCal = new DownloadModel();
+        $downloadCal->downloadIcs($task, $actual_link);
+
+        return $this->render('file/index.html.twig', [
+            'controller_name' => 'ProjectController',
+        ]);
+
     }
 
     private function getPercent($allTasks, $closed) {
