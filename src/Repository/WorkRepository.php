@@ -61,6 +61,26 @@ class WorkRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @param $taskId
+     * @param $userId
+     * @return Work
+     */
+    public function findWorkWithTaskAndUser($taskId, $userId) {
+         $q = $this->createQueryBuilder('w')
+             ->select('w.id')
+            ->leftJoin('w.task', 't')
+            ->leftJoin('w.user', 'u')
+            ->andWhere('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ->andWhere('t.id = :taskId')
+            ->setParameter('taskId', $taskId)
+            ->andWhere('w.endDate IS NULL')
+            ->getQuery();
+        $res = $q->getResult();
+        return isset($res[0]['id']) ? $res[0]['id'] : null;
+    }
+
     public function findAsigneeId($userId)
     {
         return $this->createQueryBuilder('w')

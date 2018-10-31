@@ -192,14 +192,29 @@ fieldset[disabled] .btn-dark.active {
     overflow-x: hidden;
 }
 
+.fit-content-width{
+    min-width: fit-content;
+}
+
+.importTextArea {
+        width: 100%;
+        height: 20vh;
+        margin-top: 2vh;
+}
+
+.div-import {
+        width: 70%;
+        margin: 0 auto;
+}
+
+.div-import-part {
+        padding: 5vh;
+}
+
 @media (max-width: 576px){
     .search-div {
         flex-grow: 1;
         flex-shrink: 1;
         flex-basis: 0;
     }
-}
-
-.fit-content-width{
-    min-width: fit-content;
 }

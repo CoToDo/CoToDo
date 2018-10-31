@@ -7,7 +7,7 @@ var $newLinkButton = $('<div class="my-1"></div>').append($addTagLink);
 jQuery(document).ready(function() {
     // Get the ul that holds the collection of tags
     $collectionHolder = $('div.tags');
-    console.log($collectionHolder);
+    // console.log($collectionHolder);
 
     // add the "add a tag" anchor and li to the tags ul
     $collectionHolder.append($newLinkButton);
@@ -53,6 +53,22 @@ jQuery(document).ready(function($) {
     });
 
 });
+
+/**
+ * Upload file to textArea for import
+ * @param event
+ */
+var openFile = function(event) {
+    var input = event.target;
+
+    var reader = new FileReader();
+    reader.onload = function(){
+        var text = reader.result;
+        var node = document.getElementById('importTextArea');
+        node.innerText = text;
+    };
+    reader.readAsText(input.files[0]);
+};
 
 //This calls function autoResizeTextArea everytime when textarea registers user input
 //Used for auto expanding comments in task show template
