@@ -32,11 +32,7 @@ class TaskTO
 
     public function isPrioritySet()
     {
-        if (isset($this->priority)) {
-            return true;
-        } else {
-            return false;
-        }
+        return isset($this->priority);
     }
 
     public function getProject()

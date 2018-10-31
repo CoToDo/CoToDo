@@ -21,6 +21,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImportController extends Controller
 {
+    const CONTROLLER_NAME="controller_name";
+    const IMPORT_CONTROLLER="ImportController";
     /**
      * @Route("/import", name="import")
      * @Security("has_role('ROLE_USER')")
@@ -44,12 +46,12 @@ class ImportController extends Controller
             $txtWrongLines = $import->importFromFile($file->getPath() . "/" . $ToDoTxtFile->getFile());
 
             return $this->render('import/import.html.twig', [
-                'controller_name' => 'ImportController',
+                self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
                 'wrong' => implode("\n", $txtWrongLines)
             ]);
         } else {
             return $this->render('import/index.html.twig', [
-                'controller_name' => 'ImportController',
+                self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
                 'form' => $form->createView(),
             ]);
         }
@@ -80,7 +82,7 @@ class ImportController extends Controller
             );
         }
         return $this->render('import/import.html.twig', [
-            'controller_name' => 'ImportController',
+            self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
             'wrong' => implode("\n", $txtWrongLines)
         ]);
     }

@@ -84,7 +84,6 @@ class ProjectRepository extends ServiceEntityRepository
             ->andWhere('p.name = :param')
             ->setParameter("param", $name)
             ->getQuery();
-//         var_dump($q->getDQL());
         $res = $q->getResult();
          return isset($res[0]['id']) ? $res[0]['id'] : null;
     }

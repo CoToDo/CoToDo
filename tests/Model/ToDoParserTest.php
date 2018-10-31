@@ -5,6 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 
 class ToDoParserTest extends TestCase {
 
+    const PHONE = "phone";
     public function testImport() {
         $parser = new ToDoParser();
 
@@ -32,7 +33,7 @@ class ToDoParserTest extends TestCase {
             "Testing priority"
         );
         $resProject = array(array(), array("GarageSale"), array("GarageSale"), array(), array("projectX", "heavy"), array("X", "Y", "Z", "x"), array());
-        $resTags = array(array("phone"), array("phone"), array(), array("GroceryStore"), array("phone", "space", "earth"), array("completed", "cpl", "dates"), array());
+        $resTags = array(array(self::PHONE), array(self::PHONE), array(), array("GroceryStore"), array(self::PHONE, "space", "earth"), array("completed", "cpl", "dates"), array());
         $resDeadline = array(null, null, null, null, null, null, new DateTime("2018-12-24"));
 
         $counter = 0;
