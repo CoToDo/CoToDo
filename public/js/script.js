@@ -64,7 +64,7 @@ var openFile = function(event) {
     var reader = new FileReader();
     reader.onload = function(){
         var text = reader.result;
-        var node = document.getElementById('myTextArea');
+        var node = document.getElementById('importTextArea');
         node.innerText = text;
     };
     reader.readAsText(input.files[0]);
