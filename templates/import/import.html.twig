@@ -3,19 +3,27 @@
 {% block title %} {{ controller_name }}!{% endblock %}
 
 {% block body %}
-    <div class="table-responsive div-import">
-        <h1>Import todo.txt file</h1>
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="flash-{{ label }} alert alert-{{ label }}">
-                    {{ message }}
-                </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1>Import todo.txt file</h1>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="flash-{{ label }} alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-        <div class="div-import-part">
             <form action="{{ path('import_text') }}" method="post">
-                <textarea class="importTextArea" name="txtFileData">{{ wrong }}</textArea>
-                <input type="submit" value="Import" class="btn btn-large btn-primary"/>
+                <div class="form-row">
+                    <div class="col">
+                        <textarea class="importTextArea" name="txtFileData">{{ wrong }}</textArea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="submit" value="Import" class="btn btn-large btn-primary"/>
+                    </div>
+                </div>
             </form>
         </div>
     </div>

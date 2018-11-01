@@ -41,21 +41,22 @@
                     </tbody>
                 </table>
             </div>
-            <a class="btn btn-outline-secondary" href="{{ path('project_task_index', {'id': project.id}) }}">Back to
-                list</a>
-            <a class="btn btn-outline-secondary" href="{{ path('project_show', {'id': project.id}) }}">Back to project</a>
-            {% if task.completionDate is null and (team.admin(userRole) or team.leader(userRole)) %}
-                <a class="btn btn-outline-success" href="{{ path('project_task_complete', {'idp': project.id, 'id': task.id}) }}">Complete task</a>
-            {% endif %}
-            {% if team.admin(userRole) %}
-                <a class="btn btn-outline-primary"
-                   href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
-                {{ include('task/_delete_form.html.twig') }}
-            {% endif %}
-            <a class="btn btn-outline-dark" href="{{ path('project_task_history', {'idp': project.id , 'id': task.id}) }}">History</a>
+            <div class="row">
+                <a class="btn btn-outline-secondary" href="{{ path('project_task_index', {'id': project.id}) }}">Back to
+                    list</a>
+                <a class="btn btn-outline-secondary" href="{{ path('project_show', {'id': project.id}) }}">Back to project</a>
+                {% if task.completionDate is null and (team.admin(userRole) or team.leader(userRole)) %}
+                    <a class="btn btn-outline-success" href="{{ path('project_task_complete', {'idp': project.id, 'id': task.id}) }}">Complete task</a>
+                {% endif %}
+                {% if team.admin(userRole) %}
+                    <a class="btn btn-outline-primary"
+                       href="{{ path('project_task_edit', {'idp': project.id, 'id': task.id}) }}">Edit</a>
+                    {{ include('task/_delete_form.html.twig') }}
+                {% endif %}
+                <a class="btn btn-outline-dark" href="{{ path('project_task_history', {'idp': project.id , 'id': task.id}) }}">History</a>
+            </div>
         </div>
     </div>
-
 
     <div class="row mb-5">
         <div class="col">
@@ -99,15 +100,14 @@
         </div>
     </div>
 
-
-    <div class="row">
-        <div class="col">
+    <div class="row mb-5">
+        <div class="col-md-6">
             <canvas id="myChart" ></canvas>
             <script>
               loadGraph("graph");
             </script>
 
-            <select id="sel" onchange="updateData()">
+            <select id="sel" class="custom-select" onchange="updateData()">
                 <option value="s">Seconds</option>
                 <option value="m">Minutes</option>
                 <option value="h">Hours</option>
