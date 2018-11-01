@@ -10,12 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class NotificationController extends Controller
 {
-    public function index(NotificationRepository $notificationRepository)
+    public function index(NotificationRepository $notificationRepository, $dropdownLeft = false)
     {
         $notifications = $notificationRepository->findMyNotifications($this->getUser());
         return $this->render('notification/index.html.twig', [
             'controller_name' => 'NotificationController',
-            'notifications' => $notifications
+            'notifications' => $notifications,
+            'dropdown_left' => $dropdownLeft
         ]);
     }
 
