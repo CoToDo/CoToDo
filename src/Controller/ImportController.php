@@ -9,6 +9,7 @@ use App\Repository\TaskRepository;
 use App\Repository\TeamRepository;
 use App\Repository\WorkRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use PHPUnit\Runner\Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -39,31 +40,36 @@ class ImportController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $file = $ToDoTxtFile->getFile();
-            if ($file->getClientMimeType() !== self::MIME_TYPE_TEXT_PLAIN) {
-                $this->flashMessageWrongMimeType();
-                return $this->render('import/index.html.twig', [
-                    self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
-                    'form' => $form->createView(),
-                ]);
+            try {
+                $file = $ToDoTxtFile->getFile();
+                if ($file->getClientMimeType() !== self::MIME_TYPE_TEXT_PLAIN) {
+                    $this->flashMessageWrongMimeType();
+                    $this->renderPageWithErrorBeforeImport($form);
+                }
+                $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+                $file->move($this->getParameter('file_directory'), $fileName);
+                $ToDoTxtFile->setFile($fileName);
+                $file = new File($this->getParameter('file_directory') . '/' . $ToDoTxtFile->getFile());
+                $import = new ImportModel($doctrine->getManager(), $this->getUser());
+                $txtWrongLines = $import->importFromFile($file->getPath() . "/" . $ToDoTxtFile->getFile());
+                $this->flashMessagesAfterImport($txtWrongLines);
+            } catch (\Exception $exception) {
+                return $this->renderPageWithErrorBeforeImport($form);
             }
-            $fileName = md5(uniqid()) . '.' . $file->guessExtension();
-            $file->move($this->getParameter('file_directory'), $fileName);
-            $ToDoTxtFile->setFile($fileName);
-            $file = new File($this->getParameter('file_directory').'/' . $ToDoTxtFile->getFile());
-            $import = new ImportModel($doctrine->getManager(), $this->getUser());
-            $txtWrongLines = $import->importFromFile($file->getPath() . "/" . $ToDoTxtFile->getFile());
-            $this->flashMessagesAfterImport($txtWrongLines);
             return $this->render('import/import.html.twig', [
                 self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
                 self::WRONG => implode("\n", $txtWrongLines)
             ]);
         } else {
-            return $this->render('import/index.html.twig', [
-                self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
-                'form' => $form->createView(),
-            ]);
+            return $this->renderPageWithErrorBeforeImport($form);
         }
+    }
+
+    private function renderPageWithErrorBeforeImport($form) {
+        return $this->render('import/index.html.twig', [
+            self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
