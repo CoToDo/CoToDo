@@ -81,7 +81,7 @@ class ImportController extends Controller {
      * @param Request $request
      * @return Response
      */
-    public function importText(Request $request, ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository, WorkRepository $workRepository) {
+    public function importText(Request $request, ManagerRegistry $doctrine) {
         $txtFileData = $request->get('txtFileData');
         $import = new ImportModel($doctrine->getManager(), $this->getUser());
         $txtWrongLines = $import->importFromString($txtFileData);
