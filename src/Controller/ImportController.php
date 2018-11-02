@@ -23,6 +23,8 @@ class ImportController extends Controller
 {
     const CONTROLLER_NAME="controller_name";
     const IMPORT_CONTROLLER="ImportController";
+    const WRONG = 'wrong';
+
     /**
      * @Route("/import", name="import")
      * @Security("has_role('ROLE_USER')")
@@ -47,7 +49,7 @@ class ImportController extends Controller
             $this->flashMessages($txtWrongLines);
             return $this->render('import/import.html.twig', [
                 self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
-                'wrong' => implode("\n", $txtWrongLines)
+                self::WRONG => implode("\n", $txtWrongLines)
             ]);
         } else {
             return $this->render('import/index.html.twig', [
@@ -70,7 +72,7 @@ class ImportController extends Controller
         $this->flashMessages($txtWrongLines);
         return $this->render('import/import.html.twig', [
             self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
-            'wrong' => implode("\n", $txtWrongLines)
+            self::WRONG => implode("\n", $txtWrongLines)
         ]);
     }
 
