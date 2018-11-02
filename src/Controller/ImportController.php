@@ -10,6 +10,7 @@ use App\Repository\TaskRepository;
 use App\Repository\TeamRepository;
 use App\Repository\WorkRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use phpDocumentor\Reflection\Types\Self_;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -24,6 +25,7 @@ class ImportController extends Controller
     const CONTROLLER_NAME="controller_name";
     const IMPORT_CONTROLLER="ImportController";
     const WRONG = 'wrong';
+    const MIME_TYPE_TEXT_PLAIN = "text/plain";
 
     /**
      * @Route("/import", name="import")
@@ -40,6 +42,13 @@ class ImportController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $ToDoTxtFile->getFile();
+            if ($file->getClientMimeType() !== self::MIME_TYPE_TEXT_PLAIN) {
+                return $this->render('import/index.html.twig', [
+                    self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
+                    'form' => $form->createView(),
+                    // TODO flash
+                ]);
+            }
             $fileName = md5(uniqid()) . '.' . $file->guessExtension();
             $file->move($this->getParameter('file_directory'), $fileName);
             $ToDoTxtFile->setFile($fileName);
