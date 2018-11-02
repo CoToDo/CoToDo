@@ -8,6 +8,13 @@
             <h1>Import todo.txt file</h1>
             <hr>
             <h3>File upload</h3>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="flash-{{ label }} alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
             {{ form_start(form) }}
                 {{ form_errors(form) }}
                 <div class="form-row my-2">

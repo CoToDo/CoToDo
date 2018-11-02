@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Team;
 use App\Entity\ToDoTxtFile;
 use App\Model\ImportModel;
 use App\Repository\ProjectRepository;
@@ -10,7 +9,6 @@ use App\Repository\TaskRepository;
 use App\Repository\TeamRepository;
 use App\Repository\WorkRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use phpDocumentor\Reflection\Types\Self_;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -43,10 +41,10 @@ class ImportController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $ToDoTxtFile->getFile();
             if ($file->getClientMimeType() !== self::MIME_TYPE_TEXT_PLAIN) {
+                $this->flashMessageWrongMimeType();
                 return $this->render('import/index.html.twig', [
                     self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
                     'form' => $form->createView(),
-                    // TODO flash
                 ]);
             }
             $fileName = md5(uniqid()) . '.' . $file->guessExtension();
@@ -55,7 +53,7 @@ class ImportController extends Controller
             $file = new File($this->getParameter('file_directory').'/' . $ToDoTxtFile->getFile());
             $import = new ImportModel($doctrine->getManager(), $this->getUser());
             $txtWrongLines = $import->importFromFile($file->getPath() . "/" . $ToDoTxtFile->getFile());
-            $this->flashMessages($txtWrongLines);
+            $this->flashMessagesAfterImport($txtWrongLines);
             return $this->render('import/import.html.twig', [
                 self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
                 self::WRONG => implode("\n", $txtWrongLines)
@@ -78,14 +76,14 @@ class ImportController extends Controller
         $txtFileData = $request->get('txtFileData');
         $import = new ImportModel($doctrine->getManager(), $this->getUser());
         $txtWrongLines = $import->importFromString($txtFileData);
-        $this->flashMessages($txtWrongLines);
+        $this->flashMessagesAfterImport($txtWrongLines);
         return $this->render('import/import.html.twig', [
             self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
             self::WRONG => implode("\n", $txtWrongLines)
         ]);
     }
 
-    private function flashMessages($txtWrongLines) {
+    private function flashMessagesAfterImport($txtWrongLines) {
         if (empty($txtWrongLines)) {
             $this->addFlash(
                 'success',
@@ -97,6 +95,13 @@ class ImportController extends Controller
                 'Some lines couldn\'t be proccesed!'
             );
         }
+    }
+
+    private function flashMessageWrongMimeType() {
+        $this->addFlash(
+            'warning',
+            'Wrong mime type!'
+        );
     }
 
 }
