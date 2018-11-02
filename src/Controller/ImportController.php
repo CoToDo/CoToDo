@@ -27,11 +27,11 @@ class ImportController extends Controller
      * @Route("/import", name="import")
      * @Security("has_role('ROLE_USER')")
      */
-    public function index(Request $request, ManagerRegistry $doctrine, ProjectRepository $projectRepository, TaskRepository $taskRepository, TeamRepository $teamRepository, WorkRepository $workRepository)
+    public function index(Request $request, ManagerRegistry $doctrine)
     {
         $ToDoTxtFile=new ToDoTxtFile();
         $form = $this->createFormBuilder($ToDoTxtFile)
-            ->add('file', FileType::class, array('label' => 'Plain text file (txt)'))
+            ->add('file', FileType::class, array('label' => 'Plain text file (txt)', 'attr' => array('accept' => 'text/plain')))
             ->add('save', SubmitType::class, array('label' => 'Import', 'attr'=> array('class'=>'btn btn-large btn-primary')))
             ->getForm();
 
