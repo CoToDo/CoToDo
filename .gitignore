@@ -30,3 +30,5 @@
 #dev-scripts
 /dev-scripts/
 
+clover.xml
+junit-logfile.xml
