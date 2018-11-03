@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ controller_name }}!{% endblock %}
+{% block title %}Import todo.txt{% endblock %}
 
 {% block body %}
     <div class="row justify-content-center">
@@ -16,7 +16,6 @@
                 {% endfor %}
             {% endfor %}
             {{ form_start(form) }}
-                {{ form_errors(form) }}
                 <div class="form-row my-2">
                     <div class="col">
                         {{ form_label(form.file) }}

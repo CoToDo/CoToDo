@@ -11,13 +11,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ImportController extends Controller {
-    const CONTROLLER_NAME = "controller_name";
-    const IMPORT_CONTROLLER = "ImportController";
     const WRONG = 'wrong';
     const MIME_TYPE_TEXT_PLAIN = "text/plain";
 
@@ -35,42 +34,26 @@ class ImportController extends Controller {
             ->add('save', SubmitType::class, array('label' => 'Import', 'attr' => array('class' => 'btn btn-large btn-primary')))
             ->getForm();
 
-        try {
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                $file = $ToDoTxtFile->getFile();
-                if ($file->getClientMimeType() !== self::MIME_TYPE_TEXT_PLAIN || $file->getClientOriginalExtension() !== 'txt') {
-                    $this->flashMessageWrongMimeType();
-                    return $this->renderPageWithErrorBeforeImport($form);
-                }
-                $txtWrongLines = $this->dealWithFile($file, $doctrine, $ToDoTxtFile);
-                $this->flashMessagesAfterImport($txtWrongLines);
-                return $this->render('import/import.html.twig', [
-                    self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
-                    self::WRONG => implode("\n", $txtWrongLines)
-                ]);
-            } else {
-                // TODO some bug in symfony or php, with memory size. trying to upload file when form is not valid, so there is need to redirect and not show flash messages, wtf
-                /* trying setup memory in kernel, but not work, only for some inputs ...
-                ini_set('post_max_size', '3M');
-                ini_set('memory_limit', '512M'); */
-                if (!$form->isSubmitted()) {
-                    return $this->renderPageWithErrorBeforeImport($form);
-                } else {
-                    return $this->redirectToRoute('import');
-                }
-            }
-        } catch (\Exception $exception) {
-            $this->flashMessageException($exception);
-            return $this->renderPageWithErrorBeforeImport($form);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $ToDoTxtFile->getFile();
+            $txtWrongLines = $this->dealWithFile($file, $doctrine, $ToDoTxtFile);
+            $this->flashMessagesAfterImport($txtWrongLines);
+            return $this->render('import/import.html.twig', [
+                self::WRONG => implode("\n", $txtWrongLines)
+            ]);
         }
+
+        return $this->render('import/index.html.twig', array(
+            'form' => $form->createView(),
+        ));
     }
 
     /**
      * Transfer file and import it
-     * @param $file
-     * @param $doctrine
-     * @param $ToDoTxtFile
+     * @param UploadedFile $file
+     * @param ManagerRegistry $doctrine
+     * @param ToDoTxtFile $ToDoTxtFile
      * @return array wrong lines, which couldn't be parsed
      */
     private function dealWithFile($file, $doctrine, $ToDoTxtFile) {
@@ -83,21 +66,10 @@ class ImportController extends Controller {
     }
 
     /**
-     * Render default view with form
-     * @param $form
-     * @return Response
-     */
-    private function renderPageWithErrorBeforeImport($form) {
-        return $this->render('import/index.html.twig', [
-            self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * @Route("import/text", name="import_text", methods="POST")
      * @Security("has_role('ROLE_USER')")
      * @param Request $request
+     * @param ManagerRegistry $doctrine
      * @return Response
      */
     public function importText(Request $request, ManagerRegistry $doctrine) {
@@ -106,7 +78,6 @@ class ImportController extends Controller {
         $txtWrongLines = $import->importFromString($txtFileData);
         $this->flashMessagesAfterImport($txtWrongLines);
         return $this->render('import/import.html.twig', [
-            self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
             self::WRONG => implode("\n", $txtWrongLines)
         ]);
     }
@@ -127,25 +98,5 @@ class ImportController extends Controller {
                 'Some lines couldn\'t be proccesed!'
             );
         }
-    }
-
-    /**
-     * Setup flash message when is wrong mime type
-     */
-    private function flashMessageWrongMimeType() {
-        $this->addFlash(
-            FlashMessages::WARNING,
-            'Wrong mime type!'
-        );
-    }
-
-    /**
-     * Setup flash message when any exception thrown
-     */
-    private function flashMessageException($ex) {
-        $this->addFlash(
-            FlashMessages::WARNING,
-            "Exception! " . $ex->getMessage()
-        );
     }
 }
