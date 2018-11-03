@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ controller_name }}!{% endblock %}
+{% block title %}Import todo.txt{% endblock %}
 
 {% block body %}
     <div class="row justify-content-center">
@@ -14,9 +14,9 @@
                 {% endfor %}
             {% endfor %}
             <form action="{{ path('import_text') }}" method="post">
-                <div class="form-row">
+                <div class="form-row my-2">
                     <div class="col">
-                        <textarea class="importTextArea" name="txtFileData">{{ wrong }}</textArea>
+                        <textarea class="form-control importTextArea" name="txtFileData">{{ wrong }}</textArea>
                     </div>
                 </div>
                 <div class="form-row">
