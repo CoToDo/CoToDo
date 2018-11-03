@@ -56,4 +56,23 @@ class TeamRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @return Int Returns number of Team leaders
+     */
+    public function numberOfLeaders($id)
+    {
+        $q = $this->createQueryBuilder('t')
+            ->join('t.roles', 'r')
+            ->andWhere('t.id = :id and r.type = :leader')
+            ->setParameter('id', $id)
+            ->setParameter('leader', Constants::LEADER)
+            ->select('COUNT(t)')
+            ->getQuery()
+            ->getResult()
+            ;
+
+        return isset($q[0][1]) ? $q[0][1] : null;
+
+    }
+
 }

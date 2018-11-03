@@ -19,3 +19,16 @@
 ###> symfony/web-server-bundle ###
 /.web-server-pid
 ###< symfony/web-server-bundle ###
+
+# bash files
+*.sh
+
+
+#upload files
+/public/uploads/*
+
+#dev-scripts
+/dev-scripts/
+
+clover.xml
+junit-logfile.xml

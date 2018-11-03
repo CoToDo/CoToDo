@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jenik
- * Date: 5/4/18
- * Time: 4:49 PM
- */
 
 namespace App\Model;
 
@@ -15,6 +9,9 @@ class ExportModel
 {
 
     public function exportUser(User $user) {
+        header('Content-disposition: attachment; filename=todo.txt');
+        header('Content-type: text/plain');
+
         foreach ($user->getWorks() as $work) {
             if($work->getEndDate() != null) {
                 continue;
@@ -47,9 +44,6 @@ class ExportModel
             $row .= "\n";
             echo "$row";
         }
-
-        header('Content-disposition: attachment; filename=todo.txt');
-        header('Content-type: text/plain');
     }
 
 }

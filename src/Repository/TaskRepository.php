@@ -101,4 +101,21 @@ class TaskRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @param $projectId
+     * @return int
+     */
+    public function  findTaskInProject($projectId, $taskName) {
+        $q = $this->createQueryBuilder('t')
+            ->select('t.id')
+            ->leftJoin('t.project', 'p')
+            ->andWhere('p.id = :projectId')
+            ->setParameter('projectId', $projectId)
+            ->andWhere('t.name = :name')
+            ->setParameter('name', $taskName)
+            ->getQuery();
+        $res = $q->getResult();
+        return isset($res[0]['id']) ? $res[0]['id'] : null;
+    }
+
 }

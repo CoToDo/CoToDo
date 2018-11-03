@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -179,6 +180,18 @@ class Work
     public function getWorkTime(): ?\DateInterval
     {
         return $this->getStartDate()->diff($this->getEndDate());
+    }
+
+    /**
+     * @return int
+     */
+    public function getWorkTimeStamp()
+    {
+        if ($this->isEndSet()){
+            return $this->getEndDate()->getTimestamp() - $this->getStartDate()->getTimestamp();
+        } else {
+            return 0;
+        }
     }
 
 }

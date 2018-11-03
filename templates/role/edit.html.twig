@@ -3,14 +3,28 @@
 {% block title %}Edit role{% endblock %}
 
 {% block body %}
-    <div class="main-div-crud">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1>Edit role</h1>
 
-        <h1>Edit role</h1>
+            {% for message in app.flashes('warning') %}
+                <div class="flash-notice alert alert-warning">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+        {% for message in app.flashes('warning') %}
+            <div class="flash-notice alert alert-warning">
+                {{ message }}
+            </div>
+        {% endfor %}
 
         {{ include('role/_form.html.twig', {'button_label': 'Update'}) }}
 
-        <a class="btn btn-outline-secondary" href="{{ path('team_show', {'id': role.team.id }) }}">Back to team</a>
 
-        {{ include('role/_delete_form.html.twig') }}
+            <a class="btn btn-outline-secondary" href="{{ path('team_show', {'id': role.team.id }) }}">Back to team</a>
+
+            {{ include('role/_delete_form.html.twig') }}
+        </div>
     </div>
 {% endblock %}

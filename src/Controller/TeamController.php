@@ -120,10 +120,11 @@ class TeamController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("team.isMember(user)")
      */
-    public function show(Team $team): Response
+    public function show(Team $team, TeamRepository $teamRepository): Response
     {
         return $this->render('team/show.html.twig', [
             'team' => $team,
+            'test' => $teamRepository->numberOfLeaders($team->getId()),
             'roles' => $team->getRoles(),
             'projects' => $team->getProjects(),
             'userRole' => $this->getUser()]);

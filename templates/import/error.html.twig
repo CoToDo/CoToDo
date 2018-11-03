@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Import todo.txt{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1>Import todo.txt file</h1>
+            <hr>
+            <h3>File upload</h3>
+                    <div class="flash-warning alert alert-warning">
+                        File is too large or wrong type!
+                    </div>
+            {{ form_start(form) }}
+                <div class="form-row my-2">
+                    <div class="col">
+                        {{ form_label(form.file) }}
+                        {{ form_errors(form.file) }}
+                        {{ form_widget(form.file) }}
+                    </div>
+                </div>
+            {{ form_end(form) }}
+            <hr>
+
+            <h3>Upload and Edit TXT File</h3>
+            <form action="{{ path('import_text') }}" method="post">
+                <div class="form-row">
+                    <div class="col">
+                        <label for="file">Plain text file (txt)</label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input id="file" type='file' accept='text/plain' onchange='openFile(event)' required/>
+                    </div>
+                </div>
+                <div class="form-row my-2">
+                    <div class="col">
+                        <textarea class="form-control importTextArea" id="importTextArea" name="txtFileData"></textArea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="submit" value="Import" class="btn btn-large btn-primary"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -4,7 +4,11 @@
         <i class="fas fa-bell"></i>
         <span class="badge badge-light">{{ notifications | length }}</span>
     </button>
+    {% if dropdown_left == true %}
+    <div class="dropdown-menu dropdown-menu-left scrollable-menu" aria-labelledby="navbarDropdown">
+    {% else %}
     <div class="dropdown-menu dropdown-menu-right scrollable-menu" aria-labelledby="navbarDropdown">
+    {% endif %}
         <h5 class="dropdown-header">Notifications</h5>
         {% if notifications | length == 0 %}
             <div class="dropdown-divider"></div>

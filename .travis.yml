@@ -10,4 +10,5 @@ addons:
     organization: "cotodo"
 
 script:
+  - ./bin/phpunit --verbose
   - sonar-scanner
