@@ -28,6 +28,21 @@ class ImportController extends Controller {
      * @return Response
      */
     public function index(Request $request, ManagerRegistry $doctrine) {
+        return $this->importElaboration($request, $doctrine, false);
+    }
+
+    /**
+     * @Route("/import/error", name="import_error")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param ManagerRegistry $doctrine
+     * @return Response
+     */
+    public function importError(Request $request, ManagerRegistry $doctrine) {
+        return $this->importElaboration($request, $doctrine, true);
+    }
+
+    private function importElaboration(Request $request, ManagerRegistry $doctrine, bool $showError) {
         $ToDoTxtFile = new ToDoTxtFile();
         $form = $this->createFormBuilder($ToDoTxtFile)
             ->add('file', FileType::class, array('label' => 'Plain text file (txt)', 'attr' => array('accept' => 'text/plain')))
@@ -42,11 +57,21 @@ class ImportController extends Controller {
             return $this->render('import/import.html.twig', [
                 self::WRONG => implode("\n", $txtWrongLines)
             ]);
+        } else {
+            if ($form->isSubmitted()) {
+                return $this->redirectToRoute('import_error');
+            } else {
+                if ($showError) {
+                    return $this->render('import/error.html.twig', array(
+                        'form' => $form->createView(),
+                    ));
+                } else {
+                    return $this->render('import/index.html.twig', array(
+                        'form' => $form->createView(),
+                    ));
+                }
+            }
         }
-
-        return $this->render('import/index.html.twig', array(
-            'form' => $form->createView(),
-        ));
     }
 
     /**
