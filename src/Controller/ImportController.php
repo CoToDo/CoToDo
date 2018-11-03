@@ -65,7 +65,6 @@ class ImportController extends Controller {
                 }
             }
         } catch (\Exception $exception) {
-            $logger->info('exception');
             $this->flashMessageException($exception);
             return $this->renderPageWithErrorBeforeImport($form);
         }
