@@ -11,6 +11,8 @@ namespace App;
 abstract class FlashMessages
 {
     const WARNING = 'warning';
-    const DELETE_LEADER = 'leader';
+    const SUCCESS = 'success';
+    const INFO = 'info';
 
+    const DELETE_LEADER = 'leader';
 }

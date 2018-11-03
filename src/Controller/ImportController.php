@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\ToDoTxtFile;
+use App\FlashMessages;
 use App\Model\ImportModel;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -42,12 +43,7 @@ class ImportController extends Controller {
                     $this->flashMessageWrongMimeType();
                     return $this->renderPageWithErrorBeforeImport($form);
                 }
-                $fileName = md5(uniqid()) . '.' . $file->guessExtension();
-                $file->move($this->getParameter('file_directory'), $fileName);
-                $ToDoTxtFile->setFile($fileName);
-                $file = new File($this->getParameter('file_directory') . '/' . $ToDoTxtFile->getFile());
-                $import = new ImportModel($doctrine->getManager(), $this->getUser());
-                $txtWrongLines = $import->importFromFile($file->getPath() . "/" . $ToDoTxtFile->getFile());
+                $txtWrongLines = $this->dealWithFile($file, $doctrine, $ToDoTxtFile);
                 $this->flashMessagesAfterImport($txtWrongLines);
                 return $this->render('import/import.html.twig', [
                     self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
@@ -70,6 +66,27 @@ class ImportController extends Controller {
         }
     }
 
+    /**
+     * Transfer file and import it
+     * @param $file
+     * @param $doctrine
+     * @param $ToDoTxtFile
+     * @return array wrong lines, which couldn't be parsed
+     */
+    private function dealWithFile($file, $doctrine, $ToDoTxtFile) {
+        $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+        $file->move($this->getParameter('file_directory'), $fileName);
+        $ToDoTxtFile->setFile($fileName);
+        $file = new File($this->getParameter('file_directory') . '/' . $ToDoTxtFile->getFile());
+        $import = new ImportModel($doctrine->getManager(), $this->getUser());
+        return $import->importFromFile($file->getPath() . "/" . $ToDoTxtFile->getFile());
+    }
+
+    /**
+     * Render default view with form
+     * @param $form
+     * @return Response
+     */
     private function renderPageWithErrorBeforeImport($form) {
         return $this->render('import/index.html.twig', [
             self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
@@ -94,30 +111,40 @@ class ImportController extends Controller {
         ]);
     }
 
+    /**
+     * Setup flash message in order of wrong parsed line
+     * @param array $txtWrongLines
+     */
     private function flashMessagesAfterImport($txtWrongLines) {
         if (empty($txtWrongLines)) {
             $this->addFlash(
-                'success',
+                FlashMessages::SUCCESS,
                 'Your changes were saved!'
             );
         } else {
             $this->addFlash(
-                'warning',
+                FlashMessages::WARNING,
                 'Some lines couldn\'t be proccesed!'
             );
         }
     }
 
+    /**
+     * Setup flash message when is wrong mime type
+     */
     private function flashMessageWrongMimeType() {
         $this->addFlash(
-            'warning',
+            FlashMessages::WARNING,
             'Wrong mime type!'
         );
     }
 
+    /**
+     * Setup flash message when any exception thrown
+     */
     private function flashMessageException($ex) {
         $this->addFlash(
-            'warning',
+            FlashMessages::WARNING,
             "Exception! " . $ex->getMessage()
         );
     }
