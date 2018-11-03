@@ -4,13 +4,7 @@ namespace App\Controller;
 
 use App\Entity\ToDoTxtFile;
 use App\Model\ImportModel;
-use App\Repository\ProjectRepository;
-use App\Repository\TaskRepository;
-use App\Repository\TeamRepository;
-use App\Repository\WorkRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use PHPUnit\Runner\Exception;
-use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -33,7 +27,7 @@ class ImportController extends Controller {
      * @param ManagerRegistry $doctrine
      * @return Response
      */
-    public function index(Request $request, ManagerRegistry $doctrine, LoggerInterface $logger) {
+    public function index(Request $request, ManagerRegistry $doctrine) {
         $ToDoTxtFile = new ToDoTxtFile();
         $form = $this->createFormBuilder($ToDoTxtFile)
             ->add('file', FileType::class, array('label' => 'Plain text file (txt)', 'attr' => array('accept' => 'text/plain')))
@@ -43,16 +37,11 @@ class ImportController extends Controller {
         try {
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-//                $logger->info('form OK');
                 $file = $ToDoTxtFile->getFile();
-//                $logger->info($file->getClientSize() . " size");
-//                var_dump($file->getClientOriginalExtension() . " " . $file->getClientMimeType());
                 if ($file->getClientMimeType() !== self::MIME_TYPE_TEXT_PLAIN || $file->getClientOriginalExtension() !== 'txt') {
-//                    $logger->info('wrong mime, or extension ');
                     $this->flashMessageWrongMimeType();
                     return $this->renderPageWithErrorBeforeImport($form);
                 }
-//                var_dump($file->getClientOriginalExtension() . " " . $file->getClientMimeType());
                 $fileName = md5(uniqid()) . '.' . $file->guessExtension();
                 $file->move($this->getParameter('file_directory'), $fileName);
                 $ToDoTxtFile->setFile($fileName);
@@ -60,22 +49,18 @@ class ImportController extends Controller {
                 $import = new ImportModel($doctrine->getManager(), $this->getUser());
                 $txtWrongLines = $import->importFromFile($file->getPath() . "/" . $ToDoTxtFile->getFile());
                 $this->flashMessagesAfterImport($txtWrongLines);
-//                $logger->info('after import');
                 return $this->render('import/import.html.twig', [
                     self::CONTROLLER_NAME => self::IMPORT_CONTROLLER,
                     self::WRONG => implode("\n", $txtWrongLines)
                 ]);
             } else {
-                /* TODO some bug in symfony or php, with memory size. trying to upload file when form is not valid, so there is need to redirect and not show flash messages, wtf
-                    trying setup memory in kernel, but not work, only for some inputs ...
-                    ini_set('post_max_size', '3M');
-                    ini_set('memory_limit', '512M'); */
-//                $logger->info('form not submited|not');
+                // TODO some bug in symfony or php, with memory size. trying to upload file when form is not valid, so there is need to redirect and not show flash messages, wtf
+                /* trying setup memory in kernel, but not work, only for some inputs ...
+                ini_set('post_max_size', '3M');
+                ini_set('memory_limit', '512M'); */
                 if (!$form->isSubmitted()) {
-//                    $logger->info('form not submited');
                     return $this->renderPageWithErrorBeforeImport($form);
                 } else {
-//                    $logger->info('form not valid');
                     return $this->redirectToRoute('import');
                 }
             }
