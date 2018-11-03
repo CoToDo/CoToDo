@@ -18,8 +18,9 @@ class Kernel extends BaseKernel
     public function __construct(string $environment, bool $debug)
     {
         parent::__construct($environment, $debug);
-
         date_default_timezone_set("Europe/Prague");
+        ini_set('post_max_size', '3M');
+        ini_set('memory_limit', '512M');
     }
 
     public function getCacheDir()
