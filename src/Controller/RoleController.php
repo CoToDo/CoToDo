@@ -130,7 +130,12 @@ class RoleController extends Controller
         if($teamRepository->numberOfLeaders($role->getTeam()->getId()) > 1){
             if ($this->isCsrfTokenValid('delete' . $role->getId(), $request->request->get('_token'))) {
                 $em = $this->getDoctrine()->getManager();
-                $em->remove($role, $role->getType());
+                foreach ($role->getUser()->getWorks() as $work) {
+                    if ($work->getTask()->getProject()->getTeam()->getId() == $role->getTeam()->getId()) {
+                        $em->remove($work->getTask());
+                    }
+                }
+                $em->remove($role);
                 $em->flush();
             }
 
