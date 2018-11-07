@@ -132,7 +132,7 @@ class RoleController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 foreach ($role->getUser()->getWorks() as $work) {
                     if ($work->getTask()->getProject()->getTeam()->getId() == $role->getTeam()->getId()) {
-                        $em->remove($work->getTask());
+                        $em->remove($work);
                     }
                 }
                 $em->remove($role);
