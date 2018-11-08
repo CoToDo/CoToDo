@@ -247,7 +247,7 @@ class ProjectController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isAdmin(user)")
      */
-    public function createTask(Request $request, Project $project, TagRepository $tagRepository, LoggerInterface $logger): Response
+    public function createTask(Request $request, Project $project, TagRepository $tagRepository): Response
     {
         $task = new Task();
         $task->setProject($project);
@@ -360,31 +360,27 @@ class ProjectController extends Controller
      * @param Request $request
      * @param Project $project
      * @param Task $task
+     * @param TagRepository $tagRepository
      * @return Response
      * @Route("/{idp}/tasks/{id}/edit", name="project_task_edit", methods="GET|POST")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isAdmin(user)")
      */
-    public function editTask(Request $request, Project $project, Task $task, TagRepository $tagRepository, LoggerInterface $logger): Response
+    public function editTask(Request $request, Project $project, Task $task, TagRepository $tagRepository): Response
     {
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             var_dump($task->getName());
             foreach ($task->getTags() as $tag) {
                 $tagInDb = $tagRepository->findOneBy(['name' => $tag->getName()]);
                 if (isset($tagInDb)) {
-                    $logger->info('tag in db ' . $tagInDb->getName());
                     $task->removeTag($tag);
                     $task->addTag($tagInDb);
-                } else {
-                    $logger->info('not in db' . $tag->getName());
                 }
             }
             $this->getDoctrine()->getManager()->flush();
-
             return $this->redirectToRoute('project_task_edit', ['id' => $task->getId(), 'idp' => $project->getId()]);
         }
 
