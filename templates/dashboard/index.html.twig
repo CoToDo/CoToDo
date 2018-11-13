@@ -25,7 +25,7 @@
                     <td>{{ task.createDate ? task.createDate|date('Y-m-d H:i:s') : '' }}</td>
                     <td>{{ task.deadline ? task.deadline|date('Y-m-d') : '' }}</td>
                     <td>
-                        <a class="btn btn-success" href="#">Comment</a>
+                        <a class="btn btn-success" href="{{ path('project_task_show', {'idp': task.project.id, 'id': task.id}) }}#new-comment">Comment</a>
                         {% if task.completionDate == null %}
                             {% if not task.work(user).startSet %}
                                 <a class="btn btn-outline-dark" href="{{ path('work_set_start', {'id' : task.workId(user)} ) }}">Start</a>
@@ -48,4 +48,3 @@
         </table>
     </div>
 {% endblock %}
-
