@@ -11,7 +11,7 @@
             </div>
             <br>
             <div class="table-responsive">
-                <table class="table">
+                <table class="table table-hover">
                     <tbody>
                         <tr>
                             <th>Description</th>
@@ -21,9 +21,9 @@
                             <th>Create date</th>
                             <td>{{ project.createDate ? project.createDate|date('Y-m-d H:i:s') : '' }}</td>
                         </tr>
-                        <tr>
+                        <tr class="clickable-row" data-href="{{ path('team_show', {'id': project.team.id}) }}">
                             <th>Team</th>
-                            <td>{{ project.team  }}</td>
+                            <td>{{ project.team }}</td>
                         </tr>
                     </tbody>
                 </table>
