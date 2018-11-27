@@ -87,9 +87,9 @@ class UserController extends Controller
         if ($this->isCsrfTokenValid('delete'.$userIn->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($userIn);
+            $this->get('security.token_storage')->setToken(null);
             $em->flush();
         }
-
-        return $this->redirectToRoute('user_index');
+        return $this->redirectToRoute('landing_page');
     }
 }
