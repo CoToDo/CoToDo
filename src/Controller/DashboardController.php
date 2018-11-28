@@ -20,6 +20,7 @@ class DashboardController extends Controller
      * Render DashBoard view
      * @param TaskRepository $taskRepository
      * @return Response
+     * @throws \Exception
      * @Route("/dashboard", name="dashboard")
      * @Security("has_role('ROLE_USER')")
      */
@@ -39,6 +40,8 @@ class DashboardController extends Controller
         $newDate = new \DateTime();
         $newDate->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         $newDate->setISODate($dateTime->format("Y"), $weekNo);
+
+
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
             'tasks' => $taskRepository->findMyTasksSortedByPriority($user->getId()),
@@ -51,12 +54,12 @@ class DashboardController extends Controller
             'friColor' => $friColor,
             'satColor' => $satColor,
             'sunColor' => $sunColor,
-            'tueDate' => $newDate->add(new \DateInterval('P1D'))->format('d m'),
-            'wedDate' => $newDate->add(new \DateInterval('P1D'))->format('d m'),
-            'thuDate' => $newDate->add(new \DateInterval('P1D'))->format('d m'),
-            'friDate' => $newDate->add(new \DateInterval('P1D'))->format('d m'),
-            'satDate' => $newDate->add(new \DateInterval('P1D'))->format('d m'),
-            'sunDate' => $newDate->add(new \DateInterval('P1D'))->format('d m'),
+            'tueDate' => $newDate->add(new \DateInterval('P1D'))->format('d.m'),
+            'wedDate' => $newDate->add(new \DateInterval('P1D'))->format('d.m'),
+            'thuDate' => $newDate->add(new \DateInterval('P1D'))->format('d.m'),
+            'friDate' => $newDate->add(new \DateInterval('P1D'))->format('d.m'),
+            'satDate' => $newDate->add(new \DateInterval('P1D'))->format('d.m'),
+            'sunDate' => $newDate->add(new \DateInterval('P1D'))->format('d.m'),
         ]);
 
     }
