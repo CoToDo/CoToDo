@@ -3,12 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Model\DayEnum;
+use App\Model\DayTO;
 use App\Repository\TaskRepository;
-use PhpParser\Node\Scalar\String_;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class DashboardController extends Controller {
     const TODAY_COLOR = "#aa0000";
@@ -34,7 +35,7 @@ class DashboardController extends Controller {
         $friColor = $this->getProperColor($dateTime, "Fri");
         $satColor = $this->getProperColor($dateTime, "Sat");
         $sunColor = $this->getProperColor($dateTime, "Sun");
-        $monDate = $this->getMonday();
+        $monDate = $this->getDayWithInterval(0);
         $tueDate = $this->getDayWithInterval(1);
         $wedDate = $this->getDayWithInterval(2);
         $thuDate = $this->getDayWithInterval(3);
@@ -73,6 +74,8 @@ class DashboardController extends Controller {
                     break;
             }
         }
+
+        $this->setUpDaysTO($taskRepository, $user);
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
             'tasks' => $taskRepository->findMyTasksSortedByPriority($user->getId()),
@@ -128,4 +131,22 @@ class DashboardController extends Controller {
         return ($dateTime->format("D") === $day) ? DashboardController::TODAY_COLOR : DashboardController::OTHER_COLOR;
     }
 
+    private function setUpDaysTO(TaskRepository $taskRepository, User $user) {
+        $dateTime = new \DateTime('now');
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $days = array();
+        for ($i = 0; $i < 7; $i++) {
+            $day = new DayTO();
+            $day->setColor($this->getProperColor($dateTime, DayEnum::$values[$i]));
+            $day->setDate($this->getDayWithInterval($i));
+            foreach ($taskRepository->findMyTasksSortedByPriority($user->getId()) as $task) {
+                if ($task->getDeadline()->format('dMY') === $day->getDate()->format('dMY')) {
+                    $day->getTasks()[] = $task;
+                }
+            }
+            $days[] = $day;
+        }
+
+        var_dump($days);
+    }
 }
