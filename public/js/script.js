@@ -21,6 +21,9 @@ jQuery(document).ready(function() {
         // add a new tag form (see next code block)
         addTagForm($collectionHolder, $newLinkButton);
     });
+
+    // enable autocomplete on select inputs
+    $(".autocomplete_select").chosen();
 });
 
 //adds new prototype tag when Add Tag button is clicked
