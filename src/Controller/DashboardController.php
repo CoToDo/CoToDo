@@ -27,22 +27,20 @@ class DashboardController extends Controller {
         $user = $this->getUser();
         $dateTime = new \DateTime('now');
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        $monColor = ($dateTime->format("D") === "Mon") ? DashboardController::TODAY_COLOR : DashboardController::OTHER_COLOR;
-        $tueColor = ($dateTime->format("D") === "Tue") ? DashboardController::TODAY_COLOR : DashboardController::OTHER_COLOR;
-        $wedColor = ($dateTime->format("D") === "Wed") ? DashboardController::TODAY_COLOR : DashboardController::OTHER_COLOR;
-        $thuColor = ($dateTime->format("D") === "Thu") ? DashboardController::TODAY_COLOR : DashboardController::OTHER_COLOR;
-        $friColor = ($dateTime->format("D") === "Fri") ? DashboardController::TODAY_COLOR : DashboardController::OTHER_COLOR;
-        $satColor = ($dateTime->format("D") === "Sat") ? DashboardController::TODAY_COLOR : DashboardController::OTHER_COLOR;
-        $sunColor = ($dateTime->format("D") === "Sun") ? DashboardController::TODAY_COLOR : DashboardController::OTHER_COLOR;
-
+        $monColor = $this->getProperColor($dateTime, "Mon");
+        $tueColor = $this->getProperColor($dateTime, "Thu");
+        $wedColor = $this->getProperColor($dateTime, "Wed");
+        $thuColor = $this->getProperColor($dateTime, "Thu");
+        $friColor = $this->getProperColor($dateTime, "Fri");
+        $satColor = $this->getProperColor($dateTime, "Sat");
+        $sunColor = $this->getProperColor($dateTime, "Sun");
         $monDate = $this->getMonday();
-
-        $tueDate = $this->getDaywithInterval(1);
-        $wedDate = $this->getDaywithInterval(2);
-        $thuDate = $this->getDaywithInterval(3);
-        $friDate = $this->getDaywithInterval(4);
-        $satDate = $this->getDaywithInterval(5);
-        $sunDate = $this->getDaywithInterval(6);
+        $tueDate = $this->getDayWithInterval(1);
+        $wedDate = $this->getDayWithInterval(2);
+        $thuDate = $this->getDayWithInterval(3);
+        $friDate = $this->getDayWithInterval(4);
+        $satDate = $this->getDayWithInterval(5);
+        $sunDate = $this->getDayWithInterval(6);
         $monTasks = array();
         $tueTasks = array();
         $wedTasks = array();
@@ -51,7 +49,6 @@ class DashboardController extends Controller {
         $satTasks = array();
         $sunTasks = array();
         foreach ($taskRepository->findMyTasksSortedByPriority($user->getId()) as $task) {
-            var_dump($task->getDeadline()->format('dMY'));
             switch ($task->getDeadline()->format('dMY')) {
                 case $monDate->format('dMY'):
                     $monTasks[] = $task;
@@ -76,7 +73,6 @@ class DashboardController extends Controller {
                     break;
             }
         }
-
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
             'tasks' => $taskRepository->findMyTasksSortedByPriority($user->getId()),
@@ -122,9 +118,14 @@ class DashboardController extends Controller {
         return $monDate;
     }
 
-    private function getDaywithInterval($interval) {
+    private function getDayWithInterval($interval) {
         $monDate = $this->getMonday();
         $monDate->add(new \DateInterval("P" . $interval . "D"));
         return $monDate;
     }
+
+    private function getProperColor($dateTime, $day) {
+        return ($dateTime->format("D") === $day) ? DashboardController::TODAY_COLOR : DashboardController::OTHER_COLOR;
+    }
+
 }
