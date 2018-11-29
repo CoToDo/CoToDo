@@ -23,7 +23,8 @@ jQuery(document).ready(function() {
     });
 
     // enable autocomplete on select inputs
-    $(".autocomplete_select").chosen();
+    $(".autocomplete_select").select2({
+    });
 });
 
 //adds new prototype tag when Add Tag button is clicked
