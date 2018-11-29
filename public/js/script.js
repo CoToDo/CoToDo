@@ -25,6 +25,7 @@ jQuery(document).ready(function() {
     // enable autocomplete on select inputs
     $(".autocomplete_select").select2({
         theme : "bootstrap",
+        width: '100%'
     });
 });
 
