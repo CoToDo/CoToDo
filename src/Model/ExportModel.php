@@ -8,9 +8,16 @@ use Symfony\Component\Filesystem\Filesystem;
 class ExportModel
 {
 
-    public function exportUser(User $user) {
+    public function downloadExport(User $user){
         header('Content-disposition: attachment; filename=todo.txt');
         header('Content-type: text/plain');
+
+        echo $this->exportUser($user);
+    }
+
+    public function exportUser(User $user) {
+
+        $text = "";
 
         foreach ($user->getWorks() as $work) {
             if($work->getEndDate() != null) {
@@ -42,8 +49,10 @@ class ExportModel
             $row .= "due:" . $work->getTask()->getDeadline()->format('Y-m-d') . " ";
 
             $row .= "\n";
-            echo "$row";
+            $text .= "$row";
         }
+
+        return $text;
     }
 
 }
