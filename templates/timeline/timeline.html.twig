@@ -7,8 +7,8 @@
         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
         xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
         width="280mm"
-        height="95mm"
-        viewBox="0 0 140.52496 47.630558"
+        height="160mm"
+        viewBox="0 0 140.52496 87.630558"
         version="1.1"
         id="svg4883"
         inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
@@ -188,6 +188,26 @@
                             id="tspan1021"
                             sodipodi:role="line">{{ monDate }}</tspan></text>
 
+        {%  for object in monTasks %}
+            <path
+                    style="fill:none;stroke:{{ monColor }};stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+                    d="m 45.759683,48.498658 v{{8 * loop.index}} h -5"
+                    id="path5480-7"
+                    inkscape:connector-curvature="0"
+                    sodipodi:nodetypes="ccc" />
+            <text
+                    xml:space="preserve"
+                    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3px;line-height:1.25;font-family:Evolution;-inkscape-font-specification:Evolution;letter-spacing:0px;word-spacing:0px;fill:{{ monColor }};fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+                    x="45.215908"
+                    y="55.961437"
+                    id="text907"><tspan
+                        sodipodi:role="line"
+                        id="tspan905"
+                        x="{{ 45.215908 - (object|length*1.5) }}"
+                        y="{{55.961437 + loop.index0*8 }}"
+                        style="stroke-width:0.26458332;fill:{{ monColor }};">{{ object }}</tspan></text>
+        {% endfor %}
+
     <text
             xml:space="preserve"
             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444447px;line-height:1.25;font-family:Evolution;-inkscape-font-specification:Evolution;letter-spacing:0px;word-spacing:0px;fill:{{ tueColor }};fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -210,6 +230,25 @@
                     x="50.139431"
                     y="43.539288"
                     style="font-size:3.17499995px;fill:{{ tueColor }};stroke-width:0.26458332">{{ tueDate }}</tspan></text>
+        {%  for object in tueTasks %}
+            <path
+                    style="fill:none;stroke:{{ tueColor }};stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+                    d="m 65.759683,48.498658 v{{8 * loop.index}} h -5"
+                    id="path5480-7"
+                    inkscape:connector-curvature="0"
+                    sodipodi:nodetypes="ccc" />
+            <text
+                    xml:space="preserve"
+                    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3px;line-height:1.25;font-family:Evolution;-inkscape-font-specification:Evolution;letter-spacing:0px;word-spacing:0px;fill:{{ tueColor }};fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+                    x="65.215908"
+                    y="55.961437"
+                    id="text907"><tspan
+                        sodipodi:role="line"
+                        id="tspan905"
+                        x="{{ 65.215908 - (object|length*1.5) }}"
+                        y="{{55.961437 + loop.index0*8 }}"
+                        style="stroke-width:0.26458332;fill:{{ tueColor }};">{{ object }}</tspan></text>
+        {% endfor %}
 
     <text
             xml:space="preserve"
@@ -233,7 +272,25 @@
                     x="70.24778"
                     id="tspan1001"
                     sodipodi:role="line">{{ wedDate }}</tspan></text>
-
+        {%  for object in wedTasks %}
+            <path
+                    style="fill:none;stroke:{{ wedColor }};stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+                    d="m 85.759683,48.498658 v{{8 * loop.index}} h -5"
+                    id="path5480-7"
+                    inkscape:connector-curvature="0"
+                    sodipodi:nodetypes="ccc" />
+            <text
+                    xml:space="preserve"
+                    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3px;line-height:1.25;font-family:Evolution;-inkscape-font-specification:Evolution;letter-spacing:0px;word-spacing:0px;fill:{{ wedColor }};fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+                    x="85.215908"
+                    y="55.961437"
+                    id="text907"><tspan
+                        sodipodi:role="line"
+                        id="tspan905"
+                        x="{{ 85.215908 - (object|length*1.5) }}"
+                        y="{{55.961437 + loop.index0*8 }}"
+                        style="stroke-width:0.26458332;fill:{{ wedColor }};">{{ object }}</tspan></text>
+        {% endfor %}
     <text
             xml:space="preserve"
             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444447px;line-height:1.25;font-family:Evolution;-inkscape-font-specification:Evolution;letter-spacing:0px;word-spacing:0px;fill:{{ thuColor }};fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -256,7 +313,25 @@
                     x="89.826965"
                     y="43.539288"
                     style="font-size:3.17499995px;fill:{{ thuColor }};stroke-width:0.26458332">{{ thuDate }}</tspan></text>
-
+        {%  for object in thuTasks %}
+            <path
+                    style="fill:none;stroke:{{ thuColor }};stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+                    d="m 105.759683,48.498658 v{{8 * loop.index}} h -5"
+                    id="path5480-7"
+                    inkscape:connector-curvature="0"
+                    sodipodi:nodetypes="ccc" />
+            <text
+                    xml:space="preserve"
+                    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3px;line-height:1.25;font-family:Evolution;-inkscape-font-specification:Evolution;letter-spacing:0px;word-spacing:0px;fill:{{ thuColor }};fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+                    x="105.215908"
+                    y="55.961437"
+                    id="text907"><tspan
+                        sodipodi:role="line"
+                        id="tspan905"
+                        x="{{ 105.215908 - (object|length*1.5) }}"
+                        y="{{55.961437 + loop.index0*8 }}"
+                        style="stroke-width:0.26458332;fill:{{ thuColor }};">{{ object }}</tspan></text>
+        {% endfor %}
     <text
             xml:space="preserve"
             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444447px;line-height:1.25;font-family:Evolution;-inkscape-font-specification:Evolution;letter-spacing:0px;word-spacing:0px;fill:{{ friColor }};fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -279,7 +354,25 @@
                 x="109.9353"
                 id="tspan1009"
                 sodipodi:role="line">{{ friDate }}</tspan></text>
-
+        {%  for object in friTasks %}
+            <path
+                    style="fill:none;stroke:{{ friColor }};stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+                    d="m 125.759683,48.498658 v{{8 * loop.index}} h -5"
+                    id="path5480-7"
+                    inkscape:connector-curvature="0"
+                    sodipodi:nodetypes="ccc" />
+            <text
+                    xml:space="preserve"
+                    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3px;line-height:1.25;font-family:Evolution;-inkscape-font-specification:Evolution;letter-spacing:0px;word-spacing:0px;fill:{{ friColor }};fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+                    x="125.215908"
+                    y="55.961437"
+                    id="text907"><tspan
+                        sodipodi:role="line"
+                        id="tspan905"
+                        x="{{ 125.215908 - (object|length*1.5) }}"
+                        y="{{55.961437 + loop.index0*8 }}"
+                        style="stroke-width:0.26458332;fill:{{ friColor }};">{{ object }}</tspan></text>
+        {% endfor %}
     <text
             xml:space="preserve"
             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444447px;line-height:1.25;font-family:Evolution;-inkscape-font-specification:Evolution;letter-spacing:0px;word-spacing:0px;fill:{{ satColor }};fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -302,7 +395,25 @@
                 x="130.04361"
                 y="43.539288"
                 style="font-size:3.17499995px;fill:{{ satColor }};stroke-width:0.26458332">{{ satDate }}</tspan></text>
-
+        {%  for object in satTasks %}
+            <path
+                    style="fill:none;stroke:{{ satColor }};stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+                    d="m 145.759683,48.498658 v{{8 * loop.index}} h -5"
+                    id="path5480-7"
+                    inkscape:connector-curvature="0"
+                    sodipodi:nodetypes="ccc" />
+            <text
+                    xml:space="preserve"
+                    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3px;line-height:1.25;font-family:Evolution;-inkscape-font-specification:Evolution;letter-spacing:0px;word-spacing:0px;fill:{{ satColor }};fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+                    x="145.215908"
+                    y="55.961437"
+                    id="text907"><tspan
+                        sodipodi:role="line"
+                        id="tspan905"
+                        x="{{ 145.215908 - (object|length*1.5) }}"
+                        y="{{55.961437 + loop.index0*8 }}"
+                        style="stroke-width:0.26458332;fill:{{ satColor }};">{{ object }}</tspan></text>
+        {% endfor %}
     <text
             xml:space="preserve"
             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444447px;line-height:1.25;font-family:Evolution;-inkscape-font-specification:Evolution;letter-spacing:0px;word-spacing:0px;fill:{{ sunColor }};fill-opacity:1;stroke:none;stroke-width:0.26458332"
@@ -325,12 +436,24 @@
                 x="150.15167"
                 id="tspan1017"
                 sodipodi:role="line">{{ sunDate }}</tspan></text>
-
-        <path
-                style="fill:none;stroke:#b10000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-                d="m 45.759683,48.498658 v 10 h -5"
-                id="path5480-7"
-                inkscape:connector-curvature="0"
-                sodipodi:nodetypes="ccc" />
+        {%  for object in sunTasks %}
+            <path
+                    style="fill:none;stroke:{{ sunColor }};stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+                    d="m 165.759683,48.498658 v{{8 * loop.index}} h -5"
+                    id="path5480-7"
+                    inkscape:connector-curvature="0"
+                    sodipodi:nodetypes="ccc" />
+            <text
+                    xml:space="preserve"
+                    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3px;line-height:1.25;font-family:Evolution;-inkscape-font-specification:Evolution;letter-spacing:0px;word-spacing:0px;fill:{{ sunColor }};fill-opacity:1;stroke:none;stroke-width:0.26458332;"
+                    x="165.215908"
+                    y="55.961437"
+                    id="text907"><tspan
+                        sodipodi:role="line"
+                        id="tspan905"
+                        x="{{ 165.215908 - (object|length*1.5) }}"
+                        y="{{55.961437 + loop.index0*8 }}"
+                        style="stroke-width:0.26458332;fill:{{ sunColor }};">{{ object }}</tspan></text>
+        {% endfor %}
     </g>
 </svg>
