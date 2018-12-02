@@ -3,8 +3,6 @@
 namespace App\Model;
 class DayTO {
 
-    const TODAY_COLOR = "#aa0000";
-    const OTHER_COLOR = "#000000";
     const TEXT_SIZE = 10;
 
     /**
@@ -41,6 +39,13 @@ class DayTO {
      */
     public function getDate() :\DateTime {
         return $this->date;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDateFormatDM() {
+        return $this->date->format('d.m');
     }
 
     /**

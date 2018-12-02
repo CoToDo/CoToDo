@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class DashboardController extends Controller {
     const TODAY_COLOR = "#aa0000";
     const OTHER_COLOR = "#000000";
-    const TEXT_SIZE = 10;
 
     /**
      * Render DashBoard view
@@ -26,93 +25,7 @@ class DashboardController extends Controller {
      */
     public function index(TaskRepository $taskRepository): Response {
         $user = $this->getUser();
-        $dateTime = new \DateTime('now');
-        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        $monColor = $this->getProperColor($dateTime, "Mon");
-        $tueColor = $this->getProperColor($dateTime, "Thu");
-        $wedColor = $this->getProperColor($dateTime, "Wed");
-        $thuColor = $this->getProperColor($dateTime, "Thu");
-        $friColor = $this->getProperColor($dateTime, "Fri");
-        $satColor = $this->getProperColor($dateTime, "Sat");
-        $sunColor = $this->getProperColor($dateTime, "Sun");
-        $monDate = $this->getDayWithInterval(0);
-        $tueDate = $this->getDayWithInterval(1);
-        $wedDate = $this->getDayWithInterval(2);
-        $thuDate = $this->getDayWithInterval(3);
-        $friDate = $this->getDayWithInterval(4);
-        $satDate = $this->getDayWithInterval(5);
-        $sunDate = $this->getDayWithInterval(6);
-        $monTasks = array();
-        $tueTasks = array();
-        $wedTasks = array();
-        $thuTasks = array();
-        $friTasks = array();
-        $satTasks = array();
-        $sunTasks = array();
-        foreach ($taskRepository->findMyTasksSortedByPriority($user->getId()) as $task) {
-            switch ($task->getDeadline()->format('dMY')) {
-                case $monDate->format('dMY'):
-                    $monTasks[] = $task;
-                    break;
-                case $tueDate->format('dMY'):
-                    $tueTasks[] = $task;
-                    break;
-                case $wedDate->format('dMY'):
-                    $wedTasks[] = $task;
-                    break;
-                case $thuDate->format('dMY'):
-                    $thuTasks[] = $task;
-                    break;
-                case $friDate->format('dMY'):
-                    $friTasks[] = $task;
-                    break;
-                case $satDate->format('dMY'):
-                    $satTasks[] = $task;
-                    break;
-                case $sunDate->format('dMY'):
-                    $sunTasks[] = $task;
-                    break;
-            }
-        }
-
-        $maxs = array();
-        $maxs[] = sizeof($monTasks);
-        $maxs[] = sizeof($tueTasks);
-        $maxs[] = sizeof($wedTasks);
-        $maxs[] = sizeof($thuTasks);
-        $maxs[] = sizeof($friTasks);
-        $maxs[] = sizeof($satTasks);
-        $maxs[] = sizeof($sunTasks);
-        $maxTasks = max($maxs);
-
-        $this->setUpDaysTO($taskRepository, $user);
-        return $this->render('dashboard/index.html.twig', [
-            'controller_name' => 'DashboardController',
-            'tasks' => $taskRepository->findMyTasksSortedByPriority($user->getId()),
-            'user' => $this->getUser(),
-            'monColor' => $monColor,
-            'tueColor' => $tueColor,
-            'wedColor' => $wedColor,
-            'thuColor' => $thuColor,
-            'friColor' => $friColor,
-            'satColor' => $satColor,
-            'sunColor' => $sunColor,
-            'monDate' => $monDate->format('d.m'),
-            'tueDate' => $tueDate->format('d.m'),
-            'wedDate' => $wedDate->format('d.m'),
-            'thuDate' => $thuDate->format('d.m'),
-            'friDate' => $friDate->format('d.m'),
-            'satDate' => $satDate->format('d.m'),
-            'sunDate' => $sunDate->format('d.m'),
-            'monTasks' => $monTasks,
-            'tueTasks' => $tueTasks,
-            'wedTasks' => $wedTasks,
-            'thuTasks' => $thuTasks,
-            'friTasks' => $friTasks,
-            'satTasks' => $satTasks,
-            'sunTasks' => $sunTasks,
-            'maxTasks' => $maxTasks
-        ]);
+        return $this->setUpDaysTO($taskRepository, $user);
     }
 
     private function getMonday() {
@@ -153,6 +66,19 @@ class DashboardController extends Controller {
             $days[] = $day;
         }
         $maxTasks = max($tasksNumber);
+        return $this->render('dashboard/index.html.twig', [
+            'controller_name' => 'DashboardController',
+            'tasks' => $taskRepository->findMyTasksSortedByPriority($user->getId()),
+            'user' => $this->getUser(),
+            'maxTasks' => $maxTasks,
+            'mon' => $days[0],
+            'tue' => $days[1],
+            'wed' => $days[2],
+            'thu' => $days[3],
+            'fri' => $days[4],
+            'sat' => $days[5],
+            'sun' => $days[6],
+        ]);
 //        var_dump($maxTasks);
 //        var_dump($days);
     }
