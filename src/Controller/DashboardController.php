@@ -79,7 +79,5 @@ class DashboardController extends Controller {
             'sat' => $days[5],
             'sun' => $days[6],
         ]);
-//        var_dump($maxTasks);
-//        var_dump($days);
     }
 }
