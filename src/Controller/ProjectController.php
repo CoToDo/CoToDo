@@ -13,9 +13,11 @@ use App\Form\ProjectType;
 use App\Form\TaskType;
 use App\Model\NotificationModel;
 use App\Repository\ProjectRepository;
+use App\Repository\TagRepository;
 use App\Repository\TaskRepository;
 use App\Repository\WorkRepository;
 use App\WarningMessages;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -245,7 +247,7 @@ class ProjectController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isAdmin(user)")
      */
-    public function createTask(Request $request, Project $project): Response
+    public function createTask(Request $request, Project $project, TagRepository $tagRepository): Response
     {
         $task = new Task();
         $task->setProject($project);
@@ -261,6 +263,14 @@ class ProjectController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($task->getTags() as $tag) {
+                $tagInDb = $tagRepository->findOneBy(['name' => $tag->getName()]);
+                if (isset($tagInDb)) {
+                    $task->removeTag($tag);
+                    $task->addTag($tagInDb);
+                }
+            }
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($task);
             $em->flush();
@@ -350,20 +360,27 @@ class ProjectController extends Controller
      * @param Request $request
      * @param Project $project
      * @param Task $task
+     * @param TagRepository $tagRepository
      * @return Response
      * @Route("/{idp}/tasks/{id}/edit", name="project_task_edit", methods="GET|POST")
      * @ParamConverter("project", class="App\Entity\Project", options={"id" = "idp"})
      * @Security("has_role('ROLE_USER')")
      * @Security("project.getTeam().isAdmin(user)")
      */
-    public function editTask(Request $request, Project $project, Task $task): Response
+    public function editTask(Request $request, Project $project, Task $task, TagRepository $tagRepository): Response
     {
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            var_dump($task->getName());
+            foreach ($task->getTags() as $tag) {
+                $tagInDb = $tagRepository->findOneBy(['name' => $tag->getName()]);
+                if (isset($tagInDb)) {
+                    $task->removeTag($tag);
+                    $task->addTag($tagInDb);
+                }
+            }
             $this->getDoctrine()->getManager()->flush();
-
             return $this->redirectToRoute('project_task_edit', ['id' => $task->getId(), 'idp' => $project->getId()]);
         }
 

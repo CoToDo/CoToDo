@@ -25,6 +25,7 @@ class ProjectType extends AbstractType
                 'class' => Team::class,
                 //display only those teams in which I participate
                 'choices' => $options['teamRepository']->findMyTeams($options['userId']),
+                'attr' => ['class' => 'autocomplete_select']
             ])
         ;
     }

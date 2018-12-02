@@ -48,7 +48,7 @@ class Task
     private $deadline;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", mappedBy="tasks", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", mappedBy="tasks", cascade={"persist", "remove"})
      */
     private $tags;
 
