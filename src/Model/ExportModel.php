@@ -53,6 +53,7 @@ class ExportModel
         }
 
         return $text;
+
     }
 
 }
