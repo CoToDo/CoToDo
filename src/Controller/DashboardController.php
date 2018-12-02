@@ -101,13 +101,7 @@ class DashboardController extends Controller {
             'friTasks' => $friTasks,
             'satTasks' => $satTasks,
             'sunTasks' => $sunTasks,
-            'monV' => sizeof($monTasks) * DashboardController::TEXT_SIZE,
-            'tueV' => sizeof($tueTasks) * DashboardController::TEXT_SIZE,
-            'wedV' => sizeof($wedTasks) * DashboardController::TEXT_SIZE,
-            'thuV' => sizeof($thuTasks) * DashboardController::TEXT_SIZE,
-            'friV' => sizeof($friTasks) * DashboardController::TEXT_SIZE,
-            'satV' => sizeof($satTasks) * DashboardController::TEXT_SIZE,
-            'sunV' => sizeof($sunTasks) * DashboardController::TEXT_SIZE,
+            'maxTasks' => 5
         ]);
     }
 
