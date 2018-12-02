@@ -6,23 +6,33 @@ use App\Model\ExportModel;
 use Google_Client;
 use Google_Service_Drive;
 use Google_Service_Drive_DriveFile;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
 
 class SynchronizationController extends Controller
 {
+    const CREDENTIALS_JSON = "/credentials.json";
+    const GOOGLE_SERVICE_DRIVE_ORDER = "https://www.googleapis.com/auth/apps.order";
+    private $defaultPath;
+
+    private function getDefaultPath() {
+        $this->defaultPath = $this->get('kernel')->getRootDir();
+        $this->defaultPath = substr($this->defaultPath, 0, -3);
+    }
+
     /**
      * @Route("/sync", name="synchronization")
      * @Security("has_role('ROLE_USER')")
      */
     public function index() {
+        $this->getDefaultPath();
         $folderId = null;
         $fileId = null;
         $client = new Google_Client();
-        $client->setAuthConfig("/Users/petr/Downloads/credentials.json");
+        $client->setAuthConfig($this->defaultPath . self::CREDENTIALS_JSON);
         $client->addScope(array(Google_Service_Drive::DRIVE_METADATA, Google_Service_Drive::DRIVE_FILE,
-            Google_Service_Drive::DRIVE, "https://www.googleapis.com/auth/apps.order"));
+            Google_Service_Drive::DRIVE, self::GOOGLE_SERVICE_DRIVE_ORDER));
         if (isset($_SESSION['access_token_drive']) && $_SESSION['access_token_drive']) {
             $client->setAccessToken($_SESSION['access_token_drive']);
             $drive = new Google_Service_Drive($client);
@@ -98,11 +108,12 @@ class SynchronizationController extends Controller
      * @Route("/sync/auth", name="sync_auth")
      */
     public function auth() {
+        $this->getDefaultPath();
         $client = new Google_Client();
-        $client->setAuthConfig("/Users/petr/Downloads/credentials.json");
+        $client->setAuthConfig($this->defaultPath . self::CREDENTIALS_JSON);
         $client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/sync/auth');
         $client->addScope(array(Google_Service_Drive::DRIVE_METADATA, Google_Service_Drive::DRIVE_FILE,
-            Google_Service_Drive::DRIVE, "https://www.googleapis.com/auth/apps.order"));
+            Google_Service_Drive::DRIVE, self::GOOGLE_SERVICE_DRIVE_ORDER));
 
         if (!isset($_GET['code'])) {
             $auth_url = $client->createAuthUrl();
@@ -117,13 +128,14 @@ class SynchronizationController extends Controller
     /**
      * @Route("/sync/export", name="sync_export")
      */
-    public function export(){
+    public function export() {
+        $this->getDefaultPath();
         $folderId = null;
         $fileId = null;
         $client = new Google_Client();
-        $client->setAuthConfig("/Users/petr/Downloads/credentials.json");
+        $client->setAuthConfig($this->defaultPath . self::CREDENTIALS_JSON);
         $client->addScope(array(Google_Service_Drive::DRIVE_METADATA, Google_Service_Drive::DRIVE_FILE,
-            Google_Service_Drive::DRIVE, "https://www.googleapis.com/auth/apps.order"));
+            Google_Service_Drive::DRIVE, self::GOOGLE_SERVICE_DRIVE_ORDER));
         if (isset($_SESSION['access_token_drive']) && $_SESSION['access_token_drive']) {
             $client->setAccessToken($_SESSION['access_token_drive']);
             $drive = new Google_Service_Drive($client);
