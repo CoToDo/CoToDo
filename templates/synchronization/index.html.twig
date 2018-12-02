@@ -7,9 +7,16 @@
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <h1>Google drive synchronization</h1>
+
+            {% for message in app.flashes('info') %}
+                <div class="flash-notice alert alert-warning">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
             <div class="form-group">
                 <a class="btn btn-dark" href="{{ path('sync_export') }}">Export</a>
-                <a class="btn btn-dark">Import</a>
+                <a class="btn btn-dark" href="{{ path('sync_import') }}">Import</a>
             </div>
         </div>
     </div>
