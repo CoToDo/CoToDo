@@ -2,17 +2,21 @@
 
 namespace App\Controller;
 
+use App\Model\ImportModel;
 use App\FlashMessages;
 use App\Model\ExportModel;
 use Google_Client;
 use Google_Service_Drive;
 use Google_Service_Drive_DriveFile;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SynchronizationController extends Controller
 {
+
+    const WRONG = 'wrong';
     const CREDENTIALS_JSON = "/credentials.json";
     const GOOGLE_SERVICE_DRIVE_ORDER = "https://www.googleapis.com/auth/apps.order";
     private $defaultPath;
@@ -34,10 +38,7 @@ class SynchronizationController extends Controller
             Google_Service_Drive::DRIVE, self::GOOGLE_SERVICE_DRIVE_ORDER));
         if (isset($_SESSION['access_token_drive']) && $_SESSION['access_token_drive']) {
             $client->setAccessToken($_SESSION['access_token_drive']);
-            $drive = new Google_Service_Drive($client);
 
-            $exportModel = new ExportModel();
-            print $exportModel->exportUser($this->getUser());
 
         } else {
             return $this->redirectToRoute("sync_auth");
@@ -155,8 +156,9 @@ class SynchronizationController extends Controller
     /**
      * @Route("/sync/import", name="sync_import")
      * @Security("has_role('ROLE_USER')")
+     * @param ManagerRegistry $doctrine
      */
-    public function import() {
+    public function import(ManagerRegistry $doctrine) {
         $this->getDefaultPath();
         $cotodo = null;
         $client = new Google_Client();
@@ -208,6 +210,16 @@ class SynchronizationController extends Controller
                 return $this->redirectToRoute("synchronization");
 
             } else if (count($todoFiles->getFiles()) == 1) {
+                $data = null;
+                $file = $drive->files->get($todoFiles->getFiles()[0]->getId(), array('alt' => 'media'));
+
+                $importModel = new ImportModel($doctrine->getManager(), $this->getUser());
+
+                $txtWrongLines = $importModel->importFromString($file->getBody()->getContents());
+                $this->flashMessagesAfterImport($txtWrongLines);
+                return $this->render('import/import.html.twig', [
+                    self::WRONG => implode("\n", $txtWrongLines)
+                ]);
 
             } else {
                 $this->addFlash(
@@ -221,5 +233,23 @@ class SynchronizationController extends Controller
             return $this->redirectToRoute("sync_auth");
         }
         return $this->redirectToRoute("synchronization");
+    }
+
+    /**
+     * Setup flash message in order of wrong parsed line
+     * @param array $txtWrongLines
+     */
+    private function flashMessagesAfterImport($txtWrongLines) {
+        if (empty($txtWrongLines)) {
+            $this->addFlash(
+                FlashMessages::SUCCESS,
+                'Your changes were saved!'
+            );
+        } else {
+            $this->addFlash(
+                FlashMessages::WARNING,
+                'Some lines couldn\'t be proccesed!'
+            );
+        }
     }
 }
