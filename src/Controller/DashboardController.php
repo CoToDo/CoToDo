@@ -75,6 +75,16 @@ class DashboardController extends Controller {
             }
         }
 
+        $maxs = array();
+        $maxs[] = sizeof($monTasks);
+        $maxs[] = sizeof($tueTasks);
+        $maxs[] = sizeof($wedTasks);
+        $maxs[] = sizeof($thuTasks);
+        $maxs[] = sizeof($friTasks);
+        $maxs[] = sizeof($satTasks);
+        $maxs[] = sizeof($sunTasks);
+        $maxTasks = max($maxs);
+
         $this->setUpDaysTO($taskRepository, $user);
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
@@ -101,7 +111,7 @@ class DashboardController extends Controller {
             'friTasks' => $friTasks,
             'satTasks' => $satTasks,
             'sunTasks' => $sunTasks,
-            'maxTasks' => 5
+            'maxTasks' => $maxTasks
         ]);
     }
 
@@ -129,18 +139,21 @@ class DashboardController extends Controller {
         $dateTime = new \DateTime('now');
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         $days = array();
+        $tasksNumber = array();
         for ($i = 0; $i < 7; $i++) {
             $day = new DayTO();
             $day->setColor($this->getProperColor($dateTime, DayEnum::$values[$i]));
             $day->setDate($this->getDayWithInterval($i));
             foreach ($taskRepository->findMyTasksSortedByPriority($user->getId()) as $task) {
                 if ($task->getDeadline()->format('dMY') === $day->getDate()->format('dMY')) {
-                    $day->getTasks()[] = $task;
+                    $day->addTask($task);
                 }
             }
+            $tasksNumber[] = sizeof($day->getTasks());
             $days[] = $day;
         }
-
-        var_dump($days);
+        $maxTasks = max($tasksNumber);
+//        var_dump($maxTasks);
+//        var_dump($days);
     }
 }

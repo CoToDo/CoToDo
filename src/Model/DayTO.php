@@ -71,6 +71,10 @@ class DayTO {
         return $this->tasks;
     }
 
+    public function addTask($task) {
+        $this->tasks[] = $task;
+    }
+
     /**
      * @param array $tasks
      */
