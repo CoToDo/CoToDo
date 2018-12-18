@@ -1,55 +1,50 @@
-FROM ubuntu:17.10
+FROM php:7.1-apache
 
-ENV APP_ENV dev
+ENV APP_ENV prod
+ENV APP_DEBUG 0
+ENV DATABASE_URL "sqlite:///%kernel.project_dir%/var/data.db"
 
+WORKDIR /var/www/html/
+
+#install additional libraries
 RUN apt-get update
-RUN apt-get install -y --no-install-recommends \
-	nginx \
-	php7.1-fpm \
-	apt-utils \
-    ca-certificates \
-    curl \
-    unzip \
-    git 
+RUN apt-get install -y \
+        git \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev
 
-RUN apt-get install -y --no-install-recommends \
-    php7.1-bcmath \
-    php7.1-cli \
-    php7.1-common \
-    php7.1-curl \
-    php7.1-gd \
-    php7.1-imagick \
-    php7.1-intl \
-    php7.1-json \
-    php7.1-mbstring \
-    php7.1-mcrypt \
-    php7.1-mysql \
-    php7.1-sqlite3\
-    php7.1-readline \
-    php7.1-xml \
-    php7.1-xmlrpc \
-    php7.1-zip
+#install additional php extensions
+RUN docker-php-ext-install -j$(nproc) gd
+RUN docker-php-ext-install -j$(nproc) zip
 
+#use production php.ini configuration
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+#install compoer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" 
 RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '93b54496392c062774670ac18b134c3b3a95e5a5e5c8f1a9f115f203b75bf9a129d5daa8ba6a13e2cc8a1da0806388a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
 RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 
 
-WORKDIR /var/www
+COPY . /var/www/html/
 
-#CMD ["/usr/sbin/php-fpm7.1"]
-
-COPY . /var/www
-
-RUN //composer.phar install
-RUN ls -la
-RUN ls -la var
-RUN cat .env
+#install symfony, dependencies, setup database
+RUN /var/www/html/composer.phar install --no-dev --optimize-autoloader
 RUN php bin/console doctrine:database:create
 RUN php bin/console doctrine:migrations:migrate
+run php bin/console cache:clear
 
-EXPOSE 8000
+#fix permissions
+RUN chown -R www-data:www-data var/cache/
+RUN chown -R www-data:www-data var/log/
 
+#configure Apache
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN cp vhost.conf /etc/apache2/sites-available/cotodo.conf
+RUN a2ensite cotodo.conf
+RUN a2dissite 000-default.conf
 
-CMD ["php", "bin/console", "server:run"]
+EXPOSE 80
+
