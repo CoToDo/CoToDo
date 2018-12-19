@@ -17,6 +17,7 @@ RUN docker-php-ext-install -j$(nproc) zip
 #use production php.ini configuration
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
+
 ENV APP_ENV prod
 ENV APP_DEBUG 0
 ENV DATABASE_URL "sqlite:///%kernel.project_dir%/var/data.db"
@@ -27,7 +28,6 @@ RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '93b54496392c06277
 RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 
-
 COPY . /var/www/html/
 
 #install symfony, dependencies, setup database
@@ -36,15 +36,16 @@ RUN php bin/console doctrine:database:create
 RUN php bin/console doctrine:migrations:migrate
 RUN php bin/console cache:clear
 
+
 #fix permissions
 RUN chown -R www-data:www-data var/cache/
 RUN chown -R www-data:www-data var/log/
 
 #configure Apache
+ENV PORT 80
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN cp vhost.conf /etc/apache2/sites-available/cotodo.conf
 RUN a2ensite cotodo.conf
 RUN a2dissite 000-default.conf
-
-EXPOSE 80
+RUN a2enmod rewrite
 
