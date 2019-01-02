@@ -2,33 +2,23 @@
 
 namespace App\Controller;
 
+use App\Model\TestModel;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class TestDataController extends Controller  {
-
     /**
      * @Route("/test/data", name="test_data")
      * @Security("has_role('ROLE_USER')")
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index() {
-        $testData = array();
-        $form = $this->createFormBuilder($testData)
-            ->add('test', SubmitType::class, array('label' => 'Test'))
-            ->getForm();
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            //TODO add data to DB here
-
-            return $this->render('test_data/index.html.twig', [
-                'form' => $form->createView(),
-            ]);
-        }
-
-        return $this->render('test_data/index.html.twig', [
-            'form' => $form->createView(),
-        ]);
+    public function index(UserPasswordEncoderInterface $passwordEncoder) {
+        $em = $this->getDoctrine()->getManager();
+        $test = new TestModel($em, $passwordEncoder);
+        $test->addTestingData();
+        return $this->render('test_data/index.html.twig', []);
     }
 }
