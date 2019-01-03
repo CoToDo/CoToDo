@@ -9,6 +9,7 @@ use App\Entity\Task;
 use App\Entity\Team;
 use App\Entity\User;
 use App\Entity\Work;
+use DateTimeInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -46,14 +47,20 @@ class TestModel {
         $taskDragons = $this->buildTask($projectToSaveSevenKingdoms, 'Kill dragons', 'A');
         $taskFindBlackFish = $this->buildTask($projectToSaveSevenKingdoms, 'Find Black Fish', 'C');
         $workBlackFish = $this->buildWork($userJaime, $taskFindBlackFish);
-
+        $dateTime = new \DateTime('now');
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $dateTime = $dateTime->add(new \DateInterval('PT4H'));
+        $workDragons = $this->buildWork($userCersei, $taskDragons, $dateTime);
+        $workDragonsNext = $this->buildWork($userCersei, $taskDragons, null, $dateTime);
 
         } catch (\Exception $e) {
-            var_dump('error');
+            var_dump($e->getMessage());
             return;
         }
 
+        $this->em->persist($workDragonsNext);
         $this->em->persist($taskDragons);
+        $this->em->persist($workDragons);
         $this->em->persist($taskFindBlackFish);
         $this->em->persist($workBlackFish);
         $this->em->persist($projectToSaveSevenKingdoms);
@@ -70,14 +77,21 @@ class TestModel {
     /**
      * @param User $user
      * @param Task $task
+     * @param DateTimeInterface|null $endDate
      * @return Work
      */
-    private function buildWork(User $user, Task $task) {
+    private function buildWork(User $user, Task $task, \DateTimeInterface $endDate = null, \DateTimeInterface $startDate = null) {
+        if ($startDate == null) {
+            $startDate = $this->dateTime;
+        }
         $work = new Work();
         $work->setUser($user);
         $work->setTask($task);
-        $work->setStartDate($this->dateTime);
+        $work->setStartDate($startDate);
         $work->setDescription('');
+        if($endDate != null) {
+            $work->setEndDate($endDate);
+        }
         return $work;
     }
 
