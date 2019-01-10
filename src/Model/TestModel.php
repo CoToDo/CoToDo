@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class TestModel {
 
     const LANNISTER = 'Lannister';
+    const GREYJOY = 'Greyjoy';
     const PASSWORD = '1234';
 
     private $em;
@@ -57,6 +58,24 @@ class TestModel {
             var_dump($e->getMessage());
             return;
         }
+
+
+        $userTheon = $this->buildUser('Theon', 'Greyjoy', $this::PASSWORD, 'theon@co.todo');
+        $userVictarion = $this->buildUser('Victarion', $this::GREYJOY, $this::PASSWORD, 'victarion@co.todo');
+        $userBalon = $this->buildUser('Balon', $this::GREYJOY, $this::PASSWORD, 'balon@co.todo');
+        $userEuron = $this->buildUser('Euron', $this::GREYJOY, $this::PASSWORD, 'euron@co.todo');
+        $teamGrayjoys = $this->buildTeam($this::GREYJOY);
+        $roleEuron = $this->buildRole($teamGrayjoys, Constants::LEADER, $userEuron);
+        $roleTheon = $this->buildRole($teamGrayjoys, Constants::USER, $userTheon);
+        $roleBalon = $this->buildRole($teamGrayjoys, Constants::USER, $userBalon);
+        $roleVictarion = $this->buildRole($teamGrayjoys, Constants::ADMIN, $userVictarion);
+
+
+        $this->em->persist($userTheon);
+        $this->em->persist($userVictarion);
+        $this->em->persist($userEuron);
+        $this->em->persist($userBalon);
+        $this->em->persist($teamGrayjoys);
 
         $this->em->persist($workDragonsNext);
         $this->em->persist($taskDragons);
