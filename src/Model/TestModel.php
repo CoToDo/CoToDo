@@ -48,17 +48,11 @@ class TestModel {
         $taskDragons = $this->buildTask($projectToSaveSevenKingdoms, 'Kill dragons', 'A');
         $taskFindBlackFish = $this->buildTask($projectToSaveSevenKingdoms, 'Find Black Fish', 'C');
         $workBlackFish = $this->buildWork($userJaime, $taskFindBlackFish);
-        $dateTime = new \DateTime('now');
-        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        $dateTime = $dateTime->add(new \DateInterval('PT4H'));
-        $workDragons = $this->buildWork($userCersei, $taskDragons, $dateTime);
-        $workDragonsNext = $this->buildWork($userCersei, $taskDragons, null, $dateTime);
-
-        } catch (\Exception $e) {
-            var_dump($e->getMessage());
-            return;
-        }
-
+        $dateTimeOne = new \DateTime('now');
+        $dateTimeOne->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $dateTimeOne = $dateTimeOne->add(new \DateInterval('PT4H'));
+        $workDragons = $this->buildWorkWithDates($userCersei, $taskDragons, $dateTimeOne);
+        $workDragonsNext = $this->buildWorkWithDates($userCersei, $taskDragons, null, $dateTimeOne);
 
         $userTheon = $this->buildUser('Theon', 'Greyjoy', $this::PASSWORD, 'theon@co.todo');
         $userVictarion = $this->buildUser('Victarion', $this::GREYJOY, $this::PASSWORD, 'victarion@co.todo');
@@ -69,8 +63,65 @@ class TestModel {
         $roleTheon = $this->buildRole($teamGrayjoys, Constants::USER, $userTheon);
         $roleBalon = $this->buildRole($teamGrayjoys, Constants::USER, $userBalon);
         $roleVictarion = $this->buildRole($teamGrayjoys, Constants::ADMIN, $userVictarion);
+        $projectSaltBurning = $this->buildProject($teamGrayjoys, 'Salt & Burning', '');
+        $projectT = $this->buildProject($teamGrayjoys, 'T', 'T');
+        $taskDenny = $this->buildTask($projectSaltBurning, 'Find Denny', 'A');
+        $taskShields = $this->buildTask($projectSaltBurning, 'Take the Shields', 'B');
+        $taskBalon = $this->buildTask($projectSaltBurning, 'Kill Balon', 'B');
+        $taskFleet = $this->buildTask($projectSaltBurning, 'Fleet', 'A');
+        $taskAsa = $this->buildTask($projectT, 'Save Asa', 'A');
+        $workAsa = $this->buildWork($userTheon, $taskAsa);
+        $workBalon = $this->buildWork($userEuron, $taskBalon);
+        $workDenny = $this->buildWork($userVictarion, $taskDenny);
+        $dateTimeOne = new \DateTime('now');
+        $dateTimeOne->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $dateTimeNextOne = new \DateTime('now');
+        $dateTimeNextOne->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $dateTimeNextOne = $dateTimeNextOne->add(new \DateInterval('PT1H'));
+        $workShields = $this->buildWorkWithDates($userEuron, $taskShields, $dateTimeNextOne, $dateTimeOne);
+        $dateTimeTwo = new \DateTime('now');
+        $dateTimeTwo->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $dateTimeNextTwo = new \DateTime('now');
+        $dateTimeNextTwo->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $dateTimeNextTwo = $dateTimeNextOne->add(new \DateInterval('PT2H'));
+        $workShieldsOne = $this->buildWorkWithDates($userEuron, $taskShields, $dateTimeNextTwo, $dateTimeTwo);
+        $dateTimeThree = new \DateTime('now');
+        $dateTimeThree->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $dateTimeNextThree = new \DateTime('now');
+        $dateTimeNextThree->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $dateTimeNextThree = $dateTimeNextOne->add(new \DateInterval('PT2H'));
+        $workShieldsTwo = $this->buildWorkWithDates($userEuron, $taskShields, $dateTimeNextThree, $dateTimeThree);
+        $dateTimeFour = new \DateTime('now');
+        $dateTimeFour->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $dateTimeNextFour = new \DateTime('now');
+        $dateTimeNextFour->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $dateTimeNextFour = $dateTimeNextOne->add(new \DateInterval('PT1H'));
+        $workShieldsThree = $this->buildWorkWithDates($userEuron, $taskShields, $dateTimeNextFour, $dateTimeFour);
+        $taskShields->setCompletionDate($dateTimeNextThree);
 
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            return;
+        }
 
+        $this->em->persist($workBalon);
+        $this->em->persist($workShields);
+        $this->em->persist($workDenny);
+        $this->em->persist($workShieldsOne);
+        $this->em->persist($workShieldsTwo);
+        $this->em->persist($workShieldsThree);
+        $this->em->persist($workAsa);
+        $this->em->persist($taskAsa);
+        $this->em->persist($projectT);
+        $this->em->persist($roleEuron);
+        $this->em->persist($roleTheon);
+        $this->em->persist($roleBalon);
+        $this->em->persist($roleVictarion);
+        $this->em->persist($taskDenny);
+        $this->em->persist($taskShields);
+        $this->em->persist($taskBalon);
+        $this->em->persist($taskFleet);
+        $this->em->persist($projectSaltBurning);
         $this->em->persist($userTheon);
         $this->em->persist($userVictarion);
         $this->em->persist($userEuron);
@@ -99,7 +150,7 @@ class TestModel {
      * @param DateTimeInterface|null $endDate
      * @return Work
      */
-    private function buildWork(User $user, Task $task, \DateTimeInterface $endDate = null, \DateTimeInterface $startDate = null) {
+    private function buildWorkWithDates(User $user, Task $task, \DateTimeInterface $endDate = null, \DateTimeInterface $startDate = null) {
         if ($startDate == null) {
             $startDate = $this->dateTime;
         }
@@ -111,6 +162,14 @@ class TestModel {
         if($endDate != null) {
             $work->setEndDate($endDate);
         }
+        return $work;
+    }
+
+    private function buildWork(User $user, Task $task) {
+        $work = new Work();
+        $work->setUser($user);
+        $work->setTask($task);
+        $work->setDescription('');
         return $work;
     }
 
