@@ -14,11 +14,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class TestModel {
-
     const LANNISTER = 'Lannister';
     const GREYJOY = 'Greyjoy';
     const PASSWORD = '1234';
-
     private $em;
     private $passWordEncoder;
     private $dateTime;
@@ -37,79 +35,54 @@ class TestModel {
 
     public function addTestingData() {
         try {
-        $userJaime = $this->buildUser('Jaime', $this::LANNISTER, $this::PASSWORD, 'jaime@co.todo');
-        $userCersei = $this->buildUser('Cercei', $this::LANNISTER, $this::PASSWORD, 'cersei@co.todo');
-        $userTywin = $this->buildUser('Tywin', $this::LANNISTER, $this::PASSWORD, 'tywin@co.todo');
-        $teamLannisters = $this->buildTeam($this::LANNISTER);
-        $roleJaime = $this->buildRole($teamLannisters, Constants::ADMIN, $userJaime);
-        $roleCersei = $this->buildRole($teamLannisters, Constants::ADMIN, $userCersei);
-        $roleTywin = $this->buildRole($teamLannisters, Constants::LEADER, $userTywin);
-        $projectToSaveSevenKingdoms = $this->buildProject($teamLannisters, 'Save The Westeros', 'Restore peace an prosperity to The Westeros');
-        $taskDragons = $this->buildTask($projectToSaveSevenKingdoms, 'Kill dragons', 'A');
-        $taskFindBlackFish = $this->buildTask($projectToSaveSevenKingdoms, 'Find Black Fish', 'C');
-        $workBlackFish = $this->buildWork($userJaime, $taskFindBlackFish);
-        $dateTimeOne = new \DateTime('now');
-        $dateTimeOne->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        $dateTimeOne = $dateTimeOne->add(new \DateInterval('PT4H'));
-        $workDragons = $this->buildWorkWithDates($userCersei, $taskDragons, $dateTimeOne);
-        $workDragonsNext = $this->buildWorkWithDates($userCersei, $taskDragons, null, $dateTimeOne);
-
-        $userTheon = $this->buildUser('Theon', 'Greyjoy', $this::PASSWORD, 'theon@co.todo');
-        $userVictarion = $this->buildUser('Victarion', $this::GREYJOY, $this::PASSWORD, 'victarion@co.todo');
-        $userBalon = $this->buildUser('Balon', $this::GREYJOY, $this::PASSWORD, 'balon@co.todo');
-        $userEuron = $this->buildUser('Euron', $this::GREYJOY, $this::PASSWORD, 'euron@co.todo');
-        $teamGrayjoys = $this->buildTeam($this::GREYJOY);
-        $roleEuron = $this->buildRole($teamGrayjoys, Constants::LEADER, $userEuron);
-        $roleTheon = $this->buildRole($teamGrayjoys, Constants::USER, $userTheon);
-        $roleBalon = $this->buildRole($teamGrayjoys, Constants::USER, $userBalon);
-        $roleVictarion = $this->buildRole($teamGrayjoys, Constants::ADMIN, $userVictarion);
-        $projectSaltBurning = $this->buildProject($teamGrayjoys, 'Salt & Burning', '');
-        $projectT = $this->buildProject($teamGrayjoys, 'T', 'T');
-        $taskDenny = $this->buildTask($projectSaltBurning, 'Find Denny', 'A');
-        $taskShields = $this->buildTask($projectSaltBurning, 'Take the Shields', 'B');
-        $taskBalon = $this->buildTask($projectSaltBurning, 'Kill Balon', 'B');
-        $taskFleet = $this->buildTask($projectSaltBurning, 'Fleet', 'A');
-        $taskAsa = $this->buildTask($projectT, 'Save Asa', 'A');
-        $workAsa = $this->buildWork($userTheon, $taskAsa);
-        $workBalon = $this->buildWork($userEuron, $taskBalon);
-        $workDenny = $this->buildWork($userVictarion, $taskDenny);
-        $dateTimeOne = new \DateTime('now');
-        $dateTimeOne->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        $dateTimeNextOne = new \DateTime('now');
-        $dateTimeNextOne->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        $dateTimeNextOne = $dateTimeNextOne->add(new \DateInterval('PT1H'));
-        $workShields = $this->buildWorkWithDates($userEuron, $taskShields, $dateTimeNextOne, $dateTimeOne);
-        $dateTimeTwo = new \DateTime('now');
-        $dateTimeTwo->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        $dateTimeNextTwo = new \DateTime('now');
-        $dateTimeNextTwo->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        $dateTimeNextTwo = $dateTimeNextOne->add(new \DateInterval('PT2H'));
-        $workShieldsOne = $this->buildWorkWithDates($userEuron, $taskShields, $dateTimeNextTwo, $dateTimeTwo);
-        $dateTimeThree = new \DateTime('now');
-        $dateTimeThree->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        $dateTimeNextThree = new \DateTime('now');
-        $dateTimeNextThree->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        $dateTimeNextThree = $dateTimeNextOne->add(new \DateInterval('PT2H'));
-        $workShieldsTwo = $this->buildWorkWithDates($userEuron, $taskShields, $dateTimeNextThree, $dateTimeThree);
-        $dateTimeFour = new \DateTime('now');
-        $dateTimeFour->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        $dateTimeNextFour = new \DateTime('now');
-        $dateTimeNextFour->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        $dateTimeNextFour = $dateTimeNextOne->add(new \DateInterval('PT1H'));
-        $workShieldsThree = $this->buildWorkWithDates($userEuron, $taskShields, $dateTimeNextFour, $dateTimeFour);
-        $taskShields->setCompletionDate($dateTimeNextThree);
-
+            $userJaime = $this->buildUser('Jaime', $this::LANNISTER, $this::PASSWORD, 'jaime@co.todo');
+            $userCersei = $this->buildUser('Cercei', $this::LANNISTER, $this::PASSWORD, 'cersei@co.todo');
+            $userTywin = $this->buildUser('Tywin', $this::LANNISTER, $this::PASSWORD, 'tywin@co.todo');
+            $teamLannisters = $this->buildTeam($this::LANNISTER);
+            $roleJaime = $this->buildRole($teamLannisters, Constants::ADMIN, $userJaime);
+            $roleCersei = $this->buildRole($teamLannisters, Constants::ADMIN, $userCersei);
+            $roleTywin = $this->buildRole($teamLannisters, Constants::LEADER, $userTywin);
+            $projectToSaveSevenKingdoms = $this->buildProject($teamLannisters, 'Save The Westeros', 'Restore peace an prosperity to The Westeros');
+            $taskDragons = $this->buildTask($projectToSaveSevenKingdoms, 'Kill dragons', 'A');
+            $taskFindBlackFish = $this->buildTask($projectToSaveSevenKingdoms, 'Find Black Fish', 'C');
+            $workBlackFish = $this->buildWork($userJaime, $taskFindBlackFish);
+            $dateTimeOne = new \DateTime('now');
+            $dateTimeOne->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+            $dateTimeOne = $dateTimeOne->add(new \DateInterval('PT4H'));
+            $workDragons = $this->buildWorkWithDates($userCersei, $taskDragons, $dateTimeOne);
+            $workDragonsNext = $this->buildWorkWithDates($userCersei, $taskDragons, null, $dateTimeOne);
+            $userTheon = $this->buildUser('Theon', 'Greyjoy', $this::PASSWORD, 'theon@co.todo');
+            $userVictarion = $this->buildUser('Victarion', $this::GREYJOY, $this::PASSWORD, 'victarion@co.todo');
+            $userBalon = $this->buildUser('Balon', $this::GREYJOY, $this::PASSWORD, 'balon@co.todo');
+            $userEuron = $this->buildUser('Euron', $this::GREYJOY, $this::PASSWORD, 'euron@co.todo');
+            $teamGrayjoys = $this->buildTeam($this::GREYJOY);
+            $roleEuron = $this->buildRole($teamGrayjoys, Constants::LEADER, $userEuron);
+            $roleTheon = $this->buildRole($teamGrayjoys, Constants::USER, $userTheon);
+            $roleBalon = $this->buildRole($teamGrayjoys, Constants::USER, $userBalon);
+            $roleVictarion = $this->buildRole($teamGrayjoys, Constants::ADMIN, $userVictarion);
+            $projectSaltBurning = $this->buildProject($teamGrayjoys, 'Salt & Burning', '');
+            $projectT = $this->buildProject($teamGrayjoys, 'T', 'T');
+            $taskDenny = $this->buildTask($projectSaltBurning, 'Find Denny', 'A');
+            $taskShields = $this->buildTask($projectSaltBurning, 'Take the Shields', 'B');
+            $taskShields->setCompletionDate($this->getDateTimeWithInterval('PT4H'));
+            $taskBalon = $this->buildTask($projectSaltBurning, 'Kill Balon', 'B');
+            $taskFleet = $this->buildTask($projectSaltBurning, 'Fleet', 'A');
+            $taskAsa = $this->buildTask($projectT, 'Save Asa', 'A');
+            $workAsa = $this->buildWork($userTheon, $taskAsa);
+            $workBalon = $this->buildWork($userEuron, $taskBalon);
+            $workDenny = $this->buildWork($userVictarion, $taskDenny);
+            $workShields = $this->buildWorkWithDates($userEuron, $taskShields, $this->getDateTimeWithInterval('PT1H'), $this->dateTime);
+            $workShieldsOne = $this->buildWorkWithDates($userEuron, $taskShields, $this->getDateTimeWithInterval('PT2H'), $this->getDateTimeWithInterval('PT1H'));
+            $workShieldsTwo = $this->buildWorkWithDates($userEuron, $taskShields, $this->getDateTimeWithInterval('PT4H'), $this->getDateTimeWithInterval('PT2H'));
         } catch (\Exception $e) {
             var_dump($e->getMessage());
             return;
         }
-
         $this->em->persist($workBalon);
         $this->em->persist($workShields);
         $this->em->persist($workDenny);
         $this->em->persist($workShieldsOne);
         $this->em->persist($workShieldsTwo);
-        $this->em->persist($workShieldsThree);
         $this->em->persist($workAsa);
         $this->em->persist($taskAsa);
         $this->em->persist($projectT);
@@ -127,7 +100,6 @@ class TestModel {
         $this->em->persist($userEuron);
         $this->em->persist($userBalon);
         $this->em->persist($teamGrayjoys);
-
         $this->em->persist($workDragonsNext);
         $this->em->persist($taskDragons);
         $this->em->persist($workDragons);
@@ -142,6 +114,12 @@ class TestModel {
         $this->em->persist($userTywin);
         $this->em->persist($teamLannisters);
         $this->em->flush();
+    }
+
+    private function getDateTimeWithInterval(String $dateInterval) {
+        $dateTime = new \DateTime('now');
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        return $dateTime->add(new \DateInterval($dateInterval));
     }
 
     /**
@@ -159,7 +137,7 @@ class TestModel {
         $work->setTask($task);
         $work->setStartDate($startDate);
         $work->setDescription('');
-        if($endDate != null) {
+        if ($endDate != null) {
             $work->setEndDate($endDate);
         }
         return $work;
@@ -192,6 +170,7 @@ class TestModel {
         $task->setCreateDate($dateTime);
         return $task;
     }
+
     /**
      * @param Team $team
      * @param String $name
@@ -206,6 +185,7 @@ class TestModel {
         $project->setDescription($text);
         return $project;
     }
+
     /**
      * @param Team $team
      * @param String $type
@@ -247,6 +227,4 @@ class TestModel {
         $team->setName($name);
         return $team;
     }
-
-
 }
