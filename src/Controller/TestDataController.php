@@ -18,7 +18,9 @@ class TestDataController extends Controller  {
     public function index(UserPasswordEncoderInterface $passwordEncoder) {
         $em = $this->getDoctrine()->getManager();
         $test = new TestModel($em, $passwordEncoder);
-        $test->addTestingData();
-        return $this->render('test_data/index.html.twig', []);
+        $message = $test->addTestingData();
+        return $this->render('test_data/index.html.twig', [
+            'message' => $message,
+        ]);
     }
 }
