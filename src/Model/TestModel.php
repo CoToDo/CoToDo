@@ -18,6 +18,7 @@ class TestModel {
     const LANNISTER = 'Lannister';
     const GREYJOY = 'Greyjoy';
     const PASSWORD = '1234';
+
     private $em;
     private $passWordEncoder;
     private $dateTime;
@@ -76,8 +77,8 @@ class TestModel {
      * @throws \Exception
      */
     private function addGreyjoys() {
-        $userTheon = $this->buildUser('Theon', 'Greyjoy', $this::PASSWORD, 'theon@co.todo');
-        $userAsa = $this->buildUser('Asa', 'Greyjoy', $this::PASSWORD, 'asa@co.todo');
+        $userTheon = $this->buildUser('Theon', $this::GREYJOY, $this::PASSWORD, 'theon@co.todo');
+        $userAsa = $this->buildUser('Asa', $this::GREYJOY, $this::PASSWORD, 'asa@co.todo');
         $userVictarion = $this->buildUser('Victarion', $this::GREYJOY, $this::PASSWORD, 'victarion@co.todo');
         $userBalon = $this->buildUser('Balon', $this::GREYJOY, $this::PASSWORD, 'balon@co.todo');
         $userEuron = $this->buildUser('Euron', $this::GREYJOY, $this::PASSWORD, 'euron@co.todo');
@@ -141,9 +142,9 @@ class TestModel {
     }
 
     private function getDateTimeWithInterval(String $dateInterval) {
-        $dateTime = new \DateTime('now');
-        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        return $dateTime->add(new \DateInterval($dateInterval));
+        $date = new \DateTime('now');
+        $date->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        return $date->add(new \DateInterval($dateInterval));
     }
 
     /**
@@ -192,11 +193,11 @@ class TestModel {
         $task->setName($name);
         $task->setPriority($priority);
         $task->setProject($project);
-        $dateTime = new \DateTime('now');
-        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        $dateTime = $dateTime->add(new \DateInterval('P2D'));
-        $task->setDeadline($dateTime);
-        $task->setCreateDate($dateTime);
+        $date = new \DateTime('now');
+        $date->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $date = $date->add(new \DateInterval('P2D'));
+        $task->setDeadline($date);
+        $task->setCreateDate($date);
         return $task;
     }
 
