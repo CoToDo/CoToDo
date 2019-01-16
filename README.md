@@ -28,3 +28,10 @@ Run server:
 php bin/console server:run
 ```
 
+
+## Docker setup
+
+```bash
+docker build -t cotodo/cotodo .
+docker run -p 80:80 cotodo/cotodo
+```
