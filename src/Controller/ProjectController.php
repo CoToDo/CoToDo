@@ -81,6 +81,17 @@ class ProjectController extends Controller
                 ]);
 
             }
+
+            $projectRepository = $this->getDoctrine()->getRepository(Project::class);
+            $existingProjectWithSameName = $projectRepository->findOneBy(['name' => $project->getName()]);
+            if($existingProjectWithSameName){
+                $this->addFlash('warning',WarningMessages::WARNING_PROJECT_NAME_USED);
+                return $this->render('project/new.html.twig', [
+                    'project' => $project,
+                    'form' => $form->createView(),
+                ]);
+            }
+
             $string = $project->getName();
             $length = strlen($string);
             for ($i = 0; $i < $length; $i++) {
