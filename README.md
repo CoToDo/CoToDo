@@ -5,7 +5,9 @@
 [![SonarCloud Dulpicated Lines](https://sonarcloud.io/api/project_badges/measure?project=cotodo%3Acotodo&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=cotodo%3Acotodo)
 
 
-Projekt založený v Symfony pro webovou stránku.
+Project built using symfony.
+
+DEMO version can be found here: http://cotodo.herokuapp.com
 
 ## Installation
 
