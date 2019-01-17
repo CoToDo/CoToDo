@@ -30,10 +30,14 @@ Run server:
 php bin/console server:run
 ```
 
-
 ## Docker setup
 
 ```bash
 docker build -t cotodo/cotodo .
 docker run -p 80:80 cotodo/cotodo
 ```
+
+## Test Data
+
+To add testing data to CoToDo you need to create account. Then login and in right dropdown menu click on Test Data.
+Accounts of Testing Data are family members of House Lannister and House Greyjoy. Mail ends with '@co.todo'. Passwords for all test users is 1234. Typical user jaime@co.todo or euron@co.todo</p>
