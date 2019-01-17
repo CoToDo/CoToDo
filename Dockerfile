@@ -38,8 +38,7 @@ RUN php bin/console cache:clear
 
 
 #fix permissions
-RUN chown -R www-data:www-data var/cache/
-RUN chown -R www-data:www-data var/log/
+RUN chown -R www-data:www-data var
 
 #configure Apache
 ENV PORT 80
