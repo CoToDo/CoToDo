@@ -122,6 +122,11 @@ class WorkController extends Controller
             $em->flush();
         }
 
+        if($this->getUser()->getAutoSync() && $work->getUser() == $this->getUser()){
+            return $this->redirectToRoute("sync_export");
+
+        }
+
         return $this->redirectToRoute('project_task_show', ['idp' => $project->getId(), 'id' => $task->getId()]);
     }
 
