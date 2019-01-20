@@ -75,6 +75,14 @@ class SynchronizationController extends Controller
      * @Security("has_role('ROLE_USER')")
      */
     public function export() {
+        if ($this->exportHelper()){
+            return $this->redirectToRoute("synchronization");
+        } else {
+            return $this->redirectToRoute("sync_auth");
+        }
+    }
+
+    public function exportHelper() {
         $this->getDefaultPath();
         $cotodo = null;
         $client = new Google_Client();
@@ -147,11 +155,10 @@ class SynchronizationController extends Controller
             }
 
         } else {
-            return $this->redirectToRoute("sync_auth");
+            return false;
         }
-        return $this->redirectToRoute("synchronization");
+        return true;
     }
-
 
     /**
      * @Route("/sync/import", name="sync_import")
@@ -232,6 +239,21 @@ class SynchronizationController extends Controller
         } else {
             return $this->redirectToRoute("sync_auth");
         }
+        return $this->redirectToRoute("synchronization");
+    }
+
+    /**
+     * @Route("/sync/auto", name="sync_auto")
+     * @Security("has_role('ROLE_USER')")
+     * @param ManagerRegistry $doctrine
+     */
+    public function auto(){
+        $user=$this->getUser()->setAutoSync(true);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+
         return $this->redirectToRoute("synchronization");
     }
 

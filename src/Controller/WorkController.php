@@ -205,6 +205,11 @@ class WorkController extends Controller
         $em->persist($work);
         $em->flush();
 
+        if($this->getUser()->getAutoSync()){
+            return $this->redirectToRoute("sync_export");
+
+        }
+
         return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
     }
 
