@@ -207,3 +207,10 @@ fieldset[disabled] .btn-dark.active {
         flex-basis: 0;
     }
 }
+
+.box{
+    background-color: #cfeeff;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.5rem;
+    width: fit-content;
+}
