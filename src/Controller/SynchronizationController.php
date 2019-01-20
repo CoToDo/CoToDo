@@ -9,6 +9,7 @@ use Google_Client;
 use Google_Service_Drive;
 use Google_Service_Drive_DriveFile;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -71,12 +72,24 @@ class SynchronizationController extends Controller
     }
 
     /**
-     * @Route("/sync/export", name="sync_export")
+    * @Route("/sync/export", name="sync_export")
+    * @Security("has_role('ROLE_USER')")
+    */
+    public function export(Request $request) {
+        if ($this->exportHelper()){
+            return $this->redirect($request->headers->get('referer'));
+        } else {
+            return $this->redirectToRoute("sync_auth");
+        }
+    }
+
+    /**
+     * @Route("/sync/export/dash", name="sync_export_dash")
      * @Security("has_role('ROLE_USER')")
      */
-    public function export() {
+    public function exportDash(Request $request) {
         if ($this->exportHelper()){
-            return $this->redirectToRoute("synchronization");
+            return $this->redirectToRoute("dashboard");
         } else {
             return $this->redirectToRoute("sync_auth");
         }

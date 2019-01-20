@@ -16,6 +16,12 @@ class LandingPageController extends Controller
     public function index()
     {
         if ($this->getUser()) {
+
+            if($this->getUser()->getAutoSync()){
+                return $this->redirectToRoute("sync_export_dash");
+
+            }
+
             return $this->redirectToRoute('dashboard');
         }
         return $this->render('landing_page/index.html.twig', [
