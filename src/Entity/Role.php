@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Constants;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RoleRepository")
@@ -28,6 +29,7 @@ class Role
     private $team;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="roles")
      */
     private $user;

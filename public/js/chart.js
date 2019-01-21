@@ -2,15 +2,30 @@ var chart;
 var timesSeconds = [];
 
 function graphTask(data) {
-    var users = [];
-    var times = [];
+    if (data.length === 0) {
+        document.getElementById('sel').style.display = "none";
+        return;
+    }
+    let count = 0;
+    data.forEach(function (e) {
+        if (e.sum == null) {
+            count++;
+        }
+    });
+    if (count === data.length) {
+        document.getElementById('sel').style.display = "none";
+        return;
+    }
+    document.getElementById('sel').style.display = "block";
+    let users = [];
+    let times = [];
     for (var i = 0; i < data.length; i++) {
         users.push(data[i].mail);
         times.push(data[i].sum);
         timesSeconds.push(data[i].sum);
     }
 
-    var ctx = document.getElementById('myChart').getContext('2d');
+    let ctx = document.getElementById('myChart').getContext('2d');
     chart = new Chart(ctx, {
         // The type of chart we want to create
         type: 'bar',

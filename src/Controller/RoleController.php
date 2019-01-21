@@ -113,6 +113,7 @@ class RoleController extends Controller
      * Delete role
      * @param Request $request
      * @param Role $role
+     * @param TeamRepository $teamRepository
      * @return Response
      * @Route("/{id}", name="role_delete", methods="DELETE")
      * @Security("has_role('ROLE_USER')")
@@ -127,10 +128,15 @@ class RoleController extends Controller
             return $this->redirectToRoute('team_show', ['id' => $role->getTeam()->getId()]);
         }
 
-        if($teamRepository->numberOfLeaders($role->getTeam()->getId()) > 1){
+        if($teamRepository->numberOfLeaders($role->getTeam()->getId()) > 1 || $role->getType() == Constants::USER || $role->getType() == Constants::ADMIN) {
             if ($this->isCsrfTokenValid('delete' . $role->getId(), $request->request->get('_token'))) {
                 $em = $this->getDoctrine()->getManager();
-                $em->remove($role, $role->getType());
+                foreach ($role->getUser()->getWorks() as $work) {
+                    if ($work->getTask()->getProject()->getTeam()->getId() == $role->getTeam()->getId()) {
+                        $em->remove($work);
+                    }
+                }
+                $em->remove($role);
                 $em->flush();
             }
 
