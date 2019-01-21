@@ -9,8 +9,11 @@ use Google_Client;
 use Google_Service_Drive;
 use Google_Service_Drive_DriveFile;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SynchronizationController extends Controller
@@ -29,8 +32,11 @@ class SynchronizationController extends Controller
     /**
      * @Route("/sync", name="synchronization")
      * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Google_Exception
      */
-    public function index() {
+    public function index(Request $request) {
         $this->getDefaultPath();
         $client = new Google_Client();
         $client->setAuthConfig($this->defaultPath . self::CREDENTIALS_JSON);
@@ -38,12 +44,27 @@ class SynchronizationController extends Controller
             Google_Service_Drive::DRIVE, self::GOOGLE_SERVICE_DRIVE_ORDER));
         if (isset($_SESSION['access_token_drive']) && $_SESSION['access_token_drive']) {
             $client->setAccessToken($_SESSION['access_token_drive']);
-
-
         } else {
             return $this->redirectToRoute("sync_auth");
         }
+
+        $autosyncFormResult = ['autoSync' => $this->getUser()->getAutoSync()];
+        $autosyncForm = $this->createFormBuilder($autosyncFormResult)
+            ->add('autoSync', CheckboxType::class, ['label' => 'Auto synchronization', 'required' => false])
+            ->add('save', SubmitType::class, ['label' => 'Save', 'attr' => ['class' => 'btn btn-dark']])
+            ->getForm();
+
+        $autosyncForm->handleRequest($request);
+
+        if ($autosyncForm->isSubmitted() && $autosyncForm->isValid()) {
+            $user=$this->getUser()->setAutoSync($autosyncForm->getData()['autoSync']);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+        }
+
         return $this->render('synchronization/index.html.twig', [
+            'autosyncForm' => $autosyncForm->createView(),
             'controller_name' => 'SynchronizationController',
         ]);
     }
@@ -71,10 +92,30 @@ class SynchronizationController extends Controller
     }
 
     /**
-     * @Route("/sync/export", name="sync_export")
+    * @Route("/sync/export", name="sync_export")
+    * @Security("has_role('ROLE_USER')")
+    */
+    public function export(Request $request) {
+        if ($this->exportHelper()){
+            return $this->redirect($request->headers->get('referer'));
+        } else {
+            return $this->redirectToRoute("sync_auth");
+        }
+    }
+
+    /**
+     * @Route("/sync/export/dash", name="sync_export_dash")
      * @Security("has_role('ROLE_USER')")
      */
-    public function export() {
+    public function exportDash(Request $request) {
+        if ($this->exportHelper()){
+            return $this->redirectToRoute("dashboard");
+        } else {
+            return $this->redirectToRoute("sync_auth");
+        }
+    }
+
+    public function exportHelper() {
         $this->getDefaultPath();
         $cotodo = null;
         $client = new Google_Client();
@@ -147,11 +188,10 @@ class SynchronizationController extends Controller
             }
 
         } else {
-            return $this->redirectToRoute("sync_auth");
+            return false;
         }
-        return $this->redirectToRoute("synchronization");
+        return true;
     }
-
 
     /**
      * @Route("/sync/import", name="sync_import")

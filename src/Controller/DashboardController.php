@@ -66,6 +66,7 @@ class DashboardController extends Controller {
             $days[] = $day;
         }
         $maxTasks = max($tasksNumber);
+
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
             'tasks' => $taskRepository->findMyTasksSortedByPriority($user->getId()),

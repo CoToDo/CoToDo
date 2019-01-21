@@ -80,6 +80,29 @@ class User implements UserInterface, \Serializable
     private $notificationsCreate;
 
     /**
+     * @ORM\Column(type="boolean" , nullable=true)
+     */
+    private $autoSync;
+
+    /**
+     * @return mixed
+     */
+    public function getAutoSync()
+    {
+        return $this->autoSync;
+    }
+
+    /**
+     * @param mixed $autoSync
+     */
+    public function setAutoSync($autoSync): self
+    {
+        $this->autoSync = $autoSync;
+
+        return $this;
+    }
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -89,6 +112,7 @@ class User implements UserInterface, \Serializable
         $this->roles = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->notificationsCreate = new ArrayCollection();
+        $this->autoSync = false;
     }
 
     /**

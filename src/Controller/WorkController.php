@@ -122,6 +122,11 @@ class WorkController extends Controller
             $em->flush();
         }
 
+        if($this->getUser()->getAutoSync() && $work->getUser() == $this->getUser()){
+            return $this->redirectToRoute("sync_export");
+
+        }
+
         return $this->redirectToRoute('project_task_show', ['idp' => $project->getId(), 'id' => $task->getId()]);
     }
 
@@ -204,6 +209,11 @@ class WorkController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($work);
         $em->flush();
+
+        if($this->getUser()->getAutoSync()){
+            return $this->redirectToRoute("sync_export");
+
+        }
 
         return $this->redirectToRoute('project_task_show', ['idp' => $task->getProject()->getId(), 'id' => $task->getId()]);
     }

@@ -208,6 +208,13 @@ fieldset[disabled] .btn-dark.active {
     }
 }
 
+.box{
+    background-color: #cfeeff;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.5rem;
+    width: fit-content;
+}
+
 .error-header {
     background: #fff;
     height: 180px;
@@ -255,3 +262,4 @@ svg.timeline{
     min-width: 35rem;
     max-height: 11rem;
 }
+
