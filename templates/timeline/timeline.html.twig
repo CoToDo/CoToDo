@@ -5,11 +5,10 @@
         xmlns="http://www.w3.org/2000/svg"
         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
         xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-        width="280mm"
-        height="160mm"
-        viewBox="0 0 140.52496 87.630558"
+        viewBox="0 0 140.52496 27"
         version="1.1"
         id="svg4883"
+        class="timeline"
         inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
         sodipodi:docname="TimeLineStatic.svg">
     <defs
@@ -204,7 +203,7 @@
                         id="tspan905"
                         x="{{ 45.215908 - (object|length*1.5) }}"
                         y="{{55.961437 + loop.index0*8 }}"
-                        style="stroke-width:0.26458332;fill:{{ mon.color }};">{{ object }}</tspan></text>
+                        style="stroke-width:0.26458332;fill:{{ mon.color }};"><a href= '{{ path('project_task_show', {'idp' : object.project.id, 'id': object.id}) }}'>{{object}}</a></tspan></text>
         {% endfor %}
 
     <text
@@ -246,7 +245,7 @@
                         id="tspan905"
                         x="{{ 65.215908 - (object|length*1.5) }}"
                         y="{{55.961437 + loop.index0*8 }}"
-                        style="stroke-width:0.26458332;fill:{{ tue.color }};">{{ object }}</tspan></text>
+                        style="stroke-width:0.26458332;fill:{{ tue.color }};"><a href= '{{ path('project_task_show', {'idp' : object.project.id, 'id': object.id}) }}'>{{object}}</a></tspan></text>
         {% endfor %}
 
     <text
@@ -288,7 +287,7 @@
                         id="tspan905"
                         x="{{ 85.215908 - (object|length*1.5) }}"
                         y="{{55.961437 + loop.index0*8 }}"
-                        style="stroke-width:0.26458332;fill:{{ wed.color }};">{{ object }}</tspan></text>
+                        style="stroke-width:0.26458332;fill:{{ wed.color }};"><a href= '{{ path('project_task_show', {'idp' : object.project.id, 'id': object.id}) }}'>{{object}}</a></tspan></text>
         {% endfor %}
     <text
             xml:space="preserve"
@@ -329,7 +328,7 @@
                         id="tspan905"
                         x="{{ 105.215908 - (object|length*1.5) }}"
                         y="{{55.961437 + loop.index0*8 }}"
-                        style="stroke-width:0.26458332;fill:{{ thu.color }};">{{ object }}</tspan></text>
+                        style="stroke-width:0.26458332;fill:{{ thu.color }};"><a href= '{{ path('project_task_show', {'idp' : object.project.id, 'id': object.id}) }}'>{{object}}</a></tspan></text>
         {% endfor %}
     <text
             xml:space="preserve"
@@ -370,7 +369,7 @@
                         id="tspan905"
                         x="{{ 125.215908 - (object|length*1.5) }}"
                         y="{{55.961437 + loop.index0*8 }}"
-                        style="stroke-width:0.26458332;fill:{{ fri.color }};">{{ object }}</tspan></text>
+                        style="stroke-width:0.26458332;fill:{{ fri.color }};"><a href= '{{ path('project_task_show', {'idp' : object.project.id, 'id': object.id}) }}'>{{object}}</a></tspan></text>
         {% endfor %}
     <text
             xml:space="preserve"
@@ -411,7 +410,7 @@
                         id="tspan905"
                         x="{{ 145.215908 - (object|length*1.5) }}"
                         y="{{55.961437 + loop.index0*8 }}"
-                        style="stroke-width:0.26458332;fill:{{ sat.color }};">{{ object }}</tspan></text>
+                        style="stroke-width:0.26458332;fill:{{ sat.color }};"><a href= '{{ path('project_task_show', {'idp' : object.project.id, 'id': object.id}) }}'>{{object}}</a></tspan></text>
         {% endfor %}
     <text
             xml:space="preserve"
@@ -452,7 +451,7 @@
                         id="tspan905"
                         x="{{ 165.215908 - (object|length*1.5) }}"
                         y="{{55.961437 + loop.index0*8 }}"
-                        style="stroke-width:0.26458332;fill:{{ sun.color }};">{{ object }}</tspan></text>
+                        style="stroke-width:0.26458332;fill:{{ sun.color }};"><a href= '{{ path('project_task_show', {'idp' : object.project.id, 'id': object.id}) }}'>{{object}}</a></tspan></text>
         {% endfor %}
     </g>
 </svg>

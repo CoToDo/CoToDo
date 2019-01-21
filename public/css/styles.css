@@ -258,3 +258,8 @@ fieldset[disabled] .btn-dark.active {
     text-align: center;
 }
 
+svg.timeline{
+    min-width: 35rem;
+    max-height: 11rem;
+}
+

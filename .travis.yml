@@ -1,14 +1,30 @@
 language: php
+
 php:
-  - '7.1'
+- '7.1'
+
+services:
+- docker
+
+before_install:
+- docker build -t cotodo/cotodo .
+
 
 install:
-  - composer install
+- composer install
 
 addons:
   sonarcloud:
-    organization: "cotodo"
+    organization: cotodo
 
 script:
-  - ./bin/phpunit --verbose
-  - sonar-scanner
+- "./bin/phpunit --verbose"
+- sonar-scanner
+
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: DDtyLFp3t4/6/UkC3SpNBI/j78L/rmOI1yMG3AUCl/91dKRYZSJonS8t4dOAc3py2CZDsL+1dKPTeUpN49Vg4n3EfbwAsZUumZF6rHbV6FMwHsORL1mdZuZ+wgFmKsNqioJaJkVyEH/jSv6Za9SkdgSjKUx9sAPSlMTn45uHz4HUE1mLl37BqLPxNiGwa0kvY4Bl8gAxJhq20ZRQZ+StqaM+JoiWT+Om0pFhv0bDEj8GQARDV2EKa/Mh68IoSlQplZUaaBz0TXa3dsSuYw1P9xCl4sdtBkjbX6VC7RFGTftx0uRJ2MsDfDgVi/MRS9CszT5cDQeFiVGsVhwA9w+pdjemt9qtPsr7yhAfl83yzay9ADufAeMwe5+fkSW7HY17LFS61OgHwWf38vxhjj4Dn8++n1O/Vf9P7XWItzMSiGj2EgoxCTcYeGrVfgshwki1z7nAFKSZkzQgZCj7SgGDW5YFpCdv56S3i5a8S3aPwLrDGWaME2U4nGFFQkPZqzgR4NUUh2Cks9ac91qvwy0CcX2p6cdPM+V0qdnj2IDqvaplS7Ph+ySq4YhG6K89QQh2wU5Y5nnVyH6pcCoxkxL6XXWkyAhc4W2FyiUhe82zN+xfTn2nXWXJQViiRUj7aqAlzOMWnsvGDXijydwHyLhKNE8G97dIBfruTmchyHKv3CA=
+  app: cotodo
+  on: master
